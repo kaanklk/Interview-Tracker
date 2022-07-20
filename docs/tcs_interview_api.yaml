@@ -1,0 +1,1675 @@
+openapi: 3.0.0
+info:
+  title: TCS Interview API
+  description: Rest API serving TCS interview orchestration
+  version: 0.0.1
+  contact:
+    name: Zoltán Simon
+    email: zoltan.simon@edu.bme.hu
+paths:
+#-----------------------------------------------------------------------
+# <Accessing users>
+  /users:
+    get:
+      security:
+        - authcodeWithPKCE: [admin]
+      tags:
+        - users
+      parameters:
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/OrderBy'
+        - $ref: '#/components/parameters/OrderDirection'
+        - $ref: '#/components/parameters/Filter'
+      description: Retrieve multiple objects
+      responses:
+        200:
+          description: The array of objects is returned in content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'  
+        500:
+          $ref: '#/components/responses/500APIError'
+    post:
+      tags:
+        - users
+      security:
+        - authcodeWithPKCE: [admin]
+      description: Create a new object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserNoId'
+      responses:
+        201:
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        500:
+          $ref: '#/components/responses/500APIError'
+  /users/{userId}:
+    get:
+      security:
+        - authcodeWithPKCE: [admin]
+      
+      tags:
+        - users
+      description: Retrieve a specific object
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        200:
+          description: The object is returned in content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+    patch:
+      tags:
+        - users
+      security:
+        - authcodeWithPKCE: [admin]
+      description: Update the properties of the object with the provided ID
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserNoId'
+      responses:
+        200:
+          description: Object was updated successfully. The updated verion is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The newly updated object
+                $ref: '#/components/schemas/User'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+    delete:
+      tags:
+        - users
+      security:
+        - authcodeWithPKCE: [admin]
+      description: Delete an object with the provided ID
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        200:
+          description: Object deleted successfully. The deleted object is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The deleted object
+                $ref: '#/components/schemas/User'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+
+
+#-----------------------------------------------------------------------
+# <Accessing roles>
+  /roles:
+    get:
+      security:
+        - authcodeWithPKCE: [admin]
+      tags:
+        - roles
+      parameters:
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/OrderBy'
+        - $ref: '#/components/parameters/OrderDirection'
+        - $ref: '#/components/parameters/Filter'
+      description: Retrieve multiple objects
+      responses:
+        200:
+          description: The array of objects is returned in content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  roles:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Role'  
+        500:
+          $ref: '#/components/responses/500APIError'
+    post:
+      tags:
+        - roles
+      security:
+        - authcodeWithPKCE: [admin]
+      description: Create a new object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleNoId'
+            
+      responses:
+        201:
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        500:
+          $ref: '#/components/responses/500APIError'      
+  /roles/{roleId}:
+    get:
+      security:
+        - authcodeWithPKCE: [admin]
+      
+      tags:
+        - roles
+      description: Retrieve a specific object
+      parameters:
+        - $ref: '#/components/parameters/RoleId'
+      responses:
+        200:
+          description: The object is returned in content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+    patch:
+      tags:
+        - roles
+      security:
+        - authcodeWithPKCE: [admin]
+      description: Update the properties of the object with the provided ID
+      parameters:
+        - $ref: '#/components/parameters/RoleId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleNoId'
+      responses:
+        200:
+          description: Object was updated successfully. The updated verion is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The newly updated object
+                $ref: '#/components/schemas/Role'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+    delete:
+      tags:
+        - roles
+      security:
+        - authcodeWithPKCE: [admin]
+      description: Delete an object with the provided ID
+      parameters:
+        - $ref: '#/components/parameters/RoleId'
+      responses:
+        200:
+          description: Object deleted successfully. The deleted object is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The deleted object
+                $ref: '#/components/schemas/Role'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+
+#-----------------------------------------------------------------------
+# <Accessing projects>
+  /projects:
+    get:
+      security:
+        - authcodeWithPKCE: [admin project_manager]
+      tags:
+        - projects
+      parameters:
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/OrderBy'
+        - $ref: '#/components/parameters/OrderDirection'
+        - $ref: '#/components/parameters/Filter'
+      description: Retrieve multiple objects
+      responses:
+        200:
+          description: The array of objects is returned in content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  projects:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Project'  
+        500:
+          $ref: '#/components/responses/500APIError'
+    post:
+      tags:
+        - projects
+      security:
+        - authcodeWithPKCE: [admin]
+      description: Create a new object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectNoId'
+      responses:
+        201:
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        500:
+          $ref: '#/components/responses/500APIError'      
+  /projects/{projectId}:
+    get:
+      security:
+        - authcodeWithPKCE: [admin project_manager]
+      tags:
+        - projects
+      description: Retrieve a specific object
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      responses:
+        200:
+          description: The object is returned in content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+    patch:
+      tags:
+        - projects
+      security:
+        - authcodeWithPKCE: [admin]
+      description: Update the properties of the object with the provided ID
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectNoId'
+      responses:
+        200:
+          description: Object was updated successfully. The updated verion is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The newly updated object
+                $ref: '#/components/schemas/Project'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+    delete:
+      tags:
+        - projects
+      security:
+        - authcodeWithPKCE: [admin]
+      description: Delete an object with the provided ID
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      responses:
+        200:
+          description: Object deleted successfully. The deleted object is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The deleted object
+                $ref: '#/components/schemas/Project'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+
+#-----------------------------------------------------------------------
+# <Accessing positions>
+  /positions:
+    get:
+      security:
+        - authcodeWithPKCE: [recruiter]
+      tags:
+        - positions
+      parameters:
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/OrderBy'
+        - $ref: '#/components/parameters/OrderDirection'
+        - $ref: '#/components/parameters/Filter'
+      description: Retrieve multiple objects
+      responses:
+        200:
+          description: The array of objects is returned in content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  positions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Position'  
+        500:
+          $ref: '#/components/responses/500APIError'
+    post:
+      tags:
+        - positions
+      security:
+        - authcodeWithPKCE: [recruiter]
+      description: Create a new object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PositionNoId'  
+      responses:
+        201:
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Position'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        500:
+          $ref: '#/components/responses/500APIError'      
+  /positions/{positionId}:
+    get:
+      security:
+        - authcodeWithPKCE: [recruiter]
+      tags:
+        - positions
+      description: Retrieve a specific object
+      parameters:
+        - $ref: '#/components/parameters/PositionId'
+      responses:
+        200:
+          description: The object is returned in content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Position'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+    patch:
+      tags:
+        - positions
+      security:
+        - authcodeWithPKCE: [recruiter]
+      description: Update the properties of the object with the provided ID
+      parameters:
+        - $ref: '#/components/parameters/PositionId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PositionNoId'
+      responses:
+        200:
+          description: Object was updated successfully. The updated verion is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The newly updated object
+                $ref: '#/components/schemas/Position'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+    delete:
+      tags:
+        - positions
+      security:
+        - authcodeWithPKCE: [recruiter]
+      description: Delete an object with the provided ID
+      parameters:
+        - $ref: '#/components/parameters/PositionId'
+      responses:
+        200:
+          description: Object deleted successfully. The deleted object is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The deleted object
+                $ref: '#/components/schemas/Position'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+
+#---------------------------------------------------------------------------------
+# <Accessing candidates>
+  /candidates:
+    get:
+      tags:
+        - candidates
+      parameters:
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/OrderBy'
+        - $ref: '#/components/parameters/OrderDirection'
+        - $ref: '#/components/parameters/Filter'
+      description: Retrieve multiple objects
+      responses:
+        200:
+          description: The array of objects is returned in content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  candidates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Candidate'  
+        500:
+          $ref: '#/components/responses/500APIError'
+    post:
+      tags:
+        - candidates
+      security:
+        - authcodeWithPKCE: [sourcer]
+      description: Create a new object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CandidateNoId'
+            
+      responses:
+        201:
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidate'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        500:
+          $ref: '#/components/responses/500APIError'      
+  /candidates/{candidateId}:
+    get:
+      security:
+        - authcodeWithPKCE: [recruiter project_manager sourcer]
+      tags:
+        - candidates
+      description: Retrieve a specific object
+      parameters:
+        - $ref: '#/components/parameters/CandidateId'
+      responses:
+        200:
+          description: The object is returned in content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidate'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+    patch:
+      tags:
+        - candidates
+      security:
+        - authcodeWithPKCE: [sourcer]
+      description: Update the properties of the object with the provided ID
+      parameters:
+        - $ref: '#/components/parameters/CandidateId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CandidateNoId'
+      responses:
+        200:
+          description: Object was updated successfully. The updated verion is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The newly updated object
+                $ref: '#/components/schemas/Candidate'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+    delete:
+      tags:
+        - candidates
+      security:
+        - authcodeWithPKCE: [sourcer]
+      description: Delete an object with the provided ID
+      parameters:
+        - $ref: '#/components/parameters/CandidateId'
+      responses:
+        200:
+          description: Object deleted successfully. The deleted object is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The deleted object
+                $ref: '#/components/schemas/Candidate'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+  /candidates/{candidateId}/approve:
+    patch:
+      tags:
+        - candidates
+      security:
+        - authcodeWithPKCE: [project_manager]
+      description: Approve a candidate for his or her position
+      parameters:
+        - $ref: '#/components/parameters/CandidateId'
+      responses:
+        200:
+          description: Candidate was approved for his or her position
+          content:
+            application/json:
+              schema:
+                description: The newly updated object
+                $ref: '#/components/schemas/Candidate'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+  /candidates/{candidateId}/reject:
+    patch:
+      tags:
+        - candidates
+      security:
+        - authcodeWithPKCE: [project_manager]
+      description: Reject a candidate
+      parameters:
+        - $ref: '#/components/parameters/CandidateId'
+      responses:
+        200:
+          description: Candidate was rejected
+          content:
+            application/json:
+              schema:
+                description: The newly updated object
+                $ref: '#/components/schemas/Candidate'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+  /candidates/{candidateId}/management-interviewer/{managementInterviewerId}:
+    patch:
+      security:
+        - authcodeWithPKCE: [project_manager]
+      tags:
+        - candidates
+      description: Assign management interviewer to the given candidate
+      parameters:
+        - $ref: '#/components/parameters/CandidateId'
+        - $ref: '#/components/parameters/ManagementInterviewerId'
+      responses:
+        200:
+          description: The assignment was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidate'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+  /candidates/{candidateId}/technical-interviewer/{technicalInterviewerId}:
+    patch:
+      security:
+        - authcodeWithPKCE: [project_manager]
+      tags:
+        - candidates
+      description: Assign technical interviewer to the given candidate
+      parameters:
+        - $ref: '#/components/parameters/CandidateId'
+        - $ref: '#/components/parameters/TechnicalInterviewerId'
+      responses:
+        200:
+          description: The assignment was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidate'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+  /candidates/position/{positionId}:
+    get:
+      security:
+        - authcodeWithPKCE: [recruiter]
+      tags:
+        - candidates
+      description: Retrieve candidates applying for a specific position
+      parameters:
+        - $ref: '#/components/parameters/PositionId'
+      responses:
+        200:
+          description: The array of objects is returned in content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  candidates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Candidate'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+
+#---------------------------------------------------------------------------------
+# <Accessing technical interview>
+  /technical-documentations:
+    get:
+      security:
+        - authcodeWithPKCE: [admin]
+      tags:
+        - technical interview
+      parameters:
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/OrderBy'
+        - $ref: '#/components/parameters/OrderDirection'
+        - $ref: '#/components/parameters/Filter'
+      description: Retrieve multiple objects
+      responses:
+        200:
+          description: The array of objects is returned in content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  technicalDocumentations:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TechnicalDocumentation'  
+        500:
+          $ref: '#/components/responses/500APIError'
+    post:
+      tags:
+        - technical interview
+      security:
+        - authcodeWithPKCE: [technical_interviewer]
+      description: Create a new object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TechnicalDocumentationNoId'
+            
+      responses:
+        201:
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TechnicalDocumentation'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        500:
+          $ref: '#/components/responses/500APIError'      
+  /technical-documentations/{technicalId}:
+    get:
+      security:
+        - authcodeWithPKCE: [recruiter project_manager technical_interviewer]
+      tags:
+        - technical interview
+      description: Retrieve a specific object
+      parameters:
+        - $ref: '#/components/parameters/TechnicalId'
+      responses:
+        200:
+          description: The object is returned in content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TechnicalDocumentation'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+    patch:
+      tags:
+        - technical interview
+      security:
+        - authcodeWithPKCE: [technical_interviewer]
+      description: Update the properties of the object with the provided ID
+      parameters:
+        - $ref: '#/components/parameters/TechnicalId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TechnicalDocumentationNoId'
+      responses:
+        200:
+          description: Object was updated successfully. The updated verion is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The newly updated object
+                $ref: '#/components/schemas/TechnicalDocumentation'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+    delete:
+      tags:
+        - technical interview
+      security:
+        - authcodeWithPKCE: [technical_interviewer]
+      description: Delete an object with the provided ID
+      parameters:
+        - $ref: '#/components/parameters/TechnicalId'
+      responses:
+        200:
+          description: Object deleted successfully. The deleted object is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The deleted object
+                $ref: '#/components/schemas/TechnicalDocumentation'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+
+
+#---------------------------------------------------------------------------------
+# <Accessing management interview>
+  /management-documentations:
+    get:
+      security:
+        - authcodeWithPKCE: [admin]
+      tags:
+        - management interview
+      parameters:
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/OrderBy'
+        - $ref: '#/components/parameters/OrderDirection'
+        - $ref: '#/components/parameters/Filter'
+      description: Retrieve multiple objects
+      responses:
+        200:
+          description: The array of objects is returned in content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  managementDocumentations:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ManagementDocumentation'  
+        500:
+          $ref: '#/components/responses/500APIError'
+    post:
+      tags:
+        - management interview
+      security:
+        - authcodeWithPKCE: [management_interviewer]
+      description: Create a new object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManagementDocumentationNoId'
+            
+      responses:
+        201:
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManagementDocumentation'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        500:
+          $ref: '#/components/responses/500APIError'      
+  /management-documentations/{managementId}:
+    get:
+      security:
+        - authcodeWithPKCE: [recruiter project_manager management_interviewer]
+      tags:
+        - management interview
+      description: Retrieve a specific object
+      parameters:
+        - $ref: '#/components/parameters/ManagementId'
+      responses:
+        200:
+          description: The object is returned in content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManagementDocumentation'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+    patch:
+      tags:
+        - management interview
+      security:
+        - authcodeWithPKCE: [management_interviewer]
+      description: Update the properties of the object with the provided ID
+      parameters:
+        - $ref: '#/components/parameters/ManagementId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManagementDocumentationNoId'
+      responses:
+        200:
+          description: Object was updated successfully. The updated verion is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The newly updated object
+                $ref: '#/components/schemas/ManagementDocumentation'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+    delete:
+      tags:
+        - management interview
+      security:
+        - authcodeWithPKCE: [management_interviewer]
+      description: Delete an object with the provided ID
+      parameters:
+        - $ref: '#/components/parameters/ManagementId'
+      responses:
+        200:
+          description: Object deleted successfully. The deleted object is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The deleted object
+                $ref: '#/components/schemas/ManagementDocumentation'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+
+#---------------------------------------------------------------------------------
+# <Candidate CV>
+  /cv:
+    get:
+      security:
+        - authcodeWithPKCE: [sourcer recruiter]
+      tags:
+        - CV
+      parameters:
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/OrderBy'
+        - $ref: '#/components/parameters/OrderDirection'
+        - $ref: '#/components/parameters/Filter'
+      description: Retrieve multiple objects
+      responses:
+        200:
+          description: The array of objects is returned in content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cvs:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CandidateCV'  
+        500:
+          $ref: '#/components/responses/500APIError'
+    post:
+      tags:
+        - CV
+      security:
+        - authcodeWithPKCE: [sourcer]
+      description: Create a new object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CandidateCV'
+      responses:
+        201:
+          description: CV created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CandidateCV'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        500:
+          $ref: '#/components/responses/500APIError'
+  /cv/{candidateId}:
+    get:
+      security:
+        - authcodeWithPKCE: [technical_interviewer management_interviewer sourcer recruiter project_manager]
+      tags:
+        - CV
+      description: Retrieve the CV of the given candidate
+      parameters:
+        - $ref: '#/components/parameters/CandidateId'
+      responses:
+        200:
+          description: The object is returned in content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CandidateCV'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+    patch:
+      tags:
+        - CV
+      security:
+        - authcodeWithPKCE: [sourcer]
+      description: Update the CV of the candidate with the provided ID
+      parameters:
+        - $ref: '#/components/parameters/CandidateId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CandidateCV'
+      responses:
+        200:
+          description: Object was updated successfully. The updated verion is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The newly updated object
+                $ref: '#/components/schemas/CandidateCV'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+    delete:
+      tags:
+        - CV
+      security:
+        - authcodeWithPKCE: [technical_interviewer sourcer]
+      description: Delete the CV of the given candidate
+      parameters:
+        - $ref: '#/components/parameters/CandidateId'
+      responses:
+        200:
+          description: Object deleted successfully. The deleted object is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The deleted object
+                $ref: '#/components/schemas/CandidateCV'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+
+  /scheduled-interviews:
+    get:
+      security:
+        - authcodeWithPKCE: [sourcer]
+      tags:
+        - scheduled interviews
+      parameters:
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/OrderBy'
+        - $ref: '#/components/parameters/OrderDirection'
+        - $ref: '#/components/parameters/Filter'
+      description: Retrieve multiple objects
+      responses:
+        200:
+          description: The array of objects is returned in content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scheduledInterviews:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ScheduledInterview'  
+        500:
+          $ref: '#/components/responses/500APIError'
+    post:
+      tags:
+        - scheduled interviews
+      security:
+        - authcodeWithPKCE: [sourcer]
+      description: Create a new object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScheduledInterview'
+      responses:
+        201:
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduledInterview'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        500:
+          $ref: '#/components/responses/500APIError'
+  /scheduled-interviews/{scheduledInterviewId}:
+    get:
+      security:
+        - authcodeWithPKCE: [technical_interviewer sourcer]
+      tags:
+        - scheduled interviews
+      description: Retrieve a specific object
+      parameters:
+        - $ref: '#/components/parameters/ScheduledInterviewId'
+      responses:
+        200:
+          description: The object is returned in content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduledInterview'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+    patch:
+      tags:
+        - scheduled interviews
+      security:
+        - authcodeWithPKCE: [technical_interviewer sourcer]
+      description: Update the properties of the object with the provided ID
+      parameters:
+        - $ref: '#/components/parameters/ScheduledInterviewId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScheduledInterview'
+      responses:
+        200:
+          description: Object was updated successfully. The updated verion is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The newly updated object
+                $ref: '#/components/schemas/ScheduledInterview'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+    delete:
+      tags:
+        - scheduled interviews
+      security:
+        - authcodeWithPKCE: [technical_interviewer sourcer]
+      description: Delete an object with the provided ID
+      parameters:
+        - $ref: '#/components/parameters/ScheduledInterviewId'
+      responses:
+        200:
+          description: Object deleted successfully. The deleted object is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The deleted object
+                $ref: '#/components/schemas/ScheduledInterview'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+
+
+
+
+
+
+
+#=================================================================================
+#COMPONENTS=======================================================================
+components:
+  parameters:
+    UserId:
+      in: path
+      name: userId
+      description: version 4 UUID of a user 
+      required: true
+      schema:
+        type: string
+        example: 0ea9267e-dcc7-4ee6-9381-306e220a3588
+        description: version 4 UUID
+    RoleId:
+      in: path
+      name: roleId
+      description: version 4 UUID of a role
+      required: true
+      schema:
+        type: string
+        example: d7961dea-b3b8-4865-abf4-57939ede0b4a
+        description: version 4 UUID
+    ProjectId:
+      in: path
+      name: projectId
+      description: version 4 UUID of a project
+      required: true
+      schema:
+        type: string
+        example: d7a1845d-29b5-4f62-8faa-456101d8f168
+        description: version 4 UUID
+    PositionId:
+      in: path
+      name: positionId
+      description: version 4 UUID of a job position
+      required: true
+      schema:
+        type: string
+        example: b2985797-38f9-4935-b9ab-c241e90b3d4a
+        description: version 4 UUID
+    CandidateId:
+      in: path
+      name: candidateId
+      description: version 4 UUID of a candidate for a particular position
+      required: true
+      schema:
+        type: string
+        example: 41ab9244-8091-4619-b621-efe38dbde027
+        description: version 4 UUID
+    TechnicalId:
+      in: path
+      name: technicalId
+      description: version 4 UUID of a technical interview
+      required: true
+      schema:
+        type: string
+        example: cf6c6dc9-7e09-40da-bc62-74d2251e2140
+        description: version 4 UUID
+    ManagementId:
+      in: path
+      name: managementId
+      description: version 4 UUID of a management interview
+      required: true
+      schema:
+        type: string
+        example: 29a634e5-a496-48a8-8d6b-0e694cdf8134
+        description: version 4 UUID
+    ScheduledInterviewId:
+      in: path
+      name: scheduledInterviewId
+      description: version 4 UUID of a scheduled technical or management interview
+      required: true
+      schema:
+        type: string
+        example: cb9dd3d2-ce95-481f-a953-69d0a9cfc129
+        description: version 4 UUID
+    TechnicalInterviewerId:
+      in: path
+      name: technicalInterviewerId
+      description: version 4 UUID of a user with technical interviewer role
+      required: true
+      schema:
+        type: string
+        example: 67bacb31-0f27-4a4c-9e5e-6beb0d2f3d69
+        description: version 4 UUID
+    ManagementInterviewerId:
+      in: path
+      name: managementInterviewerId
+      description: version 4 UUID of a user with management interviewer role
+      required: true
+      schema:
+        type: string
+        example: 6d1fc02e-47b2-488f-ba88-b1180505e53d
+        description: version 4 UUID
+    InterviewerId:
+      in: path
+      name: interviewerId
+      description: version 4 UUID of a user with technical interviewer or management interviewer role
+      required: true
+      schema:
+        type: string
+        example: 7d66b824-de6d-4a9d-a918-a86b9de40a08
+        description: version 4 UUID
+    PageSize:
+      in: query
+      name: pagesize
+      description: Determine how many items shoud be retrieved
+      required: false
+      schema:
+        type: integer
+        example: 50
+    Offset:
+      in: query
+      name: offset
+      description: Determine the index of the first item that should be retrieved (Starts with 0)
+      required: false
+      schema:
+        type: integer
+        example: 0
+    OrderBy:
+      in: query
+      name: order-by
+      description: order by which content field
+      required: false
+      schema:
+        type: string
+        example: name
+    OrderDirection:
+      in: query
+      name: order-direction
+      description: Ascending or descending ordering
+      required: false
+      schema:
+        type: string
+        example: ascending
+    Filter:
+      in: query
+      name: filter
+      description: Select specific subset
+      required: false
+      schema:
+        type: string
+        example: management-interviewer
+
+#--------------------------------------------------
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: a9756c50-febb-4dd7-8145-c85da5863dda
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        middleName:
+          type: string
+          example: D.
+        employeeId:
+          type: string
+          example: 1234567
+        profilePictureURL:
+          type: string
+          example: https://profile-pics/xyz/1234567
+        dateOfBirth:
+          type: string
+          example: 1999-08-15
+          description: date in YYYY-MM-DD format
+        roleId:
+          type: string
+          example: d329f084-20be-4006-90d1-c42e27360326
+          description: version 4 UUID
+    UserNoId:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        middleName:
+          type: string
+          example: D.
+        employeeId:
+          type: string
+          example: 1234567
+        profilePictureURL:
+          type: string
+          example: https://profile-pics/xyz/1234567
+        dateOfBirth:
+          type: string
+          example: 1999-08-15
+          description: date in YYYY-MM-DD format
+        roleId:
+          type: string
+          example: d329f084-20be-4006-90d1-c42e27360326
+          description: version 4 UUID
+    Role:
+      type: object
+      properties:
+        id:
+          type: string
+          example: fdb10b0c-0842-4659-bee8-c32cb7508a39
+          description: version 4 UUID
+        name:
+          type: string
+          example: administrator
+    RoleNoId:
+      type: object
+      properties:
+        name:
+          type: string
+          example: administrator
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 5924d57d-ae08-49ff-8a0a-c77489e3c895
+          description: version 4 UUID
+        name:
+          type: string
+          example: Interview system
+        projectManagerId:
+          type: string
+          example: 48e6181c-5b37-4481-8fa8-dadb91e4a8cd
+          description: version 4 UUID
+    ProjectNoId:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Interview system
+        projectManagerId:
+          type: string
+          example: 48e6181c-5b37-4481-8fa8-dadb91e4a8cd
+          description: version 4 UUID
+    Position:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 234b821c-941d-439c-9558-1bf952838b43
+          description: version 4 UUID
+        name:
+          type: string
+          example: data engineer
+        recruiterId:
+          type: string
+          example: d867dc22-51ec-4de6-935e-2769ffc43afd
+          description: version 4 UUID
+    PositionNoId:
+      type: object
+      properties:
+        name:
+          type: string
+          example: data engineer
+        recruiterId:
+          type: string
+          example: d867dc22-51ec-4de6-935e-2769ffc43afd
+          description: version 4 UUID
+    Candidate:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 52c2fc2d-04c1-4d17-bdef-72aca038749e
+          description: version 4 UUID
+        userId:
+          type: string
+          example: e6c548be-3267-4954-9b98-730ca0c49b9e
+          description: version 4 UUID
+        positionId:
+          type: string
+          example: b46ef63b-d4c3-4a36-9649-615b004a7019
+          description: version 4 UUID
+        technicalInterviewerId:
+          type: string
+          example: akds7igseajsnajfsjf410
+          description: version 4 UUID
+        managementInterviewerId:
+          type: string
+          example: gjdseigseajsnajfsjf4d9
+          description: version 4 UUID
+        _technicalDocumentationId:
+          type: string
+          example: kkoavldmvaskaspv24jkj
+          description: version 4 UUID
+        _managementDocumentationId:
+          type: string
+          example: kakakvajaqoror3p42hi
+          description: version 4 UUID
+    CandidateNoId:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: gjeigeajnajfsjf4d5s6d6
+          description: version 4 UUID
+        positionId:
+          type: string
+          example: opnb79wbjwebwejqw5we5w
+          description: version 4 UUID
+        technicalInterviewerId:
+          type: string
+          example: akds7igseajsnajfsjf410
+          description: version 4 UUID
+        managementInterviewerId:
+          type: string
+          example: gjdseigseajsnajfsjf4d9
+          description: version 4 UUID
+        technicalDocumentationId:
+          type: string
+          example: kkoavldmvaskaspv24jkj
+          description: version 4 UUID
+        managementDocumentationId:
+          type: string
+          example: kakakvajaqoror3p42hi
+          description: version 4 UUID
+    TechnicalDocumentation:
+      type: object
+      properties:
+        id:
+          type: string
+          example: kkoavldmvaskaspv24jkj
+          description: version 4 UUID
+        candidateId:
+          type: string
+          example: kanaogbnb5gsdv3sdv
+          description: version 4 UUID
+        interviewerId:
+          type: string
+          example: sdf2sd5sfsd6f5dfd5
+          description: version 4 UUID
+        score:
+          type: string
+          example: 80
+    TechnicalDocumentationNoId:
+      type: object
+      properties:
+        candidateId:
+          type: string
+          example: kanaogbnb5gsdv3sdv
+          description: version 4 UUID
+        positionId:
+          type: string
+          example: opnb79wbjwebwejqw5we5w
+          description: version 4 UUID
+        interviewerId:
+          type: string
+          example: sdf2sd5sfsd6f5dfd5
+          description: version 4 UUID
+        score:
+          type: string
+          example: 80
+    ManagementDocumentation:
+      type: object
+      properties:
+        id:
+          type: string
+          example: kakakvajaqoror3p42hi
+          description: version 4 UUID
+        candidateId:
+          type: string
+          example: kanaogbnb5gsdv3sdv
+          description: version 4 UUID
+        interviewerId:
+          type: string
+          example: sdf2sd5sfsd6f5dfd5
+          description: version 4 UUID
+        score:
+          type: string
+          example: 80
+    ManagementDocumentationNoId:
+      type: object
+      properties:
+        candidateId:
+          type: string
+          example: kanaogbnb5gsdv3sdv
+          description: version 4 UUID
+        interviewerId:
+          type: string
+          example: sdf2sd5sfsd6f5dfd5
+          description: version 4 UUID
+        score:
+          type: string
+          example: 80
+    ScheduledInterview:
+      type: object
+      properties:
+        interviewType:
+          type: string
+          example: technical
+        candidateId:
+          type: string
+          example: kkoavldmvaskaspv24jkj
+          description: version 4 UUID
+        interviewerId:
+          type: string
+          example: skko4fd5fdf5s6s6d5d5d
+          description: version 4 UUID
+        start:
+          type: string
+          example: 2022-08-15 14:30:00
+          description: UTC timestamp like YYYY-MM-DD hh:mm:ss
+        finish:
+          type: string
+          example: 2022-08-15 15:00:00
+          description: UTC timestamp like YYYY-MM-DD hh:mm:ss
+    ErrorDetails:
+      type: object
+      properties:
+        causedBy:
+          type: string
+          example: controller
+          description: The source of the error
+        errorMessage:
+          type: string
+          example: Was not able to parse the provided timestamp
+          description: Short description of the nature of the error
+    CandidateCV:
+      type: object
+      properties:
+        candidateId:
+          type: string
+          example: 3ea4d01c-297a-4f4d-a76f-52ffecd4247d
+          description: version 4 UUID of the candidate
+        data:
+          type: string
+          example: VGhpcyBpcyBhbiBleGFtcGxlIGRvY3VtZW50IHRoYXQgY291bGQgYmUgeW91ciBDVi4gSXQncyBub3QgdGhvLiBJIGhvcGUgdGhhdCB0aGlzIGlzIGEgZ29vZCBleGFtcGxlIGZvciBCYXNlNjQgZW5jb2RpbmcuIEJ5IFpvbGk=
+          description: Base64 encoded document. Character set is UTF-8 and newline is LF
+
+
+
+#--------------------------------------------------------------
+  responses:
+    400BadRequest:
+      description: Bad request. Check the content!
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDetails'
+    404ObjectNotFound:
+      description: The object with the provided identifier was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDetails'
+    500APIError:
+      description: Unexpected server-side error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDetails'
+
+#--------------------------------------------------------------
+  securitySchemes:
+    authcodeWithPKCE:
+      description: Authorization code flow with Proof Key for Code Exchange
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: http://oktaxxxxxx.com/authorize
+          tokenUrl: http://oktaxxxxxx.com/token
+          scopes:
+            admin: Administrator scope
+            recruiter: Recruiter scope
+            sourcer: Sourcer scope
+            project_manager: Project manager scope
+            technical_interviewer: Technical interviewer scope
+            management_interviewer: Management interviewer scope
+            candidate: Candidate scope
