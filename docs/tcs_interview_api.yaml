@@ -79,7 +79,7 @@ paths:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
           $ref: '#/components/responses/500APIError'
-    patch:
+    put:
       tags:
         - users
       security:
@@ -201,7 +201,7 @@ paths:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
           $ref: '#/components/responses/500APIError'      
-    patch:
+    put:
       tags:
         - roles
       security:
@@ -320,7 +320,7 @@ paths:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
           $ref: '#/components/responses/500APIError'      
-    patch:
+    put:
       tags:
         - projects
       security:
@@ -439,7 +439,7 @@ paths:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
           $ref: '#/components/responses/500APIError'      
-    patch:
+    put:
       tags:
         - positions
       security:
@@ -557,7 +557,7 @@ paths:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
           $ref: '#/components/responses/500APIError'      
-    patch:
+    put:
       tags:
         - candidates
       security:
@@ -565,6 +565,7 @@ paths:
       description: Update the properties of the object with the provided ID
       parameters:
         - $ref: '#/components/parameters/CandidateId'
+        - $ref: '#/components/parameters/CandidateState'
       requestBody:
         content:
           application/json:
@@ -604,115 +605,7 @@ paths:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
           $ref: '#/components/responses/500APIError'      
-  /candidates/{candidateId}/approve:
-    patch:
-      tags:
-        - candidates
-      security:
-        - authcodeWithPKCE: [project_manager]
-      description: Approve a candidate for his or her position
-      parameters:
-        - $ref: '#/components/parameters/CandidateId'
-      responses:
-        200:
-          description: Candidate was approved for his or her position
-          content:
-            application/json:
-              schema:
-                description: The newly updated object
-                $ref: '#/components/schemas/Candidate'
-        404:
-          $ref: '#/components/responses/404ObjectNotFound'
-        500:
-          $ref: '#/components/responses/500APIError'      
-  /candidates/{candidateId}/reject:
-    patch:
-      tags:
-        - candidates
-      security:
-        - authcodeWithPKCE: [project_manager]
-      description: Reject a candidate
-      parameters:
-        - $ref: '#/components/parameters/CandidateId'
-      responses:
-        200:
-          description: Candidate was rejected
-          content:
-            application/json:
-              schema:
-                description: The newly updated object
-                $ref: '#/components/schemas/Candidate'
-        404:
-          $ref: '#/components/responses/404ObjectNotFound'
-        500:
-          $ref: '#/components/responses/500APIError'      
-  /candidates/{candidateId}/management-interviewer/{managementInterviewerId}:
-    patch:
-      security:
-        - authcodeWithPKCE: [project_manager]
-      tags:
-        - candidates
-      description: Assign management interviewer to the given candidate
-      parameters:
-        - $ref: '#/components/parameters/CandidateId'
-        - $ref: '#/components/parameters/ManagementInterviewerId'
-      responses:
-        200:
-          description: The assignment was successful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Candidate'
-        404:
-          $ref: '#/components/responses/404ObjectNotFound'
-        500:
-          $ref: '#/components/responses/500APIError'      
-  /candidates/{candidateId}/technical-interviewer/{technicalInterviewerId}:
-    patch:
-      security:
-        - authcodeWithPKCE: [project_manager]
-      tags:
-        - candidates
-      description: Assign technical interviewer to the given candidate
-      parameters:
-        - $ref: '#/components/parameters/CandidateId'
-        - $ref: '#/components/parameters/TechnicalInterviewerId'
-      responses:
-        200:
-          description: The assignment was successful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Candidate'
-        404:
-          $ref: '#/components/responses/404ObjectNotFound'
-        500:
-          $ref: '#/components/responses/500APIError'      
-  /candidates/position/{positionId}:
-    get:
-      security:
-        - authcodeWithPKCE: [recruiter]
-      tags:
-        - candidates
-      description: Retrieve candidates applying for a specific position
-      parameters:
-        - $ref: '#/components/parameters/PositionId'
-      responses:
-        200:
-          description: The array of objects is returned in content
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  candidates:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Candidate'
-        404:
-          $ref: '#/components/responses/404ObjectNotFound'
-        500:
-          $ref: '#/components/responses/500APIError'      
+
 
 #---------------------------------------------------------------------------------
 # <Accessing technical interview>
@@ -786,7 +679,7 @@ paths:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
           $ref: '#/components/responses/500APIError'      
-    patch:
+    put:
       tags:
         - technical interview
       security:
@@ -907,7 +800,7 @@ paths:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
           $ref: '#/components/responses/500APIError'      
-    patch:
+    put:
       tags:
         - management interview
       security:
@@ -1026,7 +919,7 @@ paths:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
           $ref: '#/components/responses/500APIError'
-    patch:
+    put:
       tags:
         - CV
       security:
@@ -1125,7 +1018,7 @@ paths:
           $ref: '#/components/responses/400BadRequest'
         500:
           $ref: '#/components/responses/500APIError'
-  /interviews/{scheduledInterviewId}:
+  /interviews/{interviewId}:
     get:
       security:
         - authcodeWithPKCE: [technical_interviewer sourcer]
@@ -1133,7 +1026,7 @@ paths:
         - interviews
       description: Retrieve a specific object
       parameters:
-        - $ref: '#/components/parameters/ScheduledInterviewId'
+        - $ref: '#/components/parameters/InterviewId'
       responses:
         200:
           description: The object is returned in content
@@ -1145,14 +1038,14 @@ paths:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
           $ref: '#/components/responses/500APIError'
-    patch:
+    put:
       tags:
         - interviews
       security:
         - authcodeWithPKCE: [technical_interviewer sourcer]
       description: Update the properties of the object with the provided ID
       parameters:
-        - $ref: '#/components/parameters/ScheduledInterviewId'
+        - $ref: '#/components/parameters/InterviewId'
       requestBody:
         content:
           application/json:
@@ -1179,7 +1072,7 @@ paths:
         - authcodeWithPKCE: [technical_interviewer sourcer]
       description: Delete an object with the provided ID
       parameters:
-        - $ref: '#/components/parameters/ScheduledInterviewId'
+        - $ref: '#/components/parameters/InterviewId'
       responses:
         200:
           description: Object deleted successfully. The deleted object is returned in content.
@@ -1192,6 +1085,90 @@ paths:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
           $ref: '#/components/responses/500APIError'
+  /inteviews/{interviewId}/management-interviewer1/{managementInterviewerId}:
+    put:
+      security:
+        - authcodeWithPKCE: [management_interviewer]
+      tags:
+        - interviews
+      description: Assign management interviewer to the given interview
+      parameters:
+        - $ref: '#/components/parameters/InterviewId'
+        - $ref: '#/components/parameters/ManagementInterviewerId'
+      responses:
+        200:
+          description: The assignment was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Interview'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+  /inteviews/{interviewId}/management-interviewer2/{managementInterviewerId}:
+    put:
+      security:
+        - authcodeWithPKCE: [management_interviewer]
+      tags:
+        - interviews
+      description: Assign management interviewer to the given interview
+      parameters:
+        - $ref: '#/components/parameters/InterviewId'
+        - $ref: '#/components/parameters/ManagementInterviewerId'
+      responses:
+        200:
+          description: The assignment was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Interview'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+  /inteviews/{interviewId}/technical-interviewer1/{technicalInterviewerId}:
+    put:
+      security:
+        - authcodeWithPKCE: [technical_interviewer]
+      tags:
+        - interviews
+      description: Assign technical interviewer to the given interview
+      parameters:
+        - $ref: '#/components/parameters/InterviewId'
+        - $ref: '#/components/parameters/TechnicalInterviewerId'
+      responses:
+        200:
+          description: The assignment was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Interview'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+  /inteviews/{interviewId}/technical-interviewer2/{technicalInterviewerId}:
+    put:
+      security:
+        - authcodeWithPKCE: [technical_interviewer]
+      tags:
+        - interviews
+      description: Assign technical interviewer to the given interview
+      parameters:
+        - $ref: '#/components/parameters/InterviewId'
+        - $ref: '#/components/parameters/TechnicalInterviewerId'
+      responses:
+        200:
+          description: The assignment was successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Interview'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
 
 
 #------------------------------------------------------------------
@@ -1314,10 +1291,10 @@ components:
         type: string
         example: 29a634e5-a496-48a8-8d6b-0e694cdf8134
         description: version 4 UUID
-    ScheduledInterviewId:
+    InterviewId:
       in: path
-      name: scheduledInterviewId
-      description: version 4 UUID of a scheduled technical or management interview
+      name: interviewId
+      description: version 4 UUID of a technical or management interview
       required: true
       schema:
         type: string
@@ -1399,6 +1376,17 @@ components:
         type: string
         example: 7d66b824-de6d-4a9d-a918-a86b9de40a08
         description: version 4 UUID
+    CandidateState:
+      in: query
+      name: candidate-state
+      description: To set a new state for the candidate
+      required: false
+      schema:
+        type: string
+        example: waiting for technical interview
+
+
+
 #--------------------------------------------------
   schemas:
     User:
@@ -1529,14 +1517,21 @@ components:
         description:
           type: string
           example: This is an example project.
-        recruiterId:
+        recruiters:
           type: array
-          example: 2a46f3b1-0bff-4767-90d4-13e26d78dbb5
-          description: version 4 UUID
-        sourcerId:
-          type: string
-          example: df37a1f1-0d0d-489e-b737-b3d28665924e
-          description: version 4 UUID
+          items:
+            example: 2a46f3b1-0bff-4767-90d4-13e26d78dbb5
+            description: version 4 UUID
+        sourcers:
+          type: array
+          items:
+            example: df37a1f1-0d0d-489e-b737-b3d28665924e
+            description: version 4 UUID
+        interviewers:
+          type: array
+          items:
+            example: df37a1f1-0d0d-489e-b737-b3d28665924e
+            description: version 4 UUID
         deadline:
           type: string
           example: 2022-08-12 00:00:00
@@ -1555,7 +1550,7 @@ components:
           type: string
           example: This is an example project.
         recruiterId:
-          type: array
+          type: string
           example: 2a46f3b1-0bff-4767-90d4-13e26d78dbb5
           description: version 4 UUID
         sourcerId:
