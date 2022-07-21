@@ -1074,12 +1074,14 @@ paths:
         500:
           $ref: '#/components/responses/500APIError'
 
-  /scheduled-interviews:
+#------------------------------------------------------------------
+#<Interview>
+  /interviews:
     get:
       security:
         - authcodeWithPKCE: [sourcer]
       tags:
-        - scheduled interviews
+        - interviews
       parameters:
         - $ref: '#/components/parameters/PageSize'
         - $ref: '#/components/parameters/Offset'
@@ -1098,12 +1100,12 @@ paths:
                   scheduledInterviews:
                     type: array
                     items:
-                      $ref: '#/components/schemas/ScheduledInterview'  
+                      $ref: '#/components/schemas/Interview'  
         500:
           $ref: '#/components/responses/500APIError'
     post:
       tags:
-        - scheduled interviews
+        - interviews
       security:
         - authcodeWithPKCE: [sourcer]
       description: Create a new object
@@ -1111,24 +1113,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ScheduledInterview'
+              $ref: '#/components/schemas/InterviewNoId'
       responses:
         201:
           description: User created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ScheduledInterview'
+                $ref: '#/components/schemas/Interview'
         400:
           $ref: '#/components/responses/400BadRequest'
         500:
           $ref: '#/components/responses/500APIError'
-  /scheduled-interviews/{scheduledInterviewId}:
+  /interviews/{scheduledInterviewId}:
     get:
       security:
         - authcodeWithPKCE: [technical_interviewer sourcer]
       tags:
-        - scheduled interviews
+        - interviews
       description: Retrieve a specific object
       parameters:
         - $ref: '#/components/parameters/ScheduledInterviewId'
@@ -1138,14 +1140,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ScheduledInterview'
+                $ref: '#/components/schemas/Interview'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
           $ref: '#/components/responses/500APIError'
     patch:
       tags:
-        - scheduled interviews
+        - interviews
       security:
         - authcodeWithPKCE: [technical_interviewer sourcer]
       description: Update the properties of the object with the provided ID
@@ -1155,7 +1157,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ScheduledInterview'
+              $ref: '#/components/schemas/Interview'
       responses:
         200:
           description: Object was updated successfully. The updated verion is returned in content.
@@ -1163,7 +1165,7 @@ paths:
             application/json:
               schema:
                 description: The newly updated object
-                $ref: '#/components/schemas/ScheduledInterview'
+                $ref: '#/components/schemas/Interview'
         400:
           $ref: '#/components/responses/400BadRequest'
         404:
@@ -1172,7 +1174,7 @@ paths:
           $ref: '#/components/responses/500APIError'      
     delete:
       tags:
-        - scheduled interviews
+        - interviews
       security:
         - authcodeWithPKCE: [technical_interviewer sourcer]
       description: Delete an object with the provided ID
@@ -1185,14 +1187,62 @@ paths:
             application/json:
               schema:
                 description: The deleted object
-                $ref: '#/components/schemas/ScheduledInterview'
+                $ref: '#/components/schemas/Interview'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
           $ref: '#/components/responses/500APIError'
 
 
-
+#------------------------------------------------------------------
+#<Status changes>
+  /status-changes:
+    get:
+      security:
+        - authcodeWithPKCE: [admin, sourcer, recruiter, project_manager]
+      tags:
+        - status changes
+      parameters:
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/OrderBy'
+        - $ref: '#/components/parameters/OrderDirection'
+        - $ref: '#/components/parameters/Filter'
+      description: Retrieve multiple objects
+      responses:
+        200:
+          description: The array of objects is returned in content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scheduledInterviews:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/StatusChange'  
+        500:
+          $ref: '#/components/responses/500APIError'
+  /status-changes/{statusChangeId}:
+    get:
+      security:
+        - authcodeWithPKCE: [technical_interviewer sourcer]
+      tags:
+        - status changes
+      description: Retrieve a specific object
+      parameters:
+        - $ref: '#/components/parameters/StatusChangeId'
+      responses:
+        200:
+          description: The object is returned in content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusChange'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
 
 
 
@@ -1340,7 +1390,15 @@ components:
       schema:
         type: string
         example: management-interviewer
-
+    StatusChangeId:
+      in: path
+      name: statusChangeId
+      description: The UUID of the status change
+      required: true
+      schema:
+        type: string
+        example: 7d66b824-de6d-4a9d-a918-a86b9de40a08
+        description: version 4 UUID
 #--------------------------------------------------
   schemas:
     User:
@@ -1361,17 +1419,36 @@ components:
         employeeId:
           type: string
           example: 1234567
-        profilePictureURL:
+          description: TCS employee ID (not used as unique id in this system)
+        profilePicture:
           type: string
-          example: https://profile-pics/xyz/1234567
+          example: VGhpcyB3b3VsZCBiZSBhbiBpbWFnZS4gQnV0IG5vdyBpdCdzIG9ubHkgdGV4dC4gOiggOik=
+          description: Base 64 with UTF-8 character set
         dateOfBirth:
           type: string
-          example: 1999-08-15
-          description: date in YYYY-MM-DD format
-        roleId:
+          example: 1999-08-15 00:00:00
+          description: timestamp in YYYY-MM-DD 00:00:00 format (The time part is left 0)
+        roles:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: e734ec26-3d42-4c1c-9753-812c239bd9e9
+                description: UUID of the role
+              name:
+                type: string
+                example: administrator
+                description: name of the role
+        email:
           type: string
-          example: d329f084-20be-4006-90d1-c42e27360326
-          description: version 4 UUID
+          example: my.name@gmail.com
+          description: The e-mail of the user
+        phone:
+          type: string
+          example: +369123456789
+          description: Phone number of the user
     UserNoId:
       type: object
       properties:
@@ -1387,33 +1464,54 @@ components:
         employeeId:
           type: string
           example: 1234567
-        profilePictureURL:
+          description: TCS employee ID (not used as unique id in this system)
+        profilePicture:
           type: string
-          example: https://profile-pics/xyz/1234567
+          example: VGhpcyB3b3VsZCBiZSBhbiBpbWFnZS4gQnV0IG5vdyBpdCdzIG9ubHkgdGV4dC4gOiggOik=
+          description: Base 64 with UTF-8 character set
         dateOfBirth:
           type: string
-          example: 1999-08-15
-          description: date in YYYY-MM-DD format
-        roleId:
+          example: 1999-08-15 00:00:00
+          description: timestamp in YYYY-MM-DD 00:00:00 format (The time part is left 0)
+        roles:
+          type: array
+          items:
+            type: object
+            properties:
+              roleName:
+                type: string
+                example: administrator
+                description: name of the role
+              roleId:
+                type: string
+                example: e734ec26-3d42-4c1c-9753-812c239bd9e9
+                description: UUID of the role
+        email:
           type: string
-          example: d329f084-20be-4006-90d1-c42e27360326
-          description: version 4 UUID
+          example: my.name@gmail.com
+          description: The e-mail of the user
+        phone:
+          type: string
+          example: +369123456789
+          description: Phone number of the user
     Role:
       type: object
       properties:
         id:
           type: string
-          example: fdb10b0c-0842-4659-bee8-c32cb7508a39
-          description: version 4 UUID
+          example: e734ec26-3d42-4c1c-9753-812c239bd9e9
+          description: UUID of the role
         name:
           type: string
           example: administrator
+          description: name of the role
     RoleNoId:
       type: object
       properties:
         name:
           type: string
           example: administrator
+          description: name of the role
     Project:
       type: object
       properties:
@@ -1428,6 +1526,21 @@ components:
           type: string
           example: 48e6181c-5b37-4481-8fa8-dadb91e4a8cd
           description: version 4 UUID
+        description:
+          type: string
+          example: This is an example project.
+        recruiterId:
+          type: array
+          example: 2a46f3b1-0bff-4767-90d4-13e26d78dbb5
+          description: version 4 UUID
+        sourcerId:
+          type: string
+          example: df37a1f1-0d0d-489e-b737-b3d28665924e
+          description: version 4 UUID
+        deadline:
+          type: string
+          example: 2022-08-12 00:00:00
+          description: UTC temployeeIdimestamp like YYYY-MM-DD hh:mm:ss
     ProjectNoId:
       type: object
       properties:
@@ -1438,6 +1551,21 @@ components:
           type: string
           example: 48e6181c-5b37-4481-8fa8-dadb91e4a8cd
           description: version 4 UUID
+        description:
+          type: string
+          example: This is an example project.
+        recruiterId:
+          type: array
+          example: 2a46f3b1-0bff-4767-90d4-13e26d78dbb5
+          description: version 4 UUID
+        sourcerId:
+          type: string
+          example: df37a1f1-0d0d-489e-b737-b3d28665924e
+          description: version 4 UUID
+        deadline:
+          type: string
+          example: 2022-08-12 00:00:00
+          description: UTC timestamp like YYYY-MM-DD hh:mm:ss
     Position:
       type: object
       properties:
@@ -1448,20 +1576,46 @@ components:
         name:
           type: string
           example: data engineer
-        recruiterId:
+        projectId:
           type: string
-          example: d867dc22-51ec-4de6-935e-2769ffc43afd
+          example: 12d78cb7-f563-40d9-aa92-a8b56e29fe70
           description: version 4 UUID
+        interviewerPoll:
+          type: array
+          items:
+            type: object
+            properties:
+              id:       
+                type: string
+                example: d867dc22-51ec-4de6-935e-2769ffc43afd
+                description: version 4 UUID of a user who has interviewer role
+              type:
+                type: string
+                example: technical
+                description: technical or management
     PositionNoId:
       type: object
       properties:
         name:
           type: string
           example: data engineer
-        recruiterId:
+        projectId:
           type: string
-          example: d867dc22-51ec-4de6-935e-2769ffc43afd
+          example: 12d78cb7-f563-40d9-aa92-a8b56e29fe70
           description: version 4 UUID
+        interviewerPoll:
+          type: array
+          items:
+            type: object
+            properties:
+              id:       
+                type: string
+                example: d867dc22-51ec-4de6-935e-2769ffc43afd
+                description: version 4 UUID of a user who has interviewer role
+              type:
+                type: string
+                example: technical
+                description: technical or management
     Candidate:
       type: object
       properties:
@@ -1469,67 +1623,311 @@ components:
           type: string
           example: 52c2fc2d-04c1-4d17-bdef-72aca038749e
           description: version 4 UUID
-        userId:
-          type: string
-          example: e6c548be-3267-4954-9b98-730ca0c49b9e
-          description: version 4 UUID
         positionId:
           type: string
-          example: b46ef63b-d4c3-4a36-9649-615b004a7019
+          example: c989480a-4b8d-4c75-bf3b-db9bafe05a8e
           description: version 4 UUID
+        firstName: 
+          type: string
+          example: John
+        middleName: 
+          type: string
+          example: D.
+        lastName: 
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: my.name@gmail.com
+          description: e-mail address of the person
+        phone:
+          type: string
+          example: +369123456789
+          description: Phone number of the person
+        languages:
+          type: array
+          items:
+            type: object
+            properties:
+              language:
+                type: string
+                example: english
+                description: The name of the language
+              level:
+                type: string
+                example: beginner
+                description: The maturity level in a language
+        workExperience:
+          type: array
+          items:
+            type: object
+            properties:
+              start:
+                type: string
+                example: 2020-04-01 00:00:00
+                description: Timestamp like YYYY-MM-DD hh:mm:ss (The time part is not used)
+              end:
+                type: string
+                example: 2021-09-20 00:00:00
+                description: Timestamp like YYYY-MM-DD hh:mm:ss (The time part is not used)
+              institution:
+                type: string
+                example: TCS
+                description: The name of the institution the work was done at
+              summary:
+                type: string
+                example: The candidate was workig as a data engineer.
+                description: Summary of the job and the experience.
+        education:
+          type: array
+          items:
+            type: object
+            properties:
+              start:
+                type: string
+                example: 2019-09-01 00:00:00
+                description: Timestamp like YYYY-MM-DD hh:mm:ss (The time part is not used)
+              end:
+                type: string
+                example: 2023-01-10 00:00:00
+                description: Timestamp like YYYY-MM-DD hh:mm:ss (The time part is not used)
+              institution:
+                type: string
+                example: BME
+                description: The name of the institution
+              information:
+                type: string
+                example: Computer engineering Bsc
+                description: Some information regarding the degree and the nature of the education
+        status:
+          type: string
+          example: accepted
+          description: Shows the current state of the candidate
+        cvId:
+          type: string
+          example: 42ea2c09-f011-42bf-9aec-cda31b9066fd
+          description: UUID
         technicalInterviewerId:
           type: string
-          example: akds7igseajsnajfsjf410
-          description: version 4 UUID
-        managementInterviewerId:
+          example: 4dc75f6d-1aeb-407c-87ef-51c7635c8db3
+        technicalInterviewerId2:
           type: string
-          example: gjdseigseajsnajfsjf4d9
-          description: version 4 UUID
-        _technicalDocumentationId:
+          example: d204621a-6e57-41b2-878c-a2f1ca4550c3
+        maangementInterviewerId:
           type: string
-          example: kkoavldmvaskaspv24jkj
-          description: version 4 UUID
-        _managementDocumentationId:
+          example: 4dc75f6d-1aeb-407c-87ef-51c7635c8db3
+        maangementInterviewerId2:
           type: string
-          example: kakakvajaqoror3p42hi
-          description: version 4 UUID
+          example: d204621a-6e57-41b2-878c-a2f1ca4550c3
+        technicalDocumentationId:
+          type: string
+          example: d204621a-6e57-41b2-878c-a2f1ca4550c3
+        managementDocumentationId:
+          type: string
+          example: d204621a-6e57-41b2-878c-a2f1ca4550c3
+        possibleTimeslots:
+          type: array
+          items:
+            type: object
+            properties:
+              start: 
+                type: string
+                example: 2022-08-10 12:30:00
+                description: UTC Timestamp YYYY-MM-DD hh:mm:ss
+              end: 
+                type: string
+                example: 2022-08-10 13:00:00
+                description: UTC Timestamp YYYY-MM-DD hh:mm:ss
+
     CandidateNoId:
       type: object
       properties:
-        userId:
-          type: string
-          example: gjeigeajnajfsjf4d5s6d6
-          description: version 4 UUID
         positionId:
           type: string
-          example: opnb79wbjwebwejqw5we5w
+          example: c989480a-4b8d-4c75-bf3b-db9bafe05a8e
           description: version 4 UUID
+        firstName: 
+          type: string
+          example: John
+        middleName: 
+          type: string
+          example: D.
+        lastName: 
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: my.name@gmail.com
+          description: e-mail address of the person
+        phone:
+          type: string
+          example: +369123456789
+          description: Phone number of the person
+        languages:
+          type: array
+          items:
+            type: object
+            properties:
+              language:
+                type: string
+                example: english
+                description: The name of the language
+              level:
+                type: string
+                example: beginner
+                description: The maturity level in a language
+        workExperience:
+          type: array
+          items:
+            type: object
+            properties:
+              start:
+                type: string
+                example: 2020-04-01 00:00:00
+                description: Timestamp like YYYY-MM-DD hh:mm:ss (The time part is not used)
+              end:
+                type: string
+                example: 2021-09-20 00:00:00
+                description: Timestamp like YYYY-MM-DD hh:mm:ss (The time part is not used)
+              institution:
+                type: string
+                example: TCS
+                description: The name of the institution the work was done at
+              summary:
+                type: string
+                example: The candidate was workig as a data engineer.
+                description: Summary of the job and the experience.
+        education:
+          type: array
+          items:
+            type: object
+            properties:
+              start:
+                type: string
+                example: 2019-09-01 00:00:00
+                description: Timestamp like YYYY-MM-DD hh:mm:ss (The time part is not used)
+              end:
+                type: string
+                example: 2023-01-10 00:00:00
+                description: Timestamp like YYYY-MM-DD hh:mm:ss (The time part is not used)
+              institution:
+                type: string
+                example: BME
+                description: The name of the institution
+              information:
+                type: string
+                example: Computer engineering Bsc
+                description: Some information regarding the degree and the nature of the education
+        status:
+          type: string
+          example: accepted
+          description: Shows the current state of the candidate
+        cvId:
+          type: string
+          example: 42ea2c09-f011-42bf-9aec-cda31b9066fd
+          description: UUID
         technicalInterviewerId:
           type: string
-          example: akds7igseajsnajfsjf410
-          description: version 4 UUID
-        managementInterviewerId:
+          example: 4dc75f6d-1aeb-407c-87ef-51c7635c8db3
+        technicalInterviewerId2:
           type: string
-          example: gjdseigseajsnajfsjf4d9
-          description: version 4 UUID
+          example: d204621a-6e57-41b2-878c-a2f1ca4550c3
+        maangementInterviewerId:
+          type: string
+          example: 4dc75f6d-1aeb-407c-87ef-51c7635c8db3
+        maangementInterviewerId2:
+          type: string
+          example: d204621a-6e57-41b2-878c-a2f1ca4550c3
         technicalDocumentationId:
           type: string
-          example: kkoavldmvaskaspv24jkj
-          description: version 4 UUID
+          example: d204621a-6e57-41b2-878c-a2f1ca4550c3
         managementDocumentationId:
           type: string
-          example: kakakvajaqoror3p42hi
+          example: d204621a-6e57-41b2-878c-a2f1ca4550c3
+        possibleTimeslots:
+          type: array
+          items:
+            type: object
+            properties:
+              start: 
+                type: string
+                example: 2022-08-10 12:30:00
+                description: UTC Timestamp YYYY-MM-DD hh:mm:ss
+              end: 
+                type: string
+                example: 2022-08-10 13:00:00
+                description: UTC Timestamp YYYY-MM-DD hh:mm:ss
+    Interview:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 421e669f-9b7b-49ea-8f93-11e13bf74e02
           description: version 4 UUID
+        candidateId:
+          type: string
+          example: 6f2d190a-718f-4480-a50e-adafaf0f1c02
+          description: version 4 UUID
+        interviewerId:
+          type: string
+          example: 14726796-5b08-4b16-86e4-5e097599911c
+          description: version 4 UUID
+        interviewerId2:
+          type: string
+          example: 14726796-5b08-4b16-86e4-5e097599911c
+          description: version 4 UUID
+        finalTimeslot:
+          type: string
+          example: 14726796-5b08-4b16-86e4-5e097599911c
+          nullable: true
+          description: version 4 UUID
+        type:
+          type: string
+          example: management
+        documentationId:
+          type: string
+          example: e7e29720-57d0-4ef1-a1e4-4ae3ea1ae00f
+          description: UUID
+    InterviewNoId:
+      type: object
+      properties:
+        candidateId:
+          type: string
+          example: 6f2d190a-718f-4480-a50e-adafaf0f1c02
+          description: version 4 UUID
+        interviewerId:
+          type: string
+          example: 14726796-5b08-4b16-86e4-5e097599911c
+          description: version 4 UUID
+        interviewerId2:
+          type: string
+          example: 14726796-5b08-4b16-86e4-5e097599911c
+          description: version 4 UUID
+        finalTimeslot:
+          type: string
+          example: 14726796-5b08-4b16-86e4-5e097599911c
+          nullable: true
+          description: version 4 UUID
+        type:
+          type: string
+          example: management
+        documentationId:
+          type: string
+          example: e7e29720-57d0-4ef1-a1e4-4ae3ea1ae00f
+          description: UUID
     TechnicalDocumentation:
       type: object
       properties:
         id:
           type: string
-          example: kkoavldmvaskaspv24jkj
-          description: version 4 UUID
+          example: e7e29720-57d0-4ef1-a1e4-4ae3ea1ae00f
         candidateId:
           type: string
           example: kanaogbnb5gsdv3sdv
+          description: version 4 UUID
+        positionId:
+          type: string
+          example: opnb79wbjwebwejqw5we5w
           description: version 4 UUID
         interviewerId:
           type: string
@@ -1537,7 +1935,7 @@ components:
           description: version 4 UUID
         score:
           type: string
-          example: 80
+          example: 80 
     TechnicalDocumentationNoId:
       type: object
       properties:
@@ -1588,28 +1986,6 @@ components:
         score:
           type: string
           example: 80
-    ScheduledInterview:
-      type: object
-      properties:
-        interviewType:
-          type: string
-          example: technical
-        candidateId:
-          type: string
-          example: kkoavldmvaskaspv24jkj
-          description: version 4 UUID
-        interviewerId:
-          type: string
-          example: skko4fd5fdf5s6s6d5d5d
-          description: version 4 UUID
-        start:
-          type: string
-          example: 2022-08-15 14:30:00
-          description: UTC timestamp like YYYY-MM-DD hh:mm:ss
-        finish:
-          type: string
-          example: 2022-08-15 15:00:00
-          description: UTC timestamp like YYYY-MM-DD hh:mm:ss
     ErrorDetails:
       type: object
       properties:
@@ -1632,7 +2008,33 @@ components:
           type: string
           example: VGhpcyBpcyBhbiBleGFtcGxlIGRvY3VtZW50IHRoYXQgY291bGQgYmUgeW91ciBDVi4gSXQncyBub3QgdGhvLiBJIGhvcGUgdGhhdCB0aGlzIGlzIGEgZ29vZCBleGFtcGxlIGZvciBCYXNlNjQgZW5jb2RpbmcuIEJ5IFpvbGk=
           description: Base64 encoded document. Character set is UTF-8 and newline is LF
-
+    StatusChange:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 3ea4d01c-297a-4f4d-a76f-52ffecd4247d
+        candidateId:
+          type: string
+          example: 3ea4d01c-297a-4f4d-a76f-52ffecd4247d
+        previousStatus:
+          type: string
+          example: accepted
+        nextStatus:
+          type: string
+          example: ready for technical inteview
+        event:
+          type: string
+          example: CV approved by project manager
+        employeeId:
+          type: string
+          example: 1234567
+          description: The TCS employee ID of the user causing the status change
+        time:
+          type: string
+          example: 2022-08-07 16:12:35
+          description: YYYY-MM-DD hh:mm:ss
+              
 
 
 #--------------------------------------------------------------
