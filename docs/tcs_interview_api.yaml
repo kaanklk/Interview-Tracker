@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: TCS Interview API
   description: Rest API serving TCS interview orchestration
-  version: 0.0.1
+  version: 0.0.2
   contact:
     name: Zoltán Simon
     email: zoltan.simon@edu.bme.hu
@@ -33,7 +33,11 @@ paths:
                   users:
                     type: array
                     items:
-                      $ref: '#/components/schemas/User'  
+                      $ref: '#/components/schemas/User'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         500:
           $ref: '#/components/responses/500APIError'
     post:
@@ -56,6 +60,12 @@ paths:
                 $ref: '#/components/schemas/User'
         400:
           $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        409:
+          $ref: '#/components/responses/409AlreadyExists'
         500:
           $ref: '#/components/responses/500APIError'
   /users/{userId}:
@@ -75,6 +85,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -102,6 +116,10 @@ paths:
                 $ref: '#/components/schemas/User'
         400:
           $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -122,6 +140,10 @@ paths:
               schema:
                 description: The deleted object
                 $ref: '#/components/schemas/User'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -155,6 +177,10 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Role'  
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         500:
           $ref: '#/components/responses/500APIError'
     post:
@@ -178,6 +204,12 @@ paths:
                 $ref: '#/components/schemas/Role'
         400:
           $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        409:
+          $ref: '#/components/responses/409AlreadyExists'
         500:
           $ref: '#/components/responses/500APIError'      
   /roles/{roleId}:
@@ -197,6 +229,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Role'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -224,6 +260,10 @@ paths:
                 $ref: '#/components/schemas/Role'
         400:
           $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -244,6 +284,10 @@ paths:
               schema:
                 description: The deleted object
                 $ref: '#/components/schemas/Role'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -276,6 +320,10 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Project'  
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         500:
           $ref: '#/components/responses/500APIError'
     post:
@@ -298,6 +346,12 @@ paths:
                 $ref: '#/components/schemas/Project'
         400:
           $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        409:
+          $ref: '#/components/responses/409AlreadyExists'
         500:
           $ref: '#/components/responses/500APIError'      
   /projects/{projectId}:
@@ -316,6 +370,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Project'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -343,6 +401,10 @@ paths:
                 $ref: '#/components/schemas/Project'
         400:
           $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -363,10 +425,406 @@ paths:
               schema:
                 description: The deleted object
                 $ref: '#/components/schemas/Project'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
           $ref: '#/components/responses/500APIError'      
+  /projects/{projectId}/positions:
+    get:
+      security:
+        - authcodeWithPKCE: [admin, project_manager]
+      tags:
+        - projects
+      description: Get the positions in one project
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/OrderBy'
+        - $ref: '#/components/parameters/OrderDirection'
+        - $ref: '#/components/parameters/Filter'
+      responses:
+        200:
+          description: The positions in the project are retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  positions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Position'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+  /projects/{projectId}/position-count:
+    get:
+      security:
+        - authcodeWithPKCE: [admin, project_manager]
+      tags:
+        - projects
+      description: Get the total count of positions in one project
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      responses:
+        200:
+          description: The total count of positions in the project are retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  positionCount:
+                    type: string
+                    example: 6
+                    description: The count of the positions
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+  /projects/{projectId}/associate-count:
+    get:
+      security:
+        - authcodeWithPKCE: [admin, project_manager]
+      tags:
+        - projects
+      description: Get the count of associates (users with role in this project) of one project
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      responses:
+        200:
+          description: The total count of associates of the project are retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  positionCount:
+                    type: string
+                    example: 21
+                    description: Associate count
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+  /projects/{projectId}/incomplete-interviews:
+    get:
+      security:
+        - authcodeWithPKCE: [admin, project_manager, recruiter]
+      tags:
+        - projects
+      description: Get the incomplete interviews for positions in a project
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/OrderBy'
+        - $ref: '#/components/parameters/OrderDirection'
+        - $ref: '#/components/parameters/Filter'
+      responses:
+        200:
+          description: Incomplete interviews are retrieved in content.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  incompleteInterviews:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Interview'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+  /projects/{projectId}/complete-interviews:
+    get:
+      security:
+        - authcodeWithPKCE: [admin, project_manager, recruiter]
+      tags:
+        - projects
+      description: Get the complete interviews for positions in a project
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/OrderBy'
+        - $ref: '#/components/parameters/OrderDirection'
+        - $ref: '#/components/parameters/Filter'
+      responses:
+        200:
+          description: The complete interviews are retrieved in content.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  completeInterviews:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Interview'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+  /projects/{projectId}/pending-candidates:
+    get:
+      security:
+        - authcodeWithPKCE: [admin, project_manager, recruiter]
+      tags:
+        - projects
+      description: Get the pending candidates for positions in a project.
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/OrderBy'
+        - $ref: '#/components/parameters/OrderDirection'
+        - $ref: '#/components/parameters/Filter'
+      responses:
+        200:
+          description: The pending candidates are retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pendingCandidates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Candidate'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+  /projects/{projectId}/rejected-candidates:
+    get:
+      security:
+        - authcodeWithPKCE: [admin, project_manager, recruiter]
+      tags:
+        - projects
+      description: Get the rejected candidates for positions in a project
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/OrderBy'
+        - $ref: '#/components/parameters/OrderDirection'
+        - $ref: '#/components/parameters/Filter'
+      responses:
+        200:
+          description: The rejected candidates are retriever in content.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rejectedCandidates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Candidate'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+  /projects/{projectId}/accepted-candidates:
+    get:
+      security:
+        - authcodeWithPKCE: [admin, project_manager, recruiter]
+      tags:
+        - projects
+      description: Get the accepted candidates for positions in a project
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/OrderBy'
+        - $ref: '#/components/parameters/OrderDirection'
+        - $ref: '#/components/parameters/Filter'
+      responses:
+        200:
+          description: The accepted candidates are retriever in content.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  acceptedCandidates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Candidate'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+  /projects/{projectId}/technical-interview-count:
+    get:
+      security:
+        - authcodeWithPKCE: [admin, project_manager, recruiter]
+      tags:
+        - projects
+      description: Get the count of technical-interviews in the last days. The number of days should be provided as a query parameter.
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/Days'
+      responses:
+        200:
+          description: The interviews count is retrieved in content.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  technicalInterviewCount:
+                    type: string
+                    example: 4
+                    description: Interview count
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+  /projects/{projectId}/management-interview-count:
+    get:
+      security:
+        - authcodeWithPKCE: [admin, project_manager, recruiter]
+      tags:
+        - projects
+      description: Get the count of management interviews in the last days. The number of days should be provided as a query parameter.
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/Days'
+      responses:
+        200:
+          description: The interviews count is retrieved in content.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  managementInterviewCount:
+                    type: string
+                    example: 5
+                    description: Interview count
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+  /projects/{projectId}/upcoming-technical-interviews:
+    get:
+      security:
+        - authcodeWithPKCE: [admin, project_manager, recruiter]
+      tags:
+        - projects
+      description: Get upcoming technical interviews.
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/OrderBy'
+        - $ref: '#/components/parameters/OrderDirection'
+        - $ref: '#/components/parameters/Filter'
+      responses:
+        200:
+          description: The upcoming technical interviews are retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  upcomingInterviews:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Interview'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+  /projects/{projectId}/upcoming-management-interviews:
+    get:
+      security:
+        - authcodeWithPKCE: [admin, project_manager, recruiter]
+      tags:
+        - projects
+      description: Get upcoming management interviews.
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/PageSize'
+        - $ref: '#/components/parameters/Offset'
+        - $ref: '#/components/parameters/OrderBy'
+        - $ref: '#/components/parameters/OrderDirection'
+        - $ref: '#/components/parameters/Filter'
+      responses:
+        200:
+          description: The upcoming management interviews are retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  upcomingInterviews:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Interview'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+
+
 
 #-----------------------------------------------------------------------
 # <Accessing positions>
@@ -395,6 +853,10 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Position'  
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         500:
           $ref: '#/components/responses/500APIError'
     post:
@@ -417,8 +879,14 @@ paths:
                 $ref: '#/components/schemas/Position'
         400:
           $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        409:
+          $ref: '#/components/responses/409AlreadyExists'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
   /positions/{positionId}:
     get:
       security:
@@ -435,6 +903,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Position'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -462,6 +934,10 @@ paths:
                 $ref: '#/components/schemas/Position'
         400:
           $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -482,10 +958,44 @@ paths:
               schema:
                 description: The deleted object
                 $ref: '#/components/schemas/Position'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
           $ref: '#/components/responses/500APIError'      
+  /positions/{positionId}/candidate-count:
+    get:
+      security:
+        - authcodeWithPKCE: [recruiter, project_manager]
+      tags:
+        - positions
+      description: Retrieve the count of candidates for a position
+      parameters:
+        - $ref: '#/components/parameters/PositionId'
+      responses:
+        200:
+          description: The count of candidates is sent back in content.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  candidateCount:
+                    type: string
+                    example: 8
+                    description: Candidate count
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'      
+
 
 #---------------------------------------------------------------------------------
 # <Accessing candidates>
@@ -512,6 +1022,10 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Candidate'  
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         500:
           $ref: '#/components/responses/500APIError'
     post:
@@ -535,6 +1049,12 @@ paths:
                 $ref: '#/components/schemas/Candidate'
         400:
           $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        409:
+          $ref: '#/components/responses/409AlreadyExists'
         500:
           $ref: '#/components/responses/500APIError'      
   /candidates/{candidateId}:
@@ -553,6 +1073,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Candidate'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -581,6 +1105,10 @@ paths:
                 $ref: '#/components/schemas/Candidate'
         400:
           $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -601,6 +1129,10 @@ paths:
               schema:
                 description: The deleted object
                 $ref: '#/components/schemas/Candidate'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -634,6 +1166,10 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/TechnicalDocumentation'  
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         500:
           $ref: '#/components/responses/500APIError'
     post:
@@ -657,6 +1193,12 @@ paths:
                 $ref: '#/components/schemas/TechnicalDocumentation'
         400:
           $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        409:
+          $ref: '#/components/responses/409AlreadyExists'
         500:
           $ref: '#/components/responses/500APIError'      
   /technical-documentations/{technicalId}:
@@ -675,6 +1217,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TechnicalDocumentation'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -702,6 +1248,10 @@ paths:
                 $ref: '#/components/schemas/TechnicalDocumentation'
         400:
           $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -722,6 +1272,10 @@ paths:
               schema:
                 description: The deleted object
                 $ref: '#/components/schemas/TechnicalDocumentation'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -755,6 +1309,10 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ManagementDocumentation'  
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         500:
           $ref: '#/components/responses/500APIError'
     post:
@@ -776,8 +1334,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ManagementDocumentation'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         400:
           $ref: '#/components/responses/400BadRequest'
+        409:
+          $ref: '#/components/responses/409AlreadyExists'
         500:
           $ref: '#/components/responses/500APIError'      
   /management-documentations/{managementId}:
@@ -796,6 +1360,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ManagementDocumentation'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -823,6 +1391,10 @@ paths:
                 $ref: '#/components/schemas/ManagementDocumentation'
         400:
           $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -843,6 +1415,10 @@ paths:
               schema:
                 description: The deleted object
                 $ref: '#/components/schemas/ManagementDocumentation'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -897,6 +1473,12 @@ paths:
                 $ref: '#/components/schemas/CandidateCV'
         400:
           $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        409:
+          $ref: '#/components/responses/409AlreadyExists'
         500:
           $ref: '#/components/responses/500APIError'
   /cv/{candidateId}:
@@ -915,6 +1497,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CandidateCV'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -942,6 +1528,10 @@ paths:
                 $ref: '#/components/schemas/CandidateCV'
         400:
           $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -962,6 +1552,10 @@ paths:
               schema:
                 description: The deleted object
                 $ref: '#/components/schemas/CandidateCV'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -994,6 +1588,10 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Interview'  
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         500:
           $ref: '#/components/responses/500APIError'
     post:
@@ -1016,6 +1614,12 @@ paths:
                 $ref: '#/components/schemas/Interview'
         400:
           $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        409:
+          $ref: '#/components/responses/409AlreadyExists'
         500:
           $ref: '#/components/responses/500APIError'
   /interviews/{interviewId}:
@@ -1034,6 +1638,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Interview'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -1061,6 +1669,10 @@ paths:
                 $ref: '#/components/schemas/Interview'
         400:
           $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -1081,6 +1693,10 @@ paths:
               schema:
                 description: The deleted object
                 $ref: '#/components/schemas/Interview'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -1102,6 +1718,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Interview'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -1123,6 +1743,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Interview'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -1144,6 +1768,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Interview'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -1165,6 +1793,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Interview'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -1198,6 +1830,10 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/StatusChange'  
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         500:
           $ref: '#/components/responses/500APIError'
   /status-changes/{statusChangeId}:
@@ -1216,6 +1852,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/StatusChange'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
@@ -1384,8 +2024,14 @@ components:
       schema:
         type: string
         example: waiting for technical interview
-
-
+    Days:
+      in: query
+      name: days
+      description: Determines from how many days back from the present date should the response contain data.
+      required: true
+      schema:
+        type: string
+        example: 7
 
 #--------------------------------------------------
   schemas:
@@ -1404,6 +2050,7 @@ components:
         middleName:
           type: string
           example: D.
+          nullable: false
         employeeId:
           type: string
           example: 1234567
@@ -1415,6 +2062,59 @@ components:
         dateOfBirth:
           type: string
           example: 1999-08-15 00:00:00
+          nullable: false
+          description: timestamp in YYYY-MM-DD 00:00:00 format (The time part is left 0)
+        roles:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: e734ec26-3d42-4c1c-9753-812c239bd9e9
+                description: UUID of the role
+              name:
+                type: string
+                example: administrator
+                description: name of the role
+              projectId:
+                type: string
+                example: 1f7ba697-06be-4835-8cff-08f9776ec622
+                description: UUID of the project
+        email:
+          type: string
+          example: my.name@gmail.com
+          description: The e-mail of the user
+        phone:
+          type: string
+          example: +369123456789
+          description: Phone number of the user
+          nullable: false
+    UserNoId:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        middleName:
+          type: string
+          example: D.
+          nullable: false
+        employeeId:
+          type: string
+          example: 1234567
+          description: TCS employee ID (not used as unique id in this system)
+        profilePicture:
+          type: string
+          example: VGhpcyB3b3VsZCBiZSBhbiBpbWFnZS4gQnV0IG5vdyBpdCdzIG9ubHkgdGV4dC4gOiggOik=
+          description: Base 64 with UTF-8 character set
+        dateOfBirth:
+          type: string
+          example: 1999-08-15 00:00:00
+          nullable: false
           description: timestamp in YYYY-MM-DD 00:00:00 format (The time part is left 0)
         roles:
           type: array
@@ -1437,51 +2137,7 @@ components:
           type: string
           example: +369123456789
           description: Phone number of the user
-    UserNoId:
-      type: object
-      properties:
-        firstName:
-          type: string
-          example: John
-        lastName:
-          type: string
-          example: Doe
-        middleName:
-          type: string
-          example: D.
-        employeeId:
-          type: string
-          example: 1234567
-          description: TCS employee ID (not used as unique id in this system)
-        profilePicture:
-          type: string
-          example: VGhpcyB3b3VsZCBiZSBhbiBpbWFnZS4gQnV0IG5vdyBpdCdzIG9ubHkgdGV4dC4gOiggOik=
-          description: Base 64 with UTF-8 character set
-        dateOfBirth:
-          type: string
-          example: 1999-08-15 00:00:00
-          description: timestamp in YYYY-MM-DD 00:00:00 format (The time part is left 0)
-        roles:
-          type: array
-          items:
-            type: object
-            properties:
-              roleName:
-                type: string
-                example: administrator
-                description: name of the role
-              roleId:
-                type: string
-                example: e734ec26-3d42-4c1c-9753-812c239bd9e9
-                description: UUID of the role
-        email:
-          type: string
-          example: my.name@gmail.com
-          description: The e-mail of the user
-        phone:
-          type: string
-          example: +369123456789
-          description: Phone number of the user
+          nullable: false
     Role:
       type: object
       properties:
@@ -1575,6 +2231,14 @@ components:
           type: string
           example: 12d78cb7-f563-40d9-aa92-a8b56e29fe70
           description: version 4 UUID
+        totalCount:
+          type: string
+          example: 10
+          description: The total head count to be hired for this position. (Including the already occupied.)
+        hiredCount:
+          type: string
+          example: 3
+          description: The count of people already hired for this positions. 
         interviewerPoll:
           type: array
           items:
@@ -1598,6 +2262,10 @@ components:
           type: string
           example: 12d78cb7-f563-40d9-aa92-a8b56e29fe70
           description: version 4 UUID
+        totalCount:
+          type: string
+          example: 10
+          description: The total head count to be hired for this position.
         interviewerPoll:
           type: array
           items:
@@ -1863,6 +2531,10 @@ components:
           type: string
           example: 6f2d190a-718f-4480-a50e-adafaf0f1c02
           description: version 4 UUID
+        projectId:
+          type: string
+          example: 6991c701-ef1d-4a5a-9fd9-01bab6cc0247
+          description: UUID
         interviewerId:
           type: string
           example: 14726796-5b08-4b16-86e4-5e097599911c
@@ -1890,6 +2562,10 @@ components:
           type: string
           example: 6f2d190a-718f-4480-a50e-adafaf0f1c02
           description: version 4 UUID
+        projectId:
+          type: string
+          example: 6991c701-ef1d-4a5a-9fd9-01bab6cc0247
+          description: UUID
         interviewerId:
           type: string
           example: 14726796-5b08-4b16-86e4-5e097599911c
@@ -2042,6 +2718,24 @@ components:
             $ref: '#/components/schemas/ErrorDetails'
     404ObjectNotFound:
       description: The object with the provided identifier was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDetails'
+    401Unauthorized:
+      description: Trying to access a protected resource without proper authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDetails'
+    403Forbidden:
+      description: The user does not have the necessary permissions for the resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDetails'
+    409AlreadyExists:
+      description: An object with the same unique values already exists.
       content:
         application/json:
           schema:
