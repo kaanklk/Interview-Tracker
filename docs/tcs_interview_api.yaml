@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: TCS Interview API
   description: Rest API serving TCS interview orchestration
-  version: 0.0.2
+  version: 0.0.3
   contact:
     name: Zoltán Simon
     email: zoltan.simon@edu.bme.hu
@@ -1805,19 +1805,19 @@ paths:
 
 #------------------------------------------------------------------
 #<Status changes>
-  /status-changes:
+  /candidate/{candidateId}/history:
     get:
       security:
         - authcodeWithPKCE: [admin, sourcer, recruiter, project_manager]
       tags:
-        - status changes
+        - candidates
       parameters:
         - $ref: '#/components/parameters/PageSize'
         - $ref: '#/components/parameters/Offset'
         - $ref: '#/components/parameters/OrderBy'
         - $ref: '#/components/parameters/OrderDirection'
         - $ref: '#/components/parameters/Filter'
-      description: Retrieve multiple objects
+      description: Retrieve status change history of a candidate
       responses:
         200:
           description: The array of objects is returned in content
@@ -1826,7 +1826,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  scheduledInterviews:
+                  statusChanges:
                     type: array
                     items:
                       $ref: '#/components/schemas/StatusChange'  
@@ -1836,13 +1836,13 @@ paths:
           $ref: '#/components/responses/403Forbidden'
         500:
           $ref: '#/components/responses/500APIError'
-  /status-changes/{statusChangeId}:
+  /candidate/{candidateId}/history/{statusChangeId}:
     get:
       security:
         - authcodeWithPKCE: [technical_interviewer sourcer]
       tags:
-        - status changes
-      description: Retrieve a specific object
+        - candidates
+      description: Retrieve a specific status change
       parameters:
         - $ref: '#/components/parameters/StatusChangeId'
       responses:
@@ -1871,102 +1871,102 @@ components:
     UserId:
       in: path
       name: userId
-      description: version 4 UUID of a user 
+      description: UUID of a user 
       required: true
       schema:
         type: string
         example: 0ea9267e-dcc7-4ee6-9381-306e220a3588
-        description: version 4 UUID
+        description: UUID
     RoleId:
       in: path
       name: roleId
-      description: version 4 UUID of a role
+      description: UUID of a role
       required: true
       schema:
         type: string
         example: d7961dea-b3b8-4865-abf4-57939ede0b4a
-        description: version 4 UUID
+        description: UUID
     ProjectId:
       in: path
       name: projectId
-      description: version 4 UUID of a project
+      description: UUID of a project
       required: true
       schema:
         type: string
         example: d7a1845d-29b5-4f62-8faa-456101d8f168
-        description: version 4 UUID
+        description: UUID
     PositionId:
       in: path
       name: positionId
-      description: version 4 UUID of a job position
+      description: UUID of a job position
       required: true
       schema:
         type: string
         example: b2985797-38f9-4935-b9ab-c241e90b3d4a
-        description: version 4 UUID
+        description: UUID
     CandidateId:
       in: path
       name: candidateId
-      description: version 4 UUID of a candidate for a particular position
+      description: UUID of a candidate for a particular position
       required: true
       schema:
         type: string
         example: 41ab9244-8091-4619-b621-efe38dbde027
-        description: version 4 UUID
+        description: UUID
     TechnicalId:
       in: path
       name: technicalId
-      description: version 4 UUID of a technical interview
+      description: UUID of a technical interview
       required: true
       schema:
         type: string
         example: cf6c6dc9-7e09-40da-bc62-74d2251e2140
-        description: version 4 UUID
+        description: UUID
     ManagementId:
       in: path
       name: managementId
-      description: version 4 UUID of a management interview
+      description: UUID of a management interview
       required: true
       schema:
         type: string
         example: 29a634e5-a496-48a8-8d6b-0e694cdf8134
-        description: version 4 UUID
+        description: UUID
     InterviewId:
       in: path
       name: interviewId
-      description: version 4 UUID of a technical or management interview
+      description: UUID of a technical or management interview
       required: true
       schema:
         type: string
         example: cb9dd3d2-ce95-481f-a953-69d0a9cfc129
-        description: version 4 UUID
+        description: UUID
     TechnicalInterviewerId:
       in: path
       name: technicalInterviewerId
-      description: version 4 UUID of a user with technical interviewer role
+      description: UUID of a user with technical interviewer role
       required: true
       schema:
         type: string
         example: 67bacb31-0f27-4a4c-9e5e-6beb0d2f3d69
-        description: version 4 UUID
+        description: UUID
     ManagementInterviewerId:
       in: path
       name: managementInterviewerId
-      description: version 4 UUID of a user with management interviewer role
+      description: UUID of a user with management interviewer role
       required: true
       schema:
         type: string
         example: 6d1fc02e-47b2-488f-ba88-b1180505e53d
-        description: version 4 UUID
+        description: UUID
     InterviewerId:
       in: path
       name: interviewerId
-      description: version 4 UUID of a user with technical interviewer or management interviewer role
+      description: UUID of a user with technical interviewer or management interviewer role
       required: true
       schema:
         type: string
         example: 7d66b824-de6d-4a9d-a918-a86b9de40a08
-        description: version 4 UUID
+        description: UUID
     PageSize:
       in: query
       name: pagesize
@@ -2015,7 +2015,7 @@ components:
       schema:
         type: string
         example: 7d66b824-de6d-4a9d-a918-a86b9de40a08
-        description: version 4 UUID
+        description: UUID
     CandidateState:
       in: query
       name: candidate-state
@@ -2162,14 +2162,14 @@ components:
         id:
           type: string
           example: 5924d57d-ae08-49ff-8a0a-c77489e3c895
-          description: version 4 UUID
+          description: UUID
         name:
           type: string
           example: Interview system
         projectManagerId:
           type: string
           example: 48e6181c-5b37-4481-8fa8-dadb91e4a8cd
-          description: version 4 UUID
+          description: UUID
         description:
           type: string
           example: This is an example project.
@@ -2177,17 +2177,17 @@ components:
           type: array
           items:
             example: 2a46f3b1-0bff-4767-90d4-13e26d78dbb5
-            description: version 4 UUID
+            description: UUID
         sourcers:
           type: array
           items:
             example: df37a1f1-0d0d-489e-b737-b3d28665924e
-            description: version 4 UUID
+            description: UUID
         interviewers:
           type: array
           items:
             example: df37a1f1-0d0d-489e-b737-b3d28665924e
-            description: version 4 UUID
+            description: UUID
         deadline:
           type: string
           example: 2022-08-12 00:00:00
@@ -2201,18 +2201,18 @@ components:
         projectManagerId:
           type: string
           example: 48e6181c-5b37-4481-8fa8-dadb91e4a8cd
-          description: version 4 UUID
+          description: UUID
         description:
           type: string
           example: This is an example project.
         recruiterId:
           type: string
           example: 2a46f3b1-0bff-4767-90d4-13e26d78dbb5
-          description: version 4 UUID
+          description: UUID
         sourcerId:
           type: string
           example: df37a1f1-0d0d-489e-b737-b3d28665924e
-          description: version 4 UUID
+          description: UUID
         deadline:
           type: string
           example: 2022-08-12 00:00:00
@@ -2223,14 +2223,14 @@ components:
         id:
           type: string
           example: 234b821c-941d-439c-9558-1bf952838b43
-          description: version 4 UUID
+          description: UUID
         name:
           type: string
           example: data engineer
         projectId:
           type: string
           example: 12d78cb7-f563-40d9-aa92-a8b56e29fe70
-          description: version 4 UUID
+          description: UUID
         totalCount:
           type: string
           example: 10
@@ -2239,7 +2239,7 @@ components:
           type: string
           example: 3
           description: The count of people already hired for this positions. 
-        interviewerPoll:
+        interviewerPool:
           type: array
           items:
             type: object
@@ -2247,7 +2247,7 @@ components:
               id:       
                 type: string
                 example: d867dc22-51ec-4de6-935e-2769ffc43afd
-                description: version 4 UUID of a user who has interviewer role
+                description: UUID of a user who has interviewer role
               type:
                 type: string
                 example: technical
@@ -2261,12 +2261,12 @@ components:
         projectId:
           type: string
           example: 12d78cb7-f563-40d9-aa92-a8b56e29fe70
-          description: version 4 UUID
+          description: UUID
         totalCount:
           type: string
           example: 10
           description: The total head count to be hired for this position.
-        interviewerPoll:
+        interviewerPool:
           type: array
           items:
             type: object
@@ -2274,7 +2274,7 @@ components:
               id:       
                 type: string
                 example: d867dc22-51ec-4de6-935e-2769ffc43afd
-                description: version 4 UUID of a user who has interviewer role
+                description: UUID of a user who has interviewer role
               type:
                 type: string
                 example: technical
@@ -2285,11 +2285,11 @@ components:
         id:
           type: string
           example: 52c2fc2d-04c1-4d17-bdef-72aca038749e
-          description: version 4 UUID
+          description: UUID
         positionId:
           type: string
           example: c989480a-4b8d-4c75-bf3b-db9bafe05a8e
-          description: version 4 UUID
+          description: UUID
         firstName: 
           type: string
           example: John
@@ -2408,7 +2408,7 @@ components:
         positionId:
           type: string
           example: c989480a-4b8d-4c75-bf3b-db9bafe05a8e
-          description: version 4 UUID
+          description: UUID
         firstName: 
           type: string
           example: John
@@ -2526,11 +2526,11 @@ components:
         id:
           type: string
           example: 421e669f-9b7b-49ea-8f93-11e13bf74e02
-          description: version 4 UUID
+          description: UUID
         candidateId:
           type: string
           example: 6f2d190a-718f-4480-a50e-adafaf0f1c02
-          description: version 4 UUID
+          description: UUID
         projectId:
           type: string
           example: 6991c701-ef1d-4a5a-9fd9-01bab6cc0247
@@ -2538,16 +2538,16 @@ components:
         interviewerId:
           type: string
           example: 14726796-5b08-4b16-86e4-5e097599911c
-          description: version 4 UUID
+          description: UUID
         interviewerId2:
           type: string
           example: 14726796-5b08-4b16-86e4-5e097599911c
-          description: version 4 UUID
+          description: UUID
         finalTimeslot:
           type: string
           example: 14726796-5b08-4b16-86e4-5e097599911c
           nullable: true
-          description: version 4 UUID
+          description: UUID
         type:
           type: string
           example: management
@@ -2561,7 +2561,7 @@ components:
         candidateId:
           type: string
           example: 6f2d190a-718f-4480-a50e-adafaf0f1c02
-          description: version 4 UUID
+          description: UUID
         projectId:
           type: string
           example: 6991c701-ef1d-4a5a-9fd9-01bab6cc0247
@@ -2569,16 +2569,16 @@ components:
         interviewerId:
           type: string
           example: 14726796-5b08-4b16-86e4-5e097599911c
-          description: version 4 UUID
+          description: UUID
         interviewerId2:
           type: string
           example: 14726796-5b08-4b16-86e4-5e097599911c
-          description: version 4 UUID
+          description: UUID
         finalTimeslot:
           type: string
           example: 14726796-5b08-4b16-86e4-5e097599911c
           nullable: true
-          description: version 4 UUID
+          description: UUID
         type:
           type: string
           example: management
@@ -2595,15 +2595,15 @@ components:
         candidateId:
           type: string
           example: kanaogbnb5gsdv3sdv
-          description: version 4 UUID
+          description: UUID
         positionId:
           type: string
           example: opnb79wbjwebwejqw5we5w
-          description: version 4 UUID
+          description: UUID
         interviewerId:
           type: string
           example: sdf2sd5sfsd6f5dfd5
-          description: version 4 UUID
+          description: UUID
         score:
           type: string
           example: 80 
@@ -2613,15 +2613,15 @@ components:
         candidateId:
           type: string
           example: kanaogbnb5gsdv3sdv
-          description: version 4 UUID
+          description: UUID
         positionId:
           type: string
           example: opnb79wbjwebwejqw5we5w
-          description: version 4 UUID
+          description: UUID
         interviewerId:
           type: string
           example: sdf2sd5sfsd6f5dfd5
-          description: version 4 UUID
+          description: UUID
         score:
           type: string
           example: 80
@@ -2631,15 +2631,15 @@ components:
         id:
           type: string
           example: kakakvajaqoror3p42hi
-          description: version 4 UUID
+          description: UUID
         candidateId:
           type: string
           example: kanaogbnb5gsdv3sdv
-          description: version 4 UUID
+          description: UUID
         interviewerId:
           type: string
           example: sdf2sd5sfsd6f5dfd5
-          description: version 4 UUID
+          description: UUID
         score:
           type: string
           example: 80
@@ -2649,11 +2649,11 @@ components:
         candidateId:
           type: string
           example: kanaogbnb5gsdv3sdv
-          description: version 4 UUID
+          description: UUID
         interviewerId:
           type: string
           example: sdf2sd5sfsd6f5dfd5
-          description: version 4 UUID
+          description: UUID
         score:
           type: string
           example: 80
@@ -2674,7 +2674,7 @@ components:
         candidateId:
           type: string
           example: 3ea4d01c-297a-4f4d-a76f-52ffecd4247d
-          description: version 4 UUID of the candidate
+          description: UUID of the candidate
         data:
           type: string
           example: VGhpcyBpcyBhbiBleGFtcGxlIGRvY3VtZW50IHRoYXQgY291bGQgYmUgeW91ciBDVi4gSXQncyBub3QgdGhvLiBJIGhvcGUgdGhhdCB0aGlzIGlzIGEgZ29vZCBleGFtcGxlIGZvciBCYXNlNjQgZW5jb2RpbmcuIEJ5IFpvbGk=
