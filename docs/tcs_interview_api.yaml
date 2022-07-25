@@ -1812,6 +1812,7 @@ paths:
       tags:
         - candidates
       parameters:
+        - $ref: '#/components/parameters/CandidateId'
         - $ref: '#/components/parameters/PageSize'
         - $ref: '#/components/parameters/Offset'
         - $ref: '#/components/parameters/OrderBy'
@@ -1844,6 +1845,7 @@ paths:
         - candidates
       description: Retrieve a specific status change
       parameters:
+        - $ref: '#/components/parameters/CandidateId'
         - $ref: '#/components/parameters/StatusChangeId'
       responses:
         200:
