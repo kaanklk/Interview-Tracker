@@ -10,6 +10,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
+@Data
 @Table(name="person_has_timeslot")
 public class PersonHasTimeslot {
 
@@ -39,39 +40,7 @@ public class PersonHasTimeslot {
         this.person = person;
         this.function = function;
     }
-
-    public int getPersonHasTimeslotId() {
-        return personHasTimeslotId;
-    }
-
-    public void setPersonHasTimeslotId(int personHasTimeslotId) {
-        this.personHasTimeslotId = personHasTimeslotId;
-    }
-
-    public Timeslot getTimeslot_id() {
-        return timeslot;
-    }
-
-    public void setTimeslot_id(Timeslot timeslot) {
-        this.timeslot = timeslot;
-    }
-
-    public Person getPerson_id() {
-        return person;
-    }
-
-    public void setPerson_id(Person person) {
-        this.person = person;
-    }
-
-    public String getFunction() {
-        return function;
-    }
-
-    public void setFunction(String function) {
-        this.function = function;
-    }
-
+    
     @Override
     public String toString() {
         return "PersonHasTimeslot [function=" + function + ", personHasTimeslotId=" + personHasTimeslotId
