@@ -20,7 +20,7 @@ public class PersonHasTimeslot {
     @Column(name="id")
     @NonNull
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int personHasTimeslotId;
+    private long personHasTimeslotId;
 
     @ManyToOne
     @Column(name="timeslot_id")
@@ -36,8 +36,7 @@ public class PersonHasTimeslot {
     public PersonHasTimeslot() {
     }
 
-    public PersonHasTimeslot(int personHasTimeslotId, Timeslot  timeslot, Person person, String function) {
-        this.personHasTimeslotId = personHasTimeslotId;
+    public PersonHasTimeslot(Timeslot  timeslot, Person person, String function) {
         this.timeslot = timeslot;
         this.person = person;
         this.function = function;
