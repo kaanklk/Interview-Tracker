@@ -15,6 +15,7 @@ public class PersonHasTimeslot {
 
     @Id
     @Column(name="id")
+    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int personHasTimeslotId;
 
