@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import tcs.interviewtracker.persistence.TechnicalDocumentation;
 
 @Repository
-public interface TechnicalDocumentationRepository extends CrudRepository<TechnicalDocumentation, Integer> {
+public interface TechnicalDocumentationRepository extends CrudRepository<TechnicalDocumentation, Long> {
     
 }
