@@ -11,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
 import lombok.Data;
 
 
@@ -32,15 +31,6 @@ public class Position {
     @JoinColumn(name = "project_id", referencedColumnName = "id")
     private Project project;
 
-
-
-
-
     @OneToMany(mappedBy = "position_id")
     private Set<Candidate> candidates;
-
-
-
-
-
 }
