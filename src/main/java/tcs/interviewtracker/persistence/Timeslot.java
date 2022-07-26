@@ -18,7 +18,7 @@ public class Timeslot {
 
     @Id
     @NonNull
-    @Column(name="timeslot_id")
+    @Column(name="id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long timeslotId;
 
