@@ -8,14 +8,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Data;
+import lombok.NonNull;
+
 @Entity
 @Data
 @Table(name="timeslot")
 public class Timeslot {
 
     @Id
+    @NonNull
     @Column(name="timeslot_id")
-    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int timeslotId;
 
@@ -36,12 +39,6 @@ public class Timeslot {
         this.timeslotStart = timeslotStart;
         this.timeslotEnd = timeslotEnd;
         this.timeslotType = timeslotType;
-    }
-
-    @Override
-    public String toString() {
-        return "Timeslot [timeslotEnd=" + timeslotEnd + ", timeslotId=" + timeslotId + ", timeslotStart="
-                + timeslotStart + ", timeslotType=" + timeslotType + "]";
     }
 
 }

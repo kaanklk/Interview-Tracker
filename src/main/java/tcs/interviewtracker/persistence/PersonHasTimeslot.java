@@ -6,8 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import lombok.Data;
+import lombok.NonNull;
 
 @Entity
 @Data
@@ -16,7 +18,7 @@ public class PersonHasTimeslot {
 
     @Id
     @Column(name="id")
-    @NotNull
+    @NonNull
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int personHasTimeslotId;
 
@@ -24,7 +26,7 @@ public class PersonHasTimeslot {
     @Column(name="timeslot_id")
     private Timeslot timeslot;
 
-    @OneToMany(mappedBy="person_id")
+    @ManyToOne
     @Column(name="person_id")
     private Person person;
 
@@ -39,12 +41,6 @@ public class PersonHasTimeslot {
         this.timeslot = timeslot;
         this.person = person;
         this.function = function;
-    }
-    
-    @Override
-    public String toString() {
-        return "PersonHasTimeslot [function=" + function + ", personHasTimeslotId=" + personHasTimeslotId
-                + ", person_id=" + person + ", timeslot_id=" + timeslot + "]";
     }
 
 }
