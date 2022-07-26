@@ -3,9 +3,12 @@ package tcs.interviewtracker.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import tcs.interviewtracker.persistence.User;
 import tcs.interviewtracker.repository.UserRepository;
 
+@Service
 public class UserService {
 
 
@@ -30,10 +33,23 @@ public class UserService {
 
     public void updateUser(Long id, User user){
 
+        User userToUpdate = userRepo.findById(id).get();
+        userToUpdate.setFirstName(user.getFirstName());
+        userToUpdate.setLastName(user.getLastName());
+        userToUpdate.setMiddleName(user.getMiddleName());
+        userToUpdate.setEmployeeId(user.getEmployeeId());
+        userToUpdate.setProfilePicture(user.getProfilePicture());
+        userToUpdate.setEmail(user.getEmail());
+        userToUpdate.setDateOfBirth(user.getDateOfBirth());
+        userToUpdate.setPhone(user.getPhone());
+        userToUpdate.setRoles(user.getRoles());
+
+        userRepo.save(userToUpdate);
     }
 
     public void deleteUser(Long id){
-        userRepo.deleteById(id);
+       User user = userRepo.findById(id).get();
+       userRepo.delete(user);
     }
 
 }

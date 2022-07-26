@@ -1,6 +1,5 @@
 package tcs.interviewtracker.controller;
 
-
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -15,50 +14,48 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import tcs.interviewtracker.persistence.User;
-import tcs.interviewtracker.service.UserService;
+import tcs.interviewtracker.persistence.Role;
+import tcs.interviewtracker.service.RoleService;
 
 @RestController
 @RequestMapping("/")
-public class UserController {
+public class RoleController {
 
-    private UserService service;
+    private RoleService service;
 
-    UserController(UserService service){
+    RoleController(RoleService service){
         this.service = service;
     }
 
-    @GetMapping("users")
+    @GetMapping("roles")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public List<User> getAllUsers(){
-        return service.getAllUsers();
+    public List<Role> getAllRoles(){
+        return service.getAllRoles();
     }
 
-    @GetMapping("users/{id}")
+    @GetMapping("roles/{id}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public User getUserById(@PathVariable Long id){
-        return service.getUserById(id);
+    public Role getRoleById(@PathVariable Long id){
+        return service.getRoleById(id);
     }
 
-    @PostMapping("users")
+    @PostMapping("roles")
     @ResponseStatus(HttpStatus.CREATED)
-    public void save(@RequestBody User user){
-        service.saveUser(user);
+    public void save(@RequestBody Role role){
+        service.saveRole(role);
     }
 
-    @PutMapping("users/{id}")
+    @PutMapping("roles/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateUserById(@PathVariable Long id, @RequestBody User user){
-        service.updateUser(id,user);
+    public void updateRoleById(@PathVariable Long id, @RequestBody Role role){
+        service.updateRole(id,role);
     }
 
-    @DeleteMapping("users/{id}")
+    @DeleteMapping("roles/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUserById(@PathVariable Long id){
-        service.deleteUser(id);
+    public void deleteRoleById(@PathVariable Long id){
+        service.deleteRole(id);
     }
-
-
 }
