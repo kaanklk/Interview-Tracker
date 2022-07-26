@@ -8,14 +8,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = Project.TBL_NAME)
 @Data
+@NoArgsConstructor
 public class Project {
-    protected static final String TBL_NAME="project";
+    protected static final String TBL_NAME = "project";
 
-    protected static final String FLD_NAME="name";
+    protected static final String FLD_NAME = "name";
     protected static final String FLD_PROJECT_MANAGER_ID = "project_manager_id";
     protected static final String FLD_DESCRIPTION = "description";
     protected static final String FLD_RECRUITER_ID = "recruiter_id";
@@ -30,21 +32,21 @@ public class Project {
     private String name;
 
     // TODO: One to one
-    @Column(name = FLD_PROJECT_MANAGER_ID,nullable = false)
+    @Column(name = FLD_PROJECT_MANAGER_ID, nullable = false)
     private Long projectManagerId;
 
-    @Column(name = FLD_DESCRIPTION,nullable = false)
-    private Long description;
+    @Column(name = FLD_DESCRIPTION, nullable = false)
+    private String description;
 
-    //TODO: One to many?
-    @Column(name = FLD_RECRUITER_ID,nullable = true)
+    // TODO: One to many?
+    @Column(name = FLD_RECRUITER_ID, nullable = true)
     private Long recruiterId;
 
     // TODO: One to many?
-    @Column(name = FLD_SOURCER_ID,nullable = true)
+    @Column(name = FLD_SOURCER_ID, nullable = true)
     private Long sourcerId;
 
-    @Column(name = FLD_DEADLINE,nullable = true)
+    @Column(name = FLD_DEADLINE, nullable = true)
     private String deadline;
 
 }

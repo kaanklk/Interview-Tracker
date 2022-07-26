@@ -25,4 +25,8 @@ public class ProjectService {
         return projectRepository.getReferenceById(id);
     }
 
+    public List<Project> getAllAProjects() {
+        return projectRepository.findAll();
+    }
+
 }
