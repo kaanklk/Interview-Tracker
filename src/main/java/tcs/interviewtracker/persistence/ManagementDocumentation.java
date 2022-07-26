@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -47,7 +48,6 @@ public class ManagementDocumentation {
     @Column(columnDefinition = "varchar(256)")
     private String directSupervisorName;
 
-
     @OneToOne
     @JoinColumn(name = "candidate_id", referencedColumnName = "id")
     @Column(nullable = false)
@@ -58,12 +58,12 @@ public class ManagementDocumentation {
     @Column(nullable = false)
     private Project project;
 
-    @OneToOne
+    @OneToMany
     @JoinColumn(name = "interviewer_id1", referencedColumnName = "id")
     @Column(nullable = false)
     private User interviewer1;
 
-    @OneToOne
+    @OneToMany
     @JoinColumn(name = "interviewer_id2", referencedColumnName = "id")
     @Column(nullable = false)
     private User interviewer2;
