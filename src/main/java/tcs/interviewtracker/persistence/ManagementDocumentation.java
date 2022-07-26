@@ -53,18 +53,15 @@ public class ManagementDocumentation {
     private Candidate candidate;
 
     @ManyToOne
-    @JoinColumn(name = "project_id", referencedColumnName = "id")
-    @Column(nullable = false)
+    @JoinColumn(name = "project_id", referencedColumnName = "id", nullable = false)
     private Project project;
 
-    @OneToMany
-    @JoinColumn(name = "interviewer_id1", referencedColumnName = "id")
-    @Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "interviewer_id1", referencedColumnName = "id", nullable = false)
     private User interviewer1;
 
-    @OneToMany
-    @JoinColumn(name = "interviewer_id2", referencedColumnName = "id")
-    @Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "interviewer_id2", referencedColumnName = "id", nullable = false)
     private User interviewer2;
 
 
