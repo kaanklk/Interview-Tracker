@@ -7,8 +7,8 @@ import org.springframework.context.annotation.PropertySources;
 
 @SpringBootApplication
 @PropertySources({
-	@PropertySource("classpath:application.properties"),
-	@PropertySource("classpath:system-specific.properties")
+		@PropertySource("classpath:application.properties"),
+		@PropertySource("classpath:system-specific.properties")
 })
 public class InterviewTrackerApplication {
 
