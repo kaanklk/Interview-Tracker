@@ -1,11 +1,13 @@
 package tcs.interviewtracker.persistence;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import lombok.Data;
 
 @Entity
+@Data
 public class TechnicalDocumentation {
 
+    @Id
+    private int id;
 }

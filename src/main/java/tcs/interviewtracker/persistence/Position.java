@@ -1,5 +1,14 @@
 package tcs.interviewtracker.persistence;
 
-public class Position {
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
+import lombok.Data;
+
+@Entity
+@Data
+public class Position {
+    
+    @Id
+    private int id;
 }
