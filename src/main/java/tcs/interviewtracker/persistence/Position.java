@@ -31,6 +31,6 @@ public class Position {
     @JoinColumn(name = "project_id", referencedColumnName = "id")
     private Project project;
 
-    @OneToMany(mappedBy = "position_id")
+    @OneToMany(mappedBy = "position")
     private Set<Candidate> candidates;
 }
