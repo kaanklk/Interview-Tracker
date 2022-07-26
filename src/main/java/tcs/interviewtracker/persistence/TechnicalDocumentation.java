@@ -26,8 +26,8 @@ public class TechnicalDocumentation {
     @GeneratedValue(strategy  = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne(mappedBy = "candidate")
-    @Column(name = "candidate")
+    @OneToOne
+    @JoinColumn(name = "candidate_id", referencedColumnName = "id", nullable = false)
     private Candidate candidate;
 
     @Column(name = "date")
