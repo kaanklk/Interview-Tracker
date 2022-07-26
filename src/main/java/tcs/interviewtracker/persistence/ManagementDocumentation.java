@@ -49,8 +49,7 @@ public class ManagementDocumentation {
     private String directSupervisorName;
 
     @OneToOne
-    @JoinColumn(name = "candidate_id", referencedColumnName = "id")
-    @Column(nullable = false)
+    @JoinColumn(name = "candidate_id", referencedColumnName = "id", nullable = false)
     private Candidate candidate;
 
     @ManyToOne
