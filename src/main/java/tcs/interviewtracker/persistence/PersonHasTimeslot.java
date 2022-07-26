@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -22,7 +23,7 @@ public class PersonHasTimeslot {
     @JoinColumn(name="timeslot_id")
     private int timeslot_id;
 
-    @ManyToOne
+    @OneToMany
     @JoinColumn(name="person_id")
     private int person_id;
 
