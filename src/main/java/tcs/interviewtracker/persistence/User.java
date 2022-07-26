@@ -62,5 +62,4 @@ public class User {
     @CreationTimestamp
     private Timestamp created;
 
-
 }
