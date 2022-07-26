@@ -20,7 +20,7 @@ public class Timeslot {
     @NonNull
     @Column(name="timeslot_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int timeslotId;
+    private long timeslotId;
 
     @Column(name="start")
     private Timestamp timeslotStart;
@@ -34,8 +34,7 @@ public class Timeslot {
     public Timeslot() {
     }
 
-    public Timeslot(int timeslotId, Timestamp timeslotStart, Timestamp timeslotEnd, String timeslotType) {
-        this.timeslotId = timeslotId;
+    public Timeslot(Timestamp timeslotStart, Timestamp timeslotEnd, String timeslotType) {
         this.timeslotStart = timeslotStart;
         this.timeslotEnd = timeslotEnd;
         this.timeslotType = timeslotType;
