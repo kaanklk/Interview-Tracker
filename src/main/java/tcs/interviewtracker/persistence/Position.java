@@ -1,17 +1,23 @@
 package tcs.interviewtracker.persistence;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import lombok.Data;
 
 
 
 @Entity
+@Data
 @Table(name = "position")
 public class Position {
 
@@ -28,45 +34,10 @@ public class Position {
 
 
 
-    public Position(String positionName, Project project, Candidate candidate) {
-        this.positionName = positionName;
-        this.project = project;
-        this.candidate = candidate;
-    }
 
-    public Position() {
-    }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getPositionName() {
-        return positionName;
-    }
-
-    public void setPositionName(String positionName) {
-        this.positionName = positionName;
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProjetc(Project project) {
-        this.project = project;
-    }
-
-    public Candidate getCandidate() {
-        return candidate;
-    }
-
-    public void setCandidate(Candidate candidate) {
-        this.candidate = candidate;
-    }
-
-    @OneToOne(mappedBy = "position")
-    private Candidate candidate;
+    @OneToMany(mappedBy = "position_id")
+    private Set<Candidate> candidates;
 
 
 

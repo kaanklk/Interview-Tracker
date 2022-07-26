@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -52,7 +53,7 @@ public class ManagementDocumentation {
     @Column(nullable = false)
     private Candidate candidate;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "project_id", referencedColumnName = "id")
     @Column(nullable = false)
     private Project project;
