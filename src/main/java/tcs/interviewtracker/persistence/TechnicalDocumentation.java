@@ -3,6 +3,7 @@ package tcs.interviewtracker.persistence;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -77,11 +78,11 @@ public class TechnicalDocumentation {
     @Column(name = "last_comments")
     private Integer lastComments;
 
-    @Column(name = "interviewer_one")
+    @JoinColumn(name = "interviewer_one", referencedColumnName = "id", nullable = false)
     @ManyToOne
     private User interviewerOne;
 
-    @Column(name = "interviewer_two")
+    @JoinColumn(name = "interviewerTwo", referencedColumnName = "id", nullable = false)
     @ManyToOne
     private User interviewerTwo;
 
@@ -90,7 +91,7 @@ public class TechnicalDocumentation {
 
     @Column(name ="designation_two", nullable = true)
     private int designationTwo;
- 
+
     public TechnicalDocumentation() {
     }
 
@@ -99,7 +100,7 @@ public class TechnicalDocumentation {
             int techSkillComment2, int technicalSkills3, int techSkillComment3, int technicalSkills4,
             int techSkillComment4, int totalExperience, int roleExperience, boolean isReccomended, int lastComments,
             User interviewerOne, User interviewerTwo, int designationOne, int designationTwo) {
-        
+
         this.candidate = candidate;
         this.date = date;
         this.duration = duration;
@@ -123,5 +124,5 @@ public class TechnicalDocumentation {
         this.designationTwo = designationTwo;
     }
 
-    
+
 }
