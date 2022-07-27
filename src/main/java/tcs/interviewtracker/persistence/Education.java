@@ -2,7 +2,6 @@ package tcs.interviewtracker.persistence;
 
 import java.security.Timestamp;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -16,7 +15,7 @@ import lombok.Data;
 @Data
 @Table(name = "education")
 public class Education {
-    
+
     @Id
     private int id;
 

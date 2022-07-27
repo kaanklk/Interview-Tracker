@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import tcs.interviewtracker.persistence.Project;
-import tcs.interviewtracker.repository.ProjectRepository;
 import tcs.interviewtracker.service.ProjectService;
 
 @RestController
@@ -23,11 +22,11 @@ import tcs.interviewtracker.service.ProjectService;
 public class ProjectController {
 
     private ProjectService projectService;
-    private ProjectRepository projectRepository;
+    // private UserService UserService;
+    // private PositionService positionService;
 
-    public ProjectController(@Autowired ProjectService projectService, @Autowired ProjectRepository projectRepository) {
+    public ProjectController(@Autowired ProjectService projectService) {
         this.projectService = projectService;
-        this.projectRepository = projectRepository;
     }
 
     @GetMapping("/")
@@ -37,14 +36,13 @@ public class ProjectController {
 
     @PostMapping("/")
     public Project createNewProject(@Validated @RequestBody Project project) {
-        return projectRepository.save(project);
+        return projectService.saveProject(project);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Project> getProjectsById(@PathVariable(value = "id") Long projectId)
             throws Exception {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new Exception("Project not found with id: " + projectId));
+        Project project = projectService.getById(projectId);
         return ResponseEntity.ok().body(project);
     }
 
@@ -52,26 +50,93 @@ public class ProjectController {
     public ResponseEntity<Project> updateExistingProject(@PathVariable(value = "id") Long id,
             @Validated @RequestBody Project projectDetails)
             throws Exception {
-        Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new Exception("Project not found with id: " + id));
+
+        Project project = projectService.getById(id);
+        // User user = userService.getProjectManager()?
+        // User user = userService.getSourcer()?
+        // User user = userService.getRecruiter()?
 
         project.setName(projectDetails.getName());
-        project.setProjectManagerId(projectDetails.getProjectManagerId());
+        // project.setProjectManagerId(projectDetails.getProjectManager());
         project.setDescription(projectDetails.getDescription());
-        project.setRecruiterId(projectDetails.getRecruiterId());
-        project.setSourcerId(projectDetails.getSourcerId());
+        // project.setRecruiterId(projectDetails.getRecruiter());
+        // project.setSourcerId(projectDetails.getSourcer());
         project.setDeadline(projectDetails.getDeadline());
 
-        final Project updatedProject = projectRepository.save(project);
+        final Project updatedProject = projectService.saveProject(project);
         return ResponseEntity.ok(updatedProject);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Project> deleteProject(@PathVariable(value = "id") Long id) throws Exception {
-        Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new Exception("Project not found with id: " + id));
-        projectRepository.delete(project);
+        Project project = projectService.getById(id);
+
+        projectService.deleteProject(project);
         return ResponseEntity.ok(project);
     }
+
+    // TODO: IMPLEMENT POSITIONS
+
+    // @GetMapping(value = "/{id}/positions")
+    // public List<Position> getMethodName(@PathVariable(value = "id") Long id)
+    // throws Exception {
+
+    // }
+
+    // TODO: IMPLMENT POSITION COUNT
+    // @GetMapping(value="/{id}/position-count")
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
+
+    // @GetMapping(value = "/{id}/assosciate-count")
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
+
+    // @GetMapping(value = "/{id}/incomplete-interviews")
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
+
+    // @GetMapping(value = "/{id}/complete-interviews")
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
+
+    // @GetMapping(value = "/{id}/pending-candidates")
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
+
+    // @GetMapping(value = "/{id}/rejected-candidates")
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
+
+    // @GetMapping(value="/{id}/accepted-candidates)
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
+
+    // @GetMapping(value = "/{id}/techical-interview-count")
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
+
+    // @GetMapping(value = "/{id}/management-interview-count")
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
+
+    // @GetMapping(value = "/{id}/upcoming-tecnical-interviews")
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
+
+    // @GetMapping(value = "/{id}/upcoming-manegement-interviews")
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
 
 }

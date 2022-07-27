@@ -2,12 +2,7 @@ package tcs.interviewtracker.service;
 
 import java.util.List;
 
-import javax.persistence.criteria.Order;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import tcs.interviewtracker.persistence.Project;
@@ -15,6 +10,7 @@ import tcs.interviewtracker.repository.ProjectRepository;
 
 @Service
 public class ProjectService {
+
     private ProjectRepository projectRepository;
 
     public ProjectService(@Autowired ProjectRepository projectRepository) {
@@ -27,6 +23,14 @@ public class ProjectService {
 
     public List<Project> getAllAProjects() {
         return projectRepository.findAll();
+    }
+
+    public Project saveProject(Project project) {
+        return projectRepository.save(project);
+    }
+
+    public void deleteProject(Project project) {
+        projectRepository.delete(project);
     }
 
 }

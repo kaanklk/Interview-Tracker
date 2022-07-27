@@ -15,7 +15,6 @@ import javax.persistence.GenerationType;
 
 import java.sql.Date;
 
-
 @Entity
 @Data
 @Table(name = "technical_documentation")
@@ -23,7 +22,7 @@ public class TechnicalDocumentation {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy  = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @OneToOne
@@ -51,7 +50,7 @@ public class TechnicalDocumentation {
     @Column(name = "technical_skills2", nullable = true)
     private Integer technicalSkills2;
 
-    @Column(name = "tech_skill_comment2", nullable = true       )
+    @Column(name = "tech_skill_comment2", nullable = true)
     private Integer techSkillComment2;
 
     @Column(name = "technical_skills3", nullable = true)
@@ -86,16 +85,16 @@ public class TechnicalDocumentation {
     @ManyToOne
     private User interviewerTwo;
 
-    @Column(name ="designation_one", nullable = true)
+    @Column(name = "designation_one", nullable = true)
     private int designationOne;
 
-    @Column(name ="designation_two", nullable = true)
+    @Column(name = "designation_two", nullable = true)
     private int designationTwo;
 
     public TechnicalDocumentation() {
     }
 
-    public TechnicalDocumentation( Candidate candidate, Date date, int duration, String understandingOfRole,
+    public TechnicalDocumentation(Candidate candidate, Date date, int duration, String understandingOfRole,
             String understandingComment, int technicalSkills1, int techSkillComment1, int technicalSkills2,
             int techSkillComment2, int technicalSkills3, int techSkillComment3, int technicalSkills4,
             int techSkillComment4, int totalExperience, int roleExperience, boolean isReccomended, int lastComments,
@@ -123,6 +122,5 @@ public class TechnicalDocumentation {
         this.designationOne = designationOne;
         this.designationTwo = designationTwo;
     }
-
 
 }
