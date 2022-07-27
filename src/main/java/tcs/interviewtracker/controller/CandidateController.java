@@ -13,45 +13,35 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.AllArgsConstructor;
 import tcs.interviewtracker.DTOs.CandidateDTO;
 import tcs.interviewtracker.persistence.Candidate;
-import tcs.interviewtracker.repository.CandidateRepository;
+import tcs.interviewtracker.persistence.Person;
 import tcs.interviewtracker.service.CandidateService;
+import tcs.interviewtracker.service.PersonService;
 
 @RestController
 @RequestMapping("/candidates")
 @AllArgsConstructor
 public class CandidateController {
-    private CandidateService candidateService;
     private ModelMapper modelMapper;
+    private CandidateService candidateService;
+    private PersonService personService;
 
     @GetMapping
     public ResponseEntity<List<CandidateDTO>> getCandidates() {
-        var entityList = candidateService.findAll();
-        return new ResponseEntity<List<CandidateDTO>>(
-                        candidateEntityListToDtoList(entityList),
-                        HttpStatus.OK
-                    );
+        var candidates = candidateService.findAll();
+        var dtos = new ArrayList<CandidateDTO>();
+        for (var candidate : candidates) {
+            var person = personService.getById(candidate.getPerson().getId());
+            dtos.add(candidateEntityToDto(candidate, person));
+        }
+        return new ResponseEntity<List<CandidateDTO>>(dtos, HttpStatus.OK);
     }
 
 
-
-
-    private CandidateDTO candidateEntityToDto(Candidate candidate) {
+    private CandidateDTO candidateEntityToDto(Candidate candidate, Person person) {
         return modelMapper.map(candidate, CandidateDTO.class);
     }
 
     private Candidate candidateDtoToEntity(CandidateDTO candidateDto) {
         return modelMapper.map(candidateDto, Candidate.class);
-    }
-
-    private List<CandidateDTO> candidateEntityListToDtoList(List<Candidate> candidates) {
-        var dtoList = new ArrayList<CandidateDTO>();
-        candidates.forEach(e -> { dtoList.add(candidateEntityToDto(e)); });
-        return dtoList;
-    }
-
-    private List<Candidate> candidateDtoListToEntityList(List<CandidateDTO> candidateDtos) {
-        var entityList = new ArrayList<Candidate>();
-        candidateDtos.forEach(dto -> { entityList.add(candidateDtoToEntity(dto)); });
-        return entityList;
     }
 }
