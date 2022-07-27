@@ -25,7 +25,10 @@ public class ProjectController {
 
     private ProjectService projectService;
     private UserService userService;
-    // positionService
+
+    private static final String PM = "Project Manager";
+    private static final String SOURCER = "Sourcer";
+    private static final String RECRUITER = "Project Manager";
 
     public ProjectController(@Autowired ProjectService projectService) {
         this.projectService = projectService;
@@ -54,15 +57,15 @@ public class ProjectController {
             throws Exception {
 
         Project project = projectService.getById(id);
-        User projectManager = userService.getProjectManager(projectDetails.getId());
-        // User user = userService.getSourcer()?
-        // User user = userService.getRecruiter()?
+        User projectManager = userService.getUserWithSpesificRole(projectDetails.getId(), PM);
+        User sourcer = userService.getUserWithSpesificRole(projectDetails.getId(), SOURCER);
+        User recruiter = userService.getUserWithSpesificRole(projectDetails.getId(), RECRUITER);
 
         project.setName(projectDetails.getName());
-        // project.setProjectManagerId(projectDetails.getProjectManager());
+        project.setProjectManager(projectManager);
         project.setDescription(projectDetails.getDescription());
-        // project.setRecruiterId(projectDetails.getRecruiter());
-        // project.setSourcerId(projectDetails.getSourcer());
+        project.setRecruiter(recruiter);
+        project.setSourcer(sourcer);
         project.setDeadline(projectDetails.getDeadline());
 
         final Project updatedProject = projectService.saveProject(project);

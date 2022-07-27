@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import tcs.interviewtracker.persistence.Position;
-import tcs.interviewtracker.repository.PositionRepository;
 import tcs.interviewtracker.service.PositionService;
 
 @RestController
@@ -22,9 +21,8 @@ public class PositionController {
     }
 
     @GetMapping
-    ResponseEntity<List<Position>> all(){
-       return new ResponseEntity<>(positionService.findAll(), HttpStatus.OK);
+    ResponseEntity<List<Position>> all() {
+        return new ResponseEntity<>(positionService.findAll(), HttpStatus.OK);
     }
-
 
 }

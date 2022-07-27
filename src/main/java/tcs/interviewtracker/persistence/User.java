@@ -2,7 +2,6 @@ package tcs.interviewtracker.persistence;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -22,7 +21,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.bytebuddy.dynamic.TypeResolutionStrategy.Lazy;
 
 @Data
 @AllArgsConstructor

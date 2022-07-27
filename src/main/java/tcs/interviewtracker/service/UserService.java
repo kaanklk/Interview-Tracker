@@ -58,11 +58,11 @@ public class UserService {
         userRepo.delete(user);
     }
 
-    public User getProjectManager(Long projectId) {
+    public User getUserWithSpesificRole(Long projectId, String roleName) {
         User foundedUser = null;
         List<User> users = userRepo.findAll();
         Project project = projectRepo.findById(projectId).get();
-        Role role = roleRepo.findByRoleName("Project Manager");
+        Role role = roleRepo.findByRoleName(roleName);
         for (User user : users) {
             Set<Project> projects = user.getProjects();
             Set<Role> roles = user.getRoles();
