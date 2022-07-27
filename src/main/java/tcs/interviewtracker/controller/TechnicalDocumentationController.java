@@ -2,6 +2,7 @@ package tcs.interviewtracker.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import tcs.interviewtracker.DTOs.TechnicalDocumentationDTO;
 import tcs.interviewtracker.persistence.TechnicalDocumentation;
 import tcs.interviewtracker.repository.TechnicalDocumentationRepository;
 import tcs.interviewtracker.service.TechnicalDocumentationService;
@@ -22,16 +24,20 @@ import tcs.interviewtracker.service.TechnicalDocumentationService;
 public class TechnicalDocumentationController {
     
     private TechnicalDocumentationService techDocService;
-    private TechnicalDocumentationRepository techDocRepository;
 
-    @GetMapping("/")
-    public List<TechnicalDocumentation> getAllTechDocs(){
-        return techDocService.getAllTechDocs();
-    }
+  //  @GetMapping("/")
+  //  public ResponseEntity<List<TechnicalDocumentationDTO>> getAllTechDocs(){
+ //       try{
+    //        return ResponseEntity.ok().body()
+//        }catch(Exception e){
+////            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+  //      }
+ //   }
 
     @PostMapping("/")
     public TechnicalDocumentation createNewProject(@Validated @RequestBody TechnicalDocumentation techDoc){
-        return techDocRepository.save(techDoc);
+        
+        return techDocService.save(techDoc);
     }
 
     @GetMapping("/{technicalId}")
@@ -59,8 +65,7 @@ public class TechnicalDocumentationController {
 
         technicalDocumentation.setTechSkillComment1(techDoc.getTechSkillComment1());
         technicalDocumentation.setTechSkillComment2(techDoc.getTechSkillComment2());
-        technicalDocumentation.setTechSkillComment3import org.hibernate.engine.transaction.jta.platform.internal.TransactionManagerBasedSynchronizationStrategy;
-        (techDoc.getTechSkillComment3());
+        technicalDocumentation.setTechSkillComment3(techDoc.getTechSkillComment3());
         technicalDocumentation.setTechSkillComment4(techDoc.getTechSkillComment4());
         
         technicalDocumentation.setTechnicalSkills1(techDoc.getTechnicalSkills1());
