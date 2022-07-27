@@ -1,7 +1,10 @@
 package tcs.interviewtracker.persistence;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -16,9 +19,11 @@ import java.sql.Timestamp;
 public class WorkExperience {
 
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "candidate_id", referencedColumnName = "id", nullable = false)
     @NonNull
     private Candidate candidate;
 
