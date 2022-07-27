@@ -19,7 +19,7 @@ public class Person {
 
     @Id
     @NonNull
-    private int id;
+    private Long id;
 
     @Column(name = "fname", columnDefinition = "varchar(256)")
     @NonNull
