@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import lombok.Data;
 

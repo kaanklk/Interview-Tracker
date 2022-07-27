@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import org.springframework.lang.NonNull;
 
 import lombok.Data;
-import java.sql.Timestamp;
+import java.sql.Date;
 
 @Entity
 @Data
@@ -28,10 +28,10 @@ public class WorkExperience {
     private Candidate candidate;
 
     @NonNull
-    private Timestamp start;
+    private Date startDate;
 
     @NonNull
-    private Timestamp end;
+    private Date endDate;
 
     @NonNull
     private String institution;

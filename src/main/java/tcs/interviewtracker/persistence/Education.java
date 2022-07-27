@@ -1,6 +1,6 @@
 package tcs.interviewtracker.persistence;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,10 +29,10 @@ public class Education {
     private Candidate candidate;
 
     @NonNull
-    private Timestamp start;
+    private Date startDate;
 
     @NonNull
-    private Timestamp end;
+    private Date endDate;
 
     @NonNull
     private String institution;
