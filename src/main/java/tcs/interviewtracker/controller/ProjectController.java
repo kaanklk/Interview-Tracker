@@ -32,7 +32,7 @@ public class ProjectController {
 
     @GetMapping("/")
     public List<Project> getAllDoctors() {
-        return projectService.getAllAProjects();
+        return projectService.getAllProjects();
     }
 
     @PostMapping("/")
