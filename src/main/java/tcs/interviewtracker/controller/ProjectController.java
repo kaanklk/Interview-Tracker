@@ -15,15 +15,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import tcs.interviewtracker.persistence.Project;
+import tcs.interviewtracker.persistence.User;
 import tcs.interviewtracker.service.ProjectService;
+import tcs.interviewtracker.service.UserService;
 
 @RestController
 @RequestMapping("api/projects")
 public class ProjectController {
 
     private ProjectService projectService;
-    // private UserService UserService;
-    // private PositionService positionService;
+    private UserService userService;
+    // positionService
 
     public ProjectController(@Autowired ProjectService projectService) {
         this.projectService = projectService;
@@ -52,7 +54,7 @@ public class ProjectController {
             throws Exception {
 
         Project project = projectService.getById(id);
-        // User user = userService.getProjectManager()?
+        User projectManager = userService.getProjectManager(projectDetails.getId());
         // User user = userService.getSourcer()?
         // User user = userService.getRecruiter()?
 
