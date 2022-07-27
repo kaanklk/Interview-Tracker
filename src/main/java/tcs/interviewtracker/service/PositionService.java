@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import tcs.interviewtracker.DTOs.PositionDTO;
 import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.repository.PositionRepository;
 
@@ -18,7 +19,7 @@ public class PositionService {
     }
 
 
-    public List<Position> findAll() {
+    public List<PositionDTO> findAll() {
         return positionRepository.findAll();
     }
 

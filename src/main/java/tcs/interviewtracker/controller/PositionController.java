@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +24,19 @@ public class PositionController {
 
     @GetMapping
     ResponseEntity<List<Position>> all(){
-       return new ResponseEntity<>(positionService.findAll(), HttpStatus.OK);
+
+        var positions = positionService.findAll();
+        try {
+            return new ResponseEntity<>(positions, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @GetMapping("/positions/{id}")
+    ResponseEntity<PositionDTO> findById(@PathVariable String id){
+        positionService.findById(id);
     }
 
 
