@@ -3,11 +3,12 @@ package tcs.interviewtracker.persistence;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import lombok.Data;
 
@@ -17,8 +18,8 @@ import lombok.Data;
 public class Candidate {
     
     @Id
-    @NonNull
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @ManyToOne
     private Position position;
@@ -32,4 +33,11 @@ public class Candidate {
     @Column(columnDefinition = "varchar(256)")
     @Nullable
     private String cvPath;
+
+    @OneToMany(mappedBy = "candidate")
+    private Set<WorkExperience> workExperiences;
+
+    @OneToMany(mappedBy = "candidate")
+    private Set<Education> educations;
+
 }
