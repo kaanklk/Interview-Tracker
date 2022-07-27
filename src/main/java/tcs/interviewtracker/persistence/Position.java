@@ -33,4 +33,9 @@ public class Position {
 
     @OneToMany(mappedBy = "position")
     private Set<Candidate> candidates;
+
+    private Integer totalCount;
+    private Integer hiredCount;
+    private Boolean open;
+
 }
