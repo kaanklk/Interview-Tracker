@@ -1,12 +1,20 @@
 package tcs.interviewtracker.persistence;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -51,5 +59,15 @@ public class Project {
 
     @Column(name = FLD_DEADLINE, nullable = true)
     private String deadline;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "project")
+    // @JoinTable(name = "position")
+    // @JoinColumns({ @JoinColumn(name = "id", referencedColumnName = "id"),
+    // @JoinColumn(name = "projectPositions", referencedColumnName = "positionName")
+    // })
+    private List<Position> projectPositions;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "projects")
+    private List<User> projectAssocicates;
 
 }

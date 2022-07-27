@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.persistence.Project;
 import tcs.interviewtracker.repository.ProjectRepository;
 
@@ -31,6 +32,17 @@ public class ProjectService {
 
     public void deleteProject(Project project) {
         projectRepository.delete(project);
+    }
+
+    public List<Position> fetchProjectPositions(Long projectId) {
+        Project project = projectRepository.getReferenceById(projectId);
+        List<Position> projectPositions = project.getProjectPositions();
+        return projectPositions;
+    }
+
+    public int projectPositionsCount(Long projectId) {
+        List<Position> positions = fetchProjectPositions(projectId);
+        return positions.size();
     }
 
 }

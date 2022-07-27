@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.persistence.Project;
 import tcs.interviewtracker.persistence.User;
+import tcs.interviewtracker.service.PositionService;
 import tcs.interviewtracker.service.ProjectService;
 import tcs.interviewtracker.service.UserService;
 
@@ -25,6 +27,7 @@ public class ProjectController {
 
     private ProjectService projectService;
     private UserService userService;
+    private PositionService positionService;
 
     private static final String PM = "Project Manager";
     private static final String SOURCER = "Sourcer";
@@ -80,19 +83,17 @@ public class ProjectController {
         return ResponseEntity.ok(project);
     }
 
-    // TODO: IMPLEMENT POSITIONS
+    @GetMapping(value = "/{id}/positions")
+    public List<Position> fetchProjectPositions(@PathVariable(value = "id") Long id)
+            throws Exception {
+        return projectService.fetchProjectPositions(id);
+    }
 
-    // @GetMapping(value = "/{id}/positions")
-    // public List<Position> getMethodName(@PathVariable(value = "id") Long id)
-    // throws Exception {
-
-    // }
-
-    // TODO: IMPLMENT POSITION COUNT
-    // @GetMapping(value="/{id}/position-count")
-    // public SomeData getMethodName(@RequestParam String param) {
-    // return new SomeData();
-    // }
+    @GetMapping(value = "/{id}/position-count")
+    public ResponseEntity<Integer> fetchPositionCount(@PathVariable(value = "id") Long id) {
+        int positionCount = projectService.projectPositionsCount(id);
+        return ResponseEntity.ok(positionCount);
+    }
 
     // @GetMapping(value = "/{id}/assosciate-count")
     // public SomeData getMethodName(@RequestParam String param) {

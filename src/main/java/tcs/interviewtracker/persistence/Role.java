@@ -32,7 +32,7 @@ public class Role {
     @Column(name = "role_name", nullable = false)
     private String roleName;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "roles")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private Set<User> users = new HashSet<>();
 
 }
