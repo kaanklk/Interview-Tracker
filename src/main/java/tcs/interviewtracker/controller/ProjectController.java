@@ -2,6 +2,7 @@ package tcs.interviewtracker.controller;
 
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,7 +27,7 @@ public class ProjectController {
 
     private ProjectService projectService;
     private UserService userService;
-    //private PositionService positionService;
+    // private PositionService positionService;
 
     private static final String PM = "Project Manager";
     private static final String SOURCER = "Sourcer";
@@ -90,14 +91,15 @@ public class ProjectController {
 
     @GetMapping(value = "/{id}/position-count")
     public ResponseEntity<Integer> fetchPositionCount(@PathVariable(value = "id") Long id) {
-        int positionCount = projectService.projectPositionsCount(id);
+        int positionCount = projectService.fetchProjectPositionsCount(id);
         return ResponseEntity.ok(positionCount);
     }
 
-    // @GetMapping(value = "/{id}/assosciate-count")
-    // public SomeData getMethodName(@RequestParam String param) {
-    // return new SomeData();
-    // }
+    @GetMapping(value = "/{id}/assosciate-count")
+    public ResponseEntity<Integer> fetchAssosicateCount(@PathVariable(value = "id") Long id) {
+        int associateCount = projectService.fetchProjectAssocicateCount(id);
+        return ResponseEntity.ok(associateCount);
+    }
 
     // @GetMapping(value = "/{id}/incomplete-interviews")
     // public SomeData getMethodName(@RequestParam String param) {

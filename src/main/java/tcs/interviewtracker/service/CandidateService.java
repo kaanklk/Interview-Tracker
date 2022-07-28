@@ -66,8 +66,8 @@ public class CandidateService {
         return statusChangeRepository.getByCandidate(candidate);
     }
 
-    public StatusChange getCandidateHistoryById(Long candidateId, Long statusChangeId) 
-                            throws ResourceNotFoundException {
+    public StatusChange getCandidateHistoryById(Long candidateId, Long statusChangeId)
+            throws ResourceNotFoundException {
         Candidate candidate = candidateRepository.getReferenceById(candidateId);
         if (null == candidate) {
             throw new ResourceNotFoundException();

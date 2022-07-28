@@ -40,9 +40,15 @@ public class ProjectService {
         return projectPositions;
     }
 
-    public int projectPositionsCount(Long projectId) {
+    public int fetchProjectPositionsCount(Long projectId) {
         List<Position> positions = fetchProjectPositions(projectId);
         return positions.size();
+    }
+
+    public int fetchProjectAssocicateCount(Long projectId) {
+        Project project = projectRepository.getReferenceById(projectId);
+        List<Position> projePositions = project.getProjectPositions();
+        return projePositions.size();
     }
 
 }
