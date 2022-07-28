@@ -34,6 +34,7 @@ public class UserHasRoles {
     @ManyToOne
     private Role role;
 
-    @Column(name = FLD_PROJECTID)
-    private Long projectId;
+    @JoinColumn(name = FLD_PROJECTID)
+    @ManyToOne
+    private Project project;
 }
