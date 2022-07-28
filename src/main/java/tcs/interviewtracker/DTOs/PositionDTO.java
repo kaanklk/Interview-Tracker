@@ -8,8 +8,7 @@ import lombok.Data;
 @Data
 public class PositionDTO {
 
-    private UUID id;
-
+    private UUID uuid;
     private String name;
     private UUID projectId;
     private Boolean open;

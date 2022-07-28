@@ -1,6 +1,8 @@
 package tcs.interviewtracker.persistence;
 
 import java.sql.Timestamp;
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,6 +23,9 @@ public class Timeslot {
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long timeslotId;
+
+    @Column(name="uuid")
+    private UUID uuid;
 
     @Column(name="start")
     private Timestamp timeslotStart;

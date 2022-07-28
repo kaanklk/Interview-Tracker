@@ -1,7 +1,9 @@
 package tcs.interviewtracker.persistence;
 
 import java.sql.Date;
+import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +24,9 @@ public class Education {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(name="uuid")
+    private UUID uuid;
 
     @ManyToOne
     @JoinColumn(name = "candidate_id", referencedColumnName = "id", nullable = false)

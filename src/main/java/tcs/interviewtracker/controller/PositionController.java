@@ -86,7 +86,7 @@ public class PositionController {
 
     @PutMapping
     public ResponseEntity<PositionDTO> updatePosition(PositionDTO positionDTO){
-        if(!positionService.findById(convertUuidToDatabaseId(positionDTO.getId())).isPresent())
+        if(!positionService.findById(positionDTO.getId()).isPresent())
              return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         else{
             try {
@@ -107,10 +107,6 @@ public class PositionController {
     private Position convertToEntity(PositionDTO positionDTO) {
 
         return modelMapper.map(positionDTO, Position.class);
-    }
-
-    private Long convertUuidToDatabaseId(UUID uuid){
-        return 1L;
     }
 
 }
