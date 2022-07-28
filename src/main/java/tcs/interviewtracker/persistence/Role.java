@@ -22,13 +22,8 @@ import lombok.NoArgsConstructor;
 public class Role {
 
     @Id
-<<<<<<< HEAD
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-=======
-    @Column(name = "role_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
->>>>>>> projectendpoint
     private Long id;
 
     @Column(name = "role_name", nullable = false)

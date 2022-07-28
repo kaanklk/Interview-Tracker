@@ -32,13 +32,8 @@ import lombok.NoArgsConstructor;
 public class User {
 
     @Id
-<<<<<<< HEAD
-    @Column(name="id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-=======
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
->>>>>>> projectendpoint
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "first_name", nullable = false)
@@ -59,24 +54,17 @@ public class User {
     @Column(name = "date_of_birth", nullable = false)
     private Date dateOfBirth;
 
-<<<<<<< HEAD
+    <<<<<<<HEAD
 
-    @ManyToMany(fetch = FetchType.EAGER,
-    cascade = {
-        CascadeType.MERGE
-    })
-    @JoinTable(name = "users_roles",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "roles_role_id") })
-    private Set<Role> roles = new HashSet<>();
-=======
+    @ManyToMany(fetch=FetchType.EAGER,cascade={CascadeType.MERGE})@JoinTable(name="users_roles",joinColumns={
+    @JoinColumn(name = "user_id") },inverseJoinColumns={
+    @JoinColumn(name = "roles_role_id")
+    })private Set<Role> roles = new HashSet<>();=======
     @Column(nullable = true)
     @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "users")
-    private Set<Role> roles;
->>>>>>> projectendpoint
+    private Set<Role> roles;>>>>>>>projectendpoint
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
-            CascadeType.MERGE })
+    @ManyToMany(fetch=FetchType.LAZY,cascade={CascadeType.PERSIST,CascadeType.MERGE})
     private Set<Project> projects;
 
     @Column(name = "email", nullable = false)
@@ -88,9 +76,7 @@ public class User {
     @Column(name = "created_at")
     @CreationTimestamp
 <<<<<<< HEAD
-    private Timestamp create;
-=======
-    private Timestamp created;
->>>>>>> projectendpoint
+    private Timestamp create;=======
+    private Timestamp created;>>>>>>>projectendpoint
 
 }
