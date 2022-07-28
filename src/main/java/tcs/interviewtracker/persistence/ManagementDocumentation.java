@@ -1,6 +1,7 @@
 package tcs.interviewtracker.persistence;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,6 +23,8 @@ public class ManagementDocumentation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    private UUID uuid;
 
     private Timestamp dateOfInterview;
     private Boolean mobileToWork;
