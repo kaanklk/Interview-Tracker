@@ -2,15 +2,20 @@ package tcs.interviewtracker.persistence;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.JoinColumn;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -27,7 +32,7 @@ public class User {
 
     @Id
     @Column(name="id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name="first_name",nullable = false)
@@ -48,9 +53,15 @@ public class User {
     @Column(name="date_of_birth",nullable = false)
     private Date dateOfBirth;
 
-    @Column(nullable = true)
-    @ManyToMany
-    private List<Role> roles;
+
+    @ManyToMany(fetch = FetchType.EAGER,
+    cascade = {
+        CascadeType.MERGE
+    })
+    @JoinTable(name = "users_roles",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "roles_role_id") })
+    private Set<Role> roles = new HashSet<>();
 
     @Column(name="email",nullable = false)
     private String email;
@@ -60,7 +71,6 @@ public class User {
 
     @Column(name="created_at")
     @CreationTimestamp
-    private Timestamp created;
-
+    private Timestamp create;
 
 }
