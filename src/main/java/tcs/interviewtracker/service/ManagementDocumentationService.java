@@ -17,7 +17,7 @@ public class ManagementDocumentationService {
         this.manageRepo = manageRepo;
     }
 
-    public ManagementDocumentation getManageDocById(Long manageDocId) {
+    public <Optional>ManagementDocumentation getManageDocById(Long manageDocId) {
         return manageRepo.getReferenceById(manageDocId);
     }
 
@@ -25,8 +25,8 @@ public class ManagementDocumentationService {
         return manageRepo.findAll();
     }
 
-    public void saveManageDoc(ManagementDocumentation manageDoc) {
-        manageRepo.save(manageDoc);
+    public ManagementDocumentation saveManageDoc(ManagementDocumentation manageDoc) {
+      return  manageRepo.save(manageDoc);
     }
 
     public ManagementDocumentation updateManageDoc(Long id,  ManagementDocumentation manageDoc) {
