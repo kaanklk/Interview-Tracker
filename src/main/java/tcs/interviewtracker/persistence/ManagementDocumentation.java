@@ -63,5 +63,4 @@ public class ManagementDocumentation {
     @JoinColumn(name = "interviewer_id2", referencedColumnName = "id", nullable = false)
     private User interviewer2;
 
-
 }

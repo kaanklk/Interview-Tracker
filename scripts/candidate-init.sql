@@ -1,4 +1,3 @@
-
 INSERT INTO person (date_of_birth, email, fname, lname, mname, phone, profile_picture_url)
     VALUES
         (DATE(1999-01-01), 'helloman@gmail.com', 'John', 'Doe', '', '+36912345678', 'resources/pictures/profil/pp_001.jpg'),
@@ -42,4 +41,3 @@ INSERT INTO education (start_date, end_date, information, institution, candidate
         (DATE(2010-09-01), DATE(2013-01-02), 'BSc', 'BME', 3),
         (DATE(2008-09-01), DATE(2011-01-04), 'MSc', 'OLTE', 4),
         (DATE(2019-10-01), DATE(2020-01-11), 'OKJ', 'ELTE', 5);
-

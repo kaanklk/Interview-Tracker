@@ -18,7 +18,7 @@ import lombok.Data;
 @Data
 @Table(name = "education")
 public class Education {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

@@ -36,7 +36,6 @@ public class CandidateController {
         return new ResponseEntity<List<CandidateDTO>>(dtos, HttpStatus.OK);
     }
 
-
     private CandidateDTO candidateEntityToDto(Candidate candidate, Person person) {
         return modelMapper.map(candidate, CandidateDTO.class);
     }
