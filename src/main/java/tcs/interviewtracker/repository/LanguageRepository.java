@@ -1,12 +1,17 @@
 package tcs.interviewtracker.repository;
 
 import java.util.List;
+import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.Language;
 
 public interface LanguageRepository extends JpaRepository<Language, Long> {
+    public Language getByUuid(UUID uuid);
     public List<Language> getByCandidate(Candidate candidate);
+    public Page<Language> getByCandidate(Candidate candidate, PageRequest request);
 }
