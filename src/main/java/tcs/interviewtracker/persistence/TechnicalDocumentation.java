@@ -15,7 +15,6 @@ import javax.persistence.GenerationType;
 
 import java.sql.Date;
 
-
 @Entity
 @Data
 @Table(name = "technical_documentation")
@@ -23,7 +22,7 @@ public class TechnicalDocumentation {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy  = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @OneToOne
@@ -86,10 +85,10 @@ public class TechnicalDocumentation {
     @ManyToOne
     private User interviewerTwo;
 
-    @Column(name ="designation_one", nullable = true)
+    @Column(name = "designation_one", nullable = true)
     private int designationOne;
 
-    @Column(name ="designation_two", nullable = true)
+    @Column(name = "designation_two", nullable = true)
     private int designationTwo;
 
     public TechnicalDocumentation() {

@@ -2,6 +2,7 @@ package tcs.interviewtracker.controller;
 
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,37 +15,42 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.persistence.Project;
-import tcs.interviewtracker.repository.ProjectRepository;
+import tcs.interviewtracker.persistence.User;
 import tcs.interviewtracker.service.ProjectService;
+import tcs.interviewtracker.service.UserService;
 
 @RestController
 @RequestMapping("api/projects")
 public class ProjectController {
 
     private ProjectService projectService;
-    private ProjectRepository projectRepository;
+    private UserService userService;
+    // private PositionService positionService;
 
-    public ProjectController(@Autowired ProjectService projectService, @Autowired ProjectRepository projectRepository) {
+    private static final String PM = "Project Manager";
+    private static final String SOURCER = "Sourcer";
+    private static final String RECRUITER = "Project Manager";
+
+    public ProjectController(@Autowired ProjectService projectService) {
         this.projectService = projectService;
-        this.projectRepository = projectRepository;
     }
 
     @GetMapping("/")
     public List<Project> getAllDoctors() {
-        return projectService.getAllAProjects();
+        return projectService.getAllProjects();
     }
 
     @PostMapping("/")
     public Project createNewProject(@Validated @RequestBody Project project) {
-        return projectRepository.save(project);
+        return projectService.saveProject(project);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Project> getProjectsById(@PathVariable(value = "id") Long projectId)
             throws Exception {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new Exception("Project not found with id: " + projectId));
+        Project project = projectService.getById(projectId);
         return ResponseEntity.ok().body(project);
     }
 
@@ -52,26 +58,92 @@ public class ProjectController {
     public ResponseEntity<Project> updateExistingProject(@PathVariable(value = "id") Long id,
             @Validated @RequestBody Project projectDetails)
             throws Exception {
-        Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new Exception("Project not found with id: " + id));
+
+        Project project = projectService.getById(id);
+        User projectManager = userService.getUserWithSpesificRole(projectDetails.getId(), PM);
+        User sourcer = userService.getUserWithSpesificRole(projectDetails.getId(), SOURCER);
+        User recruiter = userService.getUserWithSpesificRole(projectDetails.getId(), RECRUITER);
 
         project.setName(projectDetails.getName());
-        project.setProjectManagerId(projectDetails.getProjectManagerId());
+        project.setProjectManager(projectManager);
         project.setDescription(projectDetails.getDescription());
-        project.setRecruiterId(projectDetails.getRecruiterId());
-        project.setSourcerId(projectDetails.getSourcerId());
+        project.setRecruiter(recruiter);
+        project.setSourcer(sourcer);
         project.setDeadline(projectDetails.getDeadline());
 
-        final Project updatedProject = projectRepository.save(project);
+        final Project updatedProject = projectService.saveProject(project);
         return ResponseEntity.ok(updatedProject);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Project> deleteProject(@PathVariable(value = "id") Long id) throws Exception {
-        Project project = projectRepository.findById(id)
-                .orElseThrow(() -> new Exception("Project not found with id: " + id));
-        projectRepository.delete(project);
+        Project project = projectService.getById(id);
+
+        projectService.deleteProject(project);
         return ResponseEntity.ok(project);
     }
+
+    @GetMapping(value = "/{id}/positions")
+    public List<Position> fetchProjectPositions(@PathVariable(value = "id") Long id)
+            throws Exception {
+        return projectService.fetchProjectPositions(id);
+    }
+
+    @GetMapping(value = "/{id}/position-count")
+    public ResponseEntity<Integer> fetchPositionCount(@PathVariable(value = "id") Long id) {
+        int positionCount = projectService.fetchProjectPositionsCount(id);
+        return ResponseEntity.ok(positionCount);
+    }
+
+    @GetMapping(value = "/{id}/assosciate-count")
+    public ResponseEntity<Integer> fetchAssosicateCount(@PathVariable(value = "id") Long id) {
+        int associateCount = projectService.fetchProjectAssocicateCount(id);
+        return ResponseEntity.ok(associateCount);
+    }
+
+    // @GetMapping(value = "/{id}/incomplete-interviews")
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
+
+    // @GetMapping(value = "/{id}/complete-interviews")
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
+
+    // @GetMapping(value = "/{id}/pending-candidates")
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
+
+    // @GetMapping(value = "/{id}/rejected-candidates")
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
+
+    // @GetMapping(value="/{id}/accepted-candidates)
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
+
+    // @GetMapping(value = "/{id}/techical-interview-count")
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
+
+    // @GetMapping(value = "/{id}/management-interview-count")
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
+
+    // @GetMapping(value = "/{id}/upcoming-tecnical-interviews")
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
+
+    // @GetMapping(value = "/{id}/upcoming-manegement-interviews")
+    // public SomeData getMethodName(@RequestParam String param) {
+    // return new SomeData();
+    // }
 
 }
