@@ -46,20 +46,33 @@ public class PositionService {
         positionRepository.save(position);
     }
 
-    /*public int[] getTotalAndHiredCanddateCount(Long positionId, ArrayList<Candidate> candidates){
+    public int getTotalCanddateCount(Long positionId, ArrayList<Candidate> candidates){
         var total = 0;
-        var hired = 0;
+
 
         for (Candidate candidate : candidates) {
-            if(candidate.getPosition().getId() == positionId){
+            if(candidate.getPosition().getId() == positionId)
                 total++;
-               // if(candidate.getStatus())
-            }
+
 
         }
 
-        return {total; hired};
-    }*/
+        return total;
+    }
+
+    public int getHiredCandidateCount(Long positionId, ArrayList<Candidate> candidates){
+        var hired = 0;
+
+
+        for (Candidate candidate : candidates) {
+            if(candidate.getPosition().getId() == positionId )
+                hired++;
+
+
+        }
+
+        return total;
+    }
 
 
 
