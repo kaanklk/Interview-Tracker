@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.persistence.Project;
+import tcs.interviewtracker.persistence.Timeslot;
 import tcs.interviewtracker.repository.ProjectRepository;
 
 @Service
@@ -49,6 +50,18 @@ public class ProjectService {
         Project project = projectRepository.getReferenceById(projectId);
         List<Position> projePositions = project.getProjectPositions();
         return projePositions.size();
+    }
+
+    public List<Timeslot> fetchCompletedInterviews(Long projectId) {
+        Project project = projectRepository.getReferenceById(projectId);
+        List<Timeslot> timeslots = projectRepository.findByIsCompletedTrue(project);
+        return timeslots;
+    }
+
+    public List<Timeslot> fetchIncompletedInterviews(Long projectId) {
+        Project project = projectRepository.getReferenceById(projectId);
+        List<Timeslot> timeslots = projectRepository.findByIsCompletedFalse(project);
+        return timeslots;
     }
 
 }

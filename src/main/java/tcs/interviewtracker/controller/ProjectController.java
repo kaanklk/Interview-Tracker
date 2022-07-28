@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.persistence.Project;
+import tcs.interviewtracker.persistence.Timeslot;
 import tcs.interviewtracker.persistence.User;
 import tcs.interviewtracker.service.ProjectService;
 import tcs.interviewtracker.service.UserService;
@@ -101,15 +102,17 @@ public class ProjectController {
         return ResponseEntity.ok(associateCount);
     }
 
-    // @GetMapping(value = "/{id}/incomplete-interviews")
-    // public SomeData getMethodName(@RequestParam String param) {
-    // return new SomeData();
-    // }
+    @GetMapping(value = "/{id}/incomplete-interviews")
+    public ResponseEntity<List<Timeslot>> fetchInCompleteInterviews(@PathVariable(value = "id") Long id) {
+        List<Timeslot> timeslots = projectService.fetchIncompletedInterviews(id);
+        return ResponseEntity.ok(timeslots);
+    }
 
-    // @GetMapping(value = "/{id}/complete-interviews")
-    // public SomeData getMethodName(@RequestParam String param) {
-    // return new SomeData();
-    // }
+    @GetMapping(value = "/{id}/complete-interviews")
+    public ResponseEntity<List<Timeslot>> fetchCompletedInterviews(@PathVariable(value = "id") Long id) {
+        List<Timeslot> timeslots = projectService.fetchCompletedInterviews(id);
+        return ResponseEntity.ok(timeslots);
+    }
 
     // @GetMapping(value = "/{id}/pending-candidates")
     // public SomeData getMethodName(@RequestParam String param) {
