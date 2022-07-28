@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Table;
 
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.NoArgsConstructor;
 
@@ -24,11 +26,13 @@ public class UserHasRoles {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = FLD_USERID)
-    private Long userId;
+    @JoinColumn(name = FLD_USERID)
+    @ManyToOne
+    private User user;
 
-    @Column(name = FLD_ROLEID)
-    private Long roleId;
+    @JoinColumn(name = FLD_ROLEID)
+    @ManyToOne
+    private Role role;
 
     @Column(name = FLD_PROJECTID)
     private Long projectId;

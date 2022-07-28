@@ -19,6 +19,7 @@ public class Candidate {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "serial")
     private Long id;
 
     @ManyToOne
