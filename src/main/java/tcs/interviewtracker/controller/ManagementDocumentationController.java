@@ -2,6 +2,7 @@ package tcs.interviewtracker.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,7 @@ public class ManagementDocumentationController {
     }
 
     @GetMapping("/{manageDocId}")
-    public ResponseEntity<ManagementDocumentationDTO> getManageDocById(@PathVariable(value = "manageDocId") Long manageDocId) {
+    public ResponseEntity<ManagementDocumentationDTO> getManageDocById(@PathVariable(value = "manageDocId") UUID manageDocId) {
         ManagementDocumentation manageEntity= manageService.getManageDocById(manageDocId);
         ManagementDocumentationDTO manageDTO = DtoConverter(manageEntity);
 
@@ -83,7 +84,7 @@ public class ManagementDocumentationController {
     }
 
     @PutMapping("/{manageDocId}")
-    public ResponseEntity<ManagementDocumentationDTO>  updateDoc(@PathVariable(value = "mangeDocId") Long manageId,
+    public ResponseEntity<ManagementDocumentationDTO>  updateDoc(@PathVariable(value = "mangeDocId") UUID manageId,
     @Validated @ RequestBody ManagementDocumentationDTO manageDTO) {
 
         ManagementDocumentation manageDoc = manageService.getManageDocById(manageId);
@@ -93,7 +94,7 @@ public class ManagementDocumentationController {
     }
 
     @DeleteMapping("/{manageDocId}")
-    public void deleteManageDoc(@PathVariable(value = "manageDocId") Long manageId )  {
+    public void deleteManageDoc(@PathVariable(value = "manageDocId") UUID manageId )  {
         manageService.deleteManageDoc(manageId);
     }
 }
