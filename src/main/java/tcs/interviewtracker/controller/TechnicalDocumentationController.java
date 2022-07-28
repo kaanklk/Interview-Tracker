@@ -1,8 +1,12 @@
 package tcs.interviewtracker.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -23,60 +27,68 @@ import tcs.interviewtracker.service.TechnicalDocumentationService;
 @RestController
 @RequestMapping("api/technical-documentations")
 public class TechnicalDocumentationController {
-    
+    @Autowired    
     private TechnicalDocumentationService techDocService;
-/* 
+
+    @Autowired
+    private ModelMapper modelMapper;
+
    @GetMapping("/")
-   public ResponseEntity<List<TechnicalDocumentationDTO>> getAllTechDocs(PageRequest pageRequest){
-        try{
-            //TODO átalakitani
-            return ResponseEntity.ok().body(techDocService.getAllTechDocs(pageRequest));
-        }catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+   //TODO pagination 
+   public ResponseEntity<List<TechnicalDocumentationDTO>> getAllTechDocs(int page, int size, Sort sort){
+    PageRequest pRequest = PageRequest.of(page, size, sort);
+        var techDocs = techDocService.getAllTechDocs();
+        var techDocsDTOs = new ArrayList<TechnicalDocumentationDTO>();
+        for(var techDoc : techDocs){
+            var techDocDTO = convertToDto(techDoc);
+            techDocsDTOs.add(techDocDTO);
         }
-    }
+        return new ResponseEntity<List<TechnicalDocumentationDTO>>(techDocsDTOs, HttpStatus.OK);
+
+}
 
     @PostMapping("/")
-    public TechnicalDocumentation createNewProject(@Validated @RequestBody TechnicalDocumentation techDoc){
-        //TODO átalakitani
-        return techDocService.save(techDoc);
+    public ResponseEntity<TechnicalDocumentationDTO> createNewProject(@Validated @RequestBody TechnicalDocumentationDTO techDocDTO){
+        
+        TechnicalDocumentation techDoc = convertToEntity(techDocDTO);
+        TechnicalDocumentationDTO savedTechDocDTO = convertToDto( techDocService.save(techDoc));
+        
+        return new ResponseEntity<TechnicalDocumentationDTO>(savedTechDocDTO, HttpStatus.CREATED);
+        
     }
 
     @GetMapping("/{technicalId}")
     public ResponseEntity<TechnicalDocumentationDTO> getProjectById(@PathVariable(value = "technicalId") Long techDocId) throws Exception{
-        try{
-            //TODO átalakitani
-            return ResponseEntity.ok().body(techDocService.getById(techDocId).get());
-        }catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+            TechnicalDocumentation technicalDocumentation = techDocService.getById(techDocId).get();
+            TechnicalDocumentationDTO technicalDocumentationDTO = convertToDto(technicalDocumentation);
+        
+            return new ResponseEntity<TechnicalDocumentationDTO>(technicalDocumentationDTO, HttpStatus.OK);      
       
     }
 
     @PutMapping("/{technicalId}")
-    public ResponseEntity<TechnicalDocumentation> updateTechnicalDocumentation(@PathVariable(value = "technicalId") Long techId, @Validated @RequestBody TechnicalDocumentation techDoc) throws Exception{
-        try{
-            TechnicalDocumentation technicalDocumentation = techDocService.getById(techId);
-        
-            return ResponseEntity.ok().body(techDocService.update(techId, techDoc));
-        }catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<TechnicalDocumentationDTO> updateTechnicalDocumentation(@PathVariable(value = "technicalId") Long techId,
+     @Validated @RequestBody TechnicalDocumentation techDoc) throws Exception{
+    
+            TechnicalDocumentation technicalDocumentation = techDocService.getById(techId).get();
+            TechnicalDocumentationDTO technicalDocumentationDTO = convertToDto(technicalDocumentation);
+
+            return new ResponseEntity<TechnicalDocumentationDTO>(technicalDocumentationDTO, HttpStatus.OK);
+    
     }
 
     @DeleteMapping("/{technicalId}")
-    public ResponseEntity<Object> deleteTechnicalDocumentation(@PathVariable(value = "technicalId") Long techId ) throws Exception {
-        try{
-            if(!techDocService.getById(techId).isPresent()){
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
+    public void deleteTechnicalDocumentation(@PathVariable(value = "technicalId") Long techId ) throws Exception {
             techDocService.delete(techId);
-
-        }catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        //TODO utánanézni 
-        return ResponseEntity.ok(); 
     }
-*/
+
+    private TechnicalDocumentationDTO convertToDto(TechnicalDocumentation technicalDocumentation) {
+        TechnicalDocumentationDTO techDocDTO = modelMapper.map(technicalDocumentation, TechnicalDocumentationDTO.class);
+        return techDocDTO;
+    }
+
+    private TechnicalDocumentation convertToEntity(TechnicalDocumentationDTO technicalDocumentationDTO) {
+        TechnicalDocumentation techDocEntity = modelMapper.map(technicalDocumentationDTO, TechnicalDocumentation.class)
+        return techDocEntity;
+    }
 }

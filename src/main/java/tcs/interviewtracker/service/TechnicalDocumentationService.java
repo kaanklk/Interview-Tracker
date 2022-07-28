@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +27,13 @@ public class TechnicalDocumentationService {
         return techDocRepository.findById(id);
     }
 
-    public List<TechnicalDocumentation> getAllTechDocs(PageRequest pageRequest){
-        
+    public List<TechnicalDocumentation> getAllTechDocs(){
+   
         return techDocRepository.findAll();
+    }
+    public Page<TechnicalDocumentation> getPaginatedTechDocs(PageRequest pageRequest){
+        return techDocRepository.findAll(pageRequest);
+
     }
     public TechnicalDocumentation save (TechnicalDocumentation tD){
         return techDocRepository.save(tD);
