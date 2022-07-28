@@ -22,7 +22,7 @@ public class ProjectService {
         return projectRepository.getReferenceById(id);
     }
 
-    public List<Project> getAllAProjects() {
+    public List<Project> getAllProjects() {
         return projectRepository.findAll();
     }
 
