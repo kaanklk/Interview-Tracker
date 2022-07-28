@@ -1,6 +1,7 @@
 package tcs.interviewtracker.persistence;
 
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,6 +25,9 @@ public class Position {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name="uuid")
+    private UUID uuid;
+
     @Column(columnDefinition = "varchar(128)")
     private String positionName;
 
@@ -33,4 +37,12 @@ public class Position {
 
     @OneToMany(mappedBy = "position")
     private Set<Candidate> candidates;
+
+    @Column(name="total_count")
+    private Integer totalCount;
+    @Column
+    private Integer hiredCount;
+    @Column
+    private Boolean open;
+
 }

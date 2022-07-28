@@ -2,6 +2,8 @@ package tcs.interviewtracker.persistence;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -11,6 +13,7 @@ import org.springframework.lang.Nullable;
 import lombok.Data;
 
 import java.sql.Date;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -18,8 +21,12 @@ import java.sql.Date;
 public class Person {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @NonNull
     private Long id;
+
+    @Column(name="uuid")
+    private UUID uuid;
 
     @Column(name = "fname", columnDefinition = "varchar(256)")
     @NonNull

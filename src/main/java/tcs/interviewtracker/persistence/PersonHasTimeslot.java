@@ -1,5 +1,7 @@
 package tcs.interviewtracker.persistence;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +23,10 @@ public class PersonHasTimeslot {
     @Column(name="id")
     @NonNull
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long personHasTimeslotId;
+    private Long personHasTimeslotId;
+
+    @Column(name="uuid")
+    private UUID uuid;
 
     @ManyToOne
     @JoinColumn(name="timeslot_id", referencedColumnName = "id")

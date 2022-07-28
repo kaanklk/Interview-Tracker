@@ -2,12 +2,16 @@ package tcs.interviewtracker.service;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 
 import tcs.interviewtracker.persistence.TechnicalDocumentation;
 import tcs.interviewtracker.repository.TechnicalDocumentationRepository;
 
+@Service
 public class TechnicalDocumentationService {
 
     @Autowired
@@ -18,11 +22,26 @@ public class TechnicalDocumentationService {
         this.techDocRepository = techDocRepository;
     }
     
-    public TechnicalDocumentation getById(Long id){
-        return techDocRepository.getReferenceById(id);
+    public Optional<TechnicalDocumentation> getById(Long id){
+        return techDocRepository.findById(id);
     }
 
-    public List<TechnicalDocumentation> getAllTechDocs(){
+    public List<TechnicalDocumentation> getAllTechDocs(PageRequest pageRequest){
+        
         return techDocRepository.findAll();
+    }
+    public TechnicalDocumentation save (TechnicalDocumentation tD){
+        return techDocRepository.save(tD);
+    }
+
+    public TechnicalDocumentation update(Long techId, TechnicalDocumentation techDoc){
+
+        TechnicalDocumentation finalTechDoc = techDocRepository.save(techDoc);
+        return finalTechDoc;
+    }
+
+    public void delete(Long techId){
+        techDocRepository.deleteById(techId);
+        
     }
 }

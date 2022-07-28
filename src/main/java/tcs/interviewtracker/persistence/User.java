@@ -2,6 +2,7 @@ package tcs.interviewtracker.persistence;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,36 +23,39 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
 
     @Id
-    @Column(name="id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="first_name",nullable = false)
+    @Column(name="uuid")
+    private UUID uuid;
+
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name="last_name",nullable = false)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name="middle_name",nullable = true)
+    @Column(name = "middle_name", nullable = true)
     private String middleName;
 
-    @Column(name="employee_id",nullable = false)
+    @Column(name = "employee_id", nullable = false)
     private String employeeId;
 
-    @Column(name="photo",nullable = true)
+    @Column(name = "photo", nullable = true)
     private String profilePicture;
 
-    @Column(name="date_of_birth",nullable = false)
+    @Column(name = "date_of_birth", nullable = false)
     private Date dateOfBirth;
 
     @Column(name="email",nullable = false)
     private String email;
 
-    @Column(name="phone_number",nullable = false)
+    @Column(name = "phone_number", nullable = false)
     private String phone;
 
     @Column(name="admin", nullable = false)

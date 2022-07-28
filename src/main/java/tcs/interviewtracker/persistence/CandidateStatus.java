@@ -1,0 +1,13 @@
+package tcs.interviewtracker.persistence;
+
+public enum CandidateStatus {
+    APPLIED,
+    REJECTED,
+    READ_FOR_TECHNICAL_INTERVIEW,
+    READY_FOR_MANAGEMENT_INTERVIEW,
+    WAITING_FOR_TECHNICAL_APPROVAL,
+    WAITING_FOR_MANAGEMENT_APPROVAL,
+    OFFER_SENT,
+    OFFER_ACCEPTED,
+    OFFER_DECLINED
+}
