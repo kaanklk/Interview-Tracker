@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.persistence.Project;
 import tcs.interviewtracker.persistence.User;
-import tcs.interviewtracker.service.PositionService;
 import tcs.interviewtracker.service.ProjectService;
 import tcs.interviewtracker.service.UserService;
 
@@ -27,7 +26,7 @@ public class ProjectController {
 
     private ProjectService projectService;
     private UserService userService;
-    private PositionService positionService;
+    //private PositionService positionService;
 
     private static final String PM = "Project Manager";
     private static final String SOURCER = "Sourcer";
