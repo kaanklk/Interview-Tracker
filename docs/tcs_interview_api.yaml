@@ -2662,14 +2662,69 @@ components:
     ErrorDetails:
       type: object
       properties:
-        causedBy:
+        errorType:
           type: string
-          example: controller
-          description: The source of the error
+          example: Parse error
+          description: The general cause of the error
         errorMessage:
           type: string
-          example: Was not able to parse the provided timestamp
-          description: Short description of the nature of the error
+          example: Was not able to parse the provided timestamp to get hte start date.
+          description: A more specific, business-related description of the error.
+    ErrorDetails404:
+      type: object
+      properties:
+        errorType:
+          type: string
+          example: Resource not found
+          description: The general cause of the error
+        errorMessage:
+          type: string
+          example: The object with the UUID 653ffdbc-ab44-4861-9d21-af6911878106 was not found.
+          description: A more specific, business-related description of the error.
+    ErrorDetails401:
+      type: object
+      properties:
+        errorType:
+          type: string
+          example: Unauthorized access
+          description: The general cause of the error
+        errorMessage:
+          type: string
+          example: The user xyz is not authorized.
+          description: A more specific, business-related description of the error.
+    ErrorDetails403:
+      type: object
+      properties:
+        errorType:
+          type: string
+          example: Forbidden
+          description: The general cause of the error
+        errorMessage:
+          type: string
+          example: The user xyz has no permission to access this resource.
+          description: A more specific, business-related description of the error.
+    ErrorDetails409:
+      type: object
+      properties:
+        errorType:
+          type: string
+          example: Already exists
+          description: The general cause of the error
+        errorMessage:
+          type: string
+          example: The object with the UUID 653ffdbc-ab44-4861-9d21-af6911878106 already exists.
+          description: A more specific, business-related description of the error.
+    ErrorDetails500:
+      type: object
+      properties:
+        errorType:
+          type: string
+          example: Unexpected server-side error
+          description: The general cause of the error
+        errorMessage:
+          type: string
+          example: Something went wrong on the server.
+          description: A more specific, business-related description of the error. 
     CandidateCV:
       type: object
       properties:
@@ -2723,31 +2778,31 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorDetails'
+            $ref: '#/components/schemas/ErrorDetails404'
     401Unauthorized:
       description: Trying to access a protected resource without proper authorization.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorDetails'
+            $ref: '#/components/schemas/ErrorDetails401'
     403Forbidden:
       description: The user does not have the necessary permissions for the resource.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorDetails'
+            $ref: '#/components/schemas/ErrorDetails403'
     409AlreadyExists:
       description: An object with the same unique values already exists.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorDetails'
+            $ref: '#/components/schemas/ErrorDetails409'
     500APIError:
       description: Unexpected server-side error
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorDetails'
+            $ref: '#/components/schemas/ErrorDetails500'
 
 #--------------------------------------------------------------
   securitySchemes:

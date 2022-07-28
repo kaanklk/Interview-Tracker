@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -23,11 +24,11 @@ public class PersonHasTimeslot {
     private long personHasTimeslotId;
 
     @ManyToOne
-    @Column(name="timeslot_id")
+    @JoinColumn(name="timeslot_id", referencedColumnName = "id")
     private Timeslot timeslot;
 
     @ManyToOne
-    @Column(name="person_id")
+    @JoinColumn(name="person_id", referencedColumnName = "id")
     private Person person;
 
     @Column(name="function")

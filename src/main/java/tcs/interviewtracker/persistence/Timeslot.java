@@ -18,7 +18,7 @@ public class Timeslot {
 
     @Id
     @NonNull
-    @Column(name="timeslot_id")
+    @Column(name="id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long timeslotId;
 
@@ -31,7 +31,11 @@ public class Timeslot {
     @Column(name="type")
     private String timeslotType;
 
+    @Column(name="isCompleted")
+    private boolean isCompleted = false;
+
     public Timeslot() {
+
     }
 
     public Timeslot(Timestamp timeslotStart, Timestamp timeslotEnd, String timeslotType) {
