@@ -32,7 +32,7 @@ public class Project {
     private String name;
 
     // TODO: One to one
-    @Column(name = FLD_PROJECT_MANAGER_ID, nullable = false)
+    @Column(name = FLD_PROJECT_MANAGER_ID, nullable = true)
     private Long projectManagerId;
 
     @Column(name = FLD_DESCRIPTION, nullable = false)

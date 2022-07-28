@@ -42,7 +42,6 @@ public class UserService {
         userToUpdate.setEmail(user.getEmail());
         userToUpdate.setDateOfBirth(user.getDateOfBirth());
         userToUpdate.setPhone(user.getPhone());
-        userToUpdate.setRoles(user.getRoles());
 
         userRepo.save(userToUpdate);
     }
