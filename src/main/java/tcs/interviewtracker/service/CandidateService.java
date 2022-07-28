@@ -12,6 +12,7 @@ import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.Education;
 import tcs.interviewtracker.persistence.ManagementDocumentation;
+import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.persistence.StatusChange;
 import tcs.interviewtracker.persistence.TechnicalDocumentation;
 import tcs.interviewtracker.persistence.User;
@@ -19,6 +20,7 @@ import tcs.interviewtracker.persistence.WorkExperience;
 import tcs.interviewtracker.repository.CandidateRepository;
 import tcs.interviewtracker.repository.EducationRepository;
 import tcs.interviewtracker.repository.ManagementDocumentationRepository;
+import tcs.interviewtracker.repository.PositionRepository;
 import tcs.interviewtracker.repository.StatusChangeRepository;
 import tcs.interviewtracker.repository.TechnicalDocumentationRepository;
 import tcs.interviewtracker.repository.UserRepository;
@@ -34,6 +36,7 @@ public class CandidateService {
     private UserRepository userRepository;
     private TechnicalDocumentationRepository technicalDocumentationRepository;
     private ManagementDocumentationRepository managementDocumentationRepository;
+    private PositionRepository positionRepository;
 
     public List<Candidate> findAll() {
         return candidateRepository.findAll();
@@ -104,6 +107,10 @@ public class CandidateService {
 
     public ManagementDocumentation getManagementDocumentation(UUID documentationUuid) {
         return managementDocumentationRepository.getReferenceByUuid(documentationUuid);
+    }
+
+    public Position getPosition(UUID positionUuid) {
+        return positionRepository.getReferenceByUuid(positionUuid);
     }
 
     //WorkExperience:----------------------------------------------------

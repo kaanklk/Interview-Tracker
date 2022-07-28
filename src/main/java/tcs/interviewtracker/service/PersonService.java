@@ -2,6 +2,7 @@ package tcs.interviewtracker.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,25 +26,27 @@ public class PersonService {
         return personRepository.findAll(request);
     }
 
-    public Person getById(Long id) {
-        return personRepository.getReferenceById(id);
+    public Person getById(UUID uuid) {
+        return personRepository.getReferenceByUuid(uuid);
     }
 
     public Person save(Person person) {
+        person.setUuid(UUID.randomUUID());
         return personRepository.save(person);
     }
 
-    public Person update(Long id, Person person) throws ResourceNotFoundException {
-        Optional<Person> oldPerson = personRepository.findById(id);
-        if (oldPerson.isEmpty()) {
+    public Person update(UUID uuid, Person person) throws ResourceNotFoundException {
+        var oldPerson = personRepository.getReferenceByUuid(uuid);
+        if (null == oldPerson) {
             throw new ResourceNotFoundException();
         }
-        person.setId(id);
+        person.setId(oldPerson.getId());
+        person.setUuid(uuid);
         return personRepository.save(person);
     }
 
-    public Person delete(Long id) throws ResourceNotFoundException {
-        Person toDelete = personRepository.getReferenceById(id);
+    public Person delete(UUID uuid) throws ResourceNotFoundException {
+        Person toDelete = personRepository.getReferenceByUuid(uuid);
         if (null == toDelete) {
             throw new ResourceNotFoundException();
         }

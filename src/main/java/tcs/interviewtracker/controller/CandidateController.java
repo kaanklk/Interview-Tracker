@@ -21,7 +21,10 @@ import tcs.interviewtracker.DTOs.CandidateDTO;
 import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.Person;
 import tcs.interviewtracker.service.CandidateService;
+import tcs.interviewtracker.service.ManagementDocumentationService;
 import tcs.interviewtracker.service.PersonService;
+import tcs.interviewtracker.service.PositionService;
+import tcs.interviewtracker.service.TechnicalDocumentationService;
 
 @RestController
 @RequestMapping("/candidates")
@@ -33,22 +36,40 @@ public class CandidateController {
     private CandidateService candidateService;
     @NonNull
     private PersonService personService;
+    @NonNull
+    private PositionService positionService;
+    @NonNull
+    private TechnicalDocumentationService technicalDocumentationService;
+    @NonNull
+    private ManagementDocumentationService managementDocumentationService;
 
     @PostConstruct
     void init() {
         candidateModelMapper = new ModelMapper();
         var typeMapToDTO = candidateModelMapper.createTypeMap(Candidate.class, CandidateDTO.class);
-        typeMapToDTO.addMapping(source-> {return source.getPosition().getUuid(); }, (dto, value) -> {dto.setPositionId((UUID)value);});
+        // Position UUID:
+        typeMapToDTO.addMapping(source -> {return source.getPosition().getUuid(); }, (dto, value) -> { dto.setPositionId((UUID)value); });
         // Name:
-        typeMapToDTO.addMapping(source-> {return source.getPerson().getFirstName(); }, (dto, value) -> {dto.setFirstName((String)value);});
-        typeMapToDTO.addMapping(source-> {return source.getPerson().getMiddleName(); }, (dto, value) -> {dto.setMiddleName((String)value);});
-        typeMapToDTO.addMapping(source-> {return source.getPerson().getLastName(); }, (dto, value) -> {dto.setLastName((String)value);});
-        typeMapToDTO.addMapping(source-> {return source.getPerson().getEmail(); }, (dto, value) -> {dto.setEmail((String)value);});
-        typeMapToDTO.addMapping(source-> {return source.getPerson().getPhone(); }, (dto, value) -> {dto.setPhone((String)value);});
-        typeMapToDTO.addMapping(source-> {return ; }, (dto, value) -> {dto.setPhone((String)value);});
+        typeMapToDTO.addMapping(source -> {return source.getPerson().getFirstName(); }, (dto, value) -> { dto.setFirstName((String)value);});
+        typeMapToDTO.addMapping(source -> {return source.getPerson().getMiddleName(); }, (dto, value) -> { dto.setMiddleName((String)value);});
+        typeMapToDTO.addMapping(source -> {return source.getPerson().getLastName(); }, (dto, value) -> { dto.setLastName((String)value);});
+        typeMapToDTO.addMapping(source -> {return source.getPerson().getEmail(); }, (dto, value) -> { dto.setEmail((String)value); });
+        typeMapToDTO.addMapping(source -> {return source.getPerson().getPhone(); }, (dto, value) -> { dto.setPhone((String)value); });
+        //TODO
+        //Interviewers and documentations can be queried from the service.
+        //Timeslot
 
         var typeMapToEntity = candidateModelMapper.createTypeMap(CandidateDTO.class, Candidate.class);
+        // Position UUID:
+        typeMapToEntity.addMapping(dto -> { return dto.getPositionId(); }, (entity, value) -> { positionService.find ((String)value); });
+        // Name:
+        typeMapToEntity.addMapping(dto -> { return dto.getFirstName(); }, (entity, value) -> {entity.getPerson().setFirstName((String)value);});
+        typeMapToEntity.addMapping(source -> {return source.getPerson().getMiddleName(); }, (dto, value) -> {dto.setMiddleName((String)value);});
+        typeMapToEntity.addMapping(source -> {return source.getPerson().getLastName(); }, (dto, value) -> {dto.setLastName((String)value);});
+        typeMapToEntity.addMapping(source -> {return source.getPerson().getEmail(); }, (dto, value) -> {dto.setEmail((String)value);});
+        typeMapToEntity.addMapping(source -> {return source.getPerson().getPhone(); }, (dto, value) -> {dto.setPhone((String)value);});
         //TODO
+
     }
 
     @GetMapping
