@@ -13,6 +13,7 @@ import org.springframework.lang.Nullable;
 import lombok.Data;
 
 import java.sql.Date;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -23,6 +24,9 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @NonNull
     private Long id;
+
+    @Column(name="uuid")
+    private UUID uuid;
 
     @Column(name = "fname", columnDefinition = "varchar(256)")
     @NonNull

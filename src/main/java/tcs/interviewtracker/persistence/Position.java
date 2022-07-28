@@ -1,6 +1,7 @@
 package tcs.interviewtracker.persistence;
 
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +24,9 @@ public class Position {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(name="uuid")
+    private UUID uuid;
 
     @Column(columnDefinition = "varchar(128)")
     private String positionName;

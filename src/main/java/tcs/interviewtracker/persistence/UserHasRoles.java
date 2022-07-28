@@ -1,5 +1,7 @@
 package tcs.interviewtracker.persistence;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,9 +28,11 @@ public class UserHasRoles {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = FLD_USERID)
-    @ManyToOne
-    private User user;
+    @Column(name="uuid")
+    private UUID uuid;
+
+    @Column(name = FLD_USERID)
+    private Long userId;
 
     @JoinColumn(name = FLD_ROLEID)
     @ManyToOne

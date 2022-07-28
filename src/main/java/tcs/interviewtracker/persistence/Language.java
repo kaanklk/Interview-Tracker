@@ -1,5 +1,8 @@
 package tcs.interviewtracker.persistence;
 
+import java.util.UUID;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,15 +18,16 @@ import lombok.Data;
 @Data
 @Table(name = "language")
 public class Language {
-    
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @NonNull
-    private int id;
+    private Long id;
+
+    @Column(name="uuid")
+    private UUID uuid;
 
     @ManyToOne
     private Candidate candidate;
-    
+
     @NonNull
     private String language;
 
