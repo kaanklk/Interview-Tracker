@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,18 +31,13 @@ import tcs.interviewtracker.service.TechnicalDocumentationService;
 @RequestMapping("/candidates")
 @RequiredArgsConstructor
 public class CandidateController {
+    @Nullable
     private ModelMapper candidateModelMapper;
 
     @NonNull
     private CandidateService candidateService;
     @NonNull
     private PersonService personService;
-    @NonNull
-    private PositionService positionService;
-    @NonNull
-    private TechnicalDocumentationService technicalDocumentationService;
-    @NonNull
-    private ManagementDocumentationService managementDocumentationService;
 
     @PostConstruct
     void init() {
@@ -55,19 +51,29 @@ public class CandidateController {
         typeMapToDTO.addMapping(source -> {return source.getPerson().getLastName(); }, (dto, value) -> { dto.setLastName((String)value);});
         typeMapToDTO.addMapping(source -> {return source.getPerson().getEmail(); }, (dto, value) -> { dto.setEmail((String)value); });
         typeMapToDTO.addMapping(source -> {return source.getPerson().getPhone(); }, (dto, value) -> { dto.setPhone((String)value); });
+        // Interviewers:
         //TODO
-        //Interviewers and documentations can be queried from the service.
-        //Timeslot
 
+        // Documentation:
+        typeMapToDTO.addMapping(
+            source -> {return candidateService.getTechnicalDocumentationOfCandidate(source.getUuid()).getUuid(); },
+            (dto, value) -> { dto.setTechnicalDocumentationId((UUID)value); }
+        );
+        typeMapToDTO.addMapping(
+            source -> {return candidateService.getManagementDocumentationByCandidate(source.getUuid()).getUuid(); },
+            (dto, value) -> { dto.setManagementDocumentationId((UUID)value); }
+        );
+        // Timeslot:
+        //TODO
         var typeMapToEntity = candidateModelMapper.createTypeMap(CandidateDTO.class, Candidate.class);
         // Position UUID:
-        typeMapToEntity.addMapping(dto -> { return dto.getPositionId(); }, (entity, value) -> { positionService.find ((String)value); });
+        typeMapToEntity.addMapping(dto -> { return dto.getPositionId(); }, (entity, value) -> { entity.setPosition(candidateService.getPosition((UUID)value)); });
         // Name:
         typeMapToEntity.addMapping(dto -> { return dto.getFirstName(); }, (entity, value) -> {entity.getPerson().setFirstName((String)value);});
-        typeMapToEntity.addMapping(source -> {return source.getPerson().getMiddleName(); }, (dto, value) -> {dto.setMiddleName((String)value);});
-        typeMapToEntity.addMapping(source -> {return source.getPerson().getLastName(); }, (dto, value) -> {dto.setLastName((String)value);});
-        typeMapToEntity.addMapping(source -> {return source.getPerson().getEmail(); }, (dto, value) -> {dto.setEmail((String)value);});
-        typeMapToEntity.addMapping(source -> {return source.getPerson().getPhone(); }, (dto, value) -> {dto.setPhone((String)value);});
+        typeMapToEntity.addMapping(dto -> {return dto.getMiddleName(); }, (entity, value) -> {entity.getPerson().setMiddleName((String)value);});
+        typeMapToEntity.addMapping(dto -> {return dto.getLastName(); }, (entity, value) -> {entity.getPerson().setLastName((String)value);});
+        typeMapToEntity.addMapping(source -> {return source.getEmail(); }, (dto, value) -> {dto.getPerson().setEmail((String)value);});
+        typeMapToEntity.addMapping(source -> {return source.getPhone(); }, (dto, value) -> {dto.getPerson().setPhone((String)value);});
         //TODO
 
     }
@@ -77,7 +83,6 @@ public class CandidateController {
         var candidates = candidateService.findAll();
         var dtos = new ArrayList<CandidateDTO>();
         for (var candidate : candidates) {
-            var person = personService.getById(candidate.getPerson().getId());
             dtos.add(candidateEntityToDto(candidate));
         }
         return new ResponseEntity<List<CandidateDTO>>(dtos, HttpStatus.OK);

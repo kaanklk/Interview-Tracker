@@ -113,6 +113,22 @@ public class CandidateService {
         return positionRepository.getReferenceByUuid(positionUuid);
     }
 
+    public TechnicalDocumentation getTechnicalDocumentationOfCandidate(UUID candidateUuid) {
+        var candidate = candidateRepository.getByUuid(candidateUuid);
+        if (null == candidate) {
+            return null;
+        }
+        return technicalDocumentationRepository.getReferenceByCandidate(candidate);
+    }
+
+    public ManagementDocumentation getManagementDocumentationByCandidate(UUID candidateUuid) {
+        var candidate = candidateRepository.getByUuid(candidateUuid);
+        if (null == candidate) {
+            return null;
+        }
+        return managementDocumentationRepository.getReferenceByCandidate(candidate);
+    }
+
     //WorkExperience:----------------------------------------------------
 
     public List<WorkExperience> findWorkExperiences(UUID candidateUuid) throws ResourceNotFoundException {
