@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import tcs.interviewtracker.DTOs.ManagementDocumentationDTO;
@@ -43,10 +44,17 @@ public class ManagementDocumentationController {
         return entity;
     }
 
-
     @GetMapping("/")
-    public ResponseEntity<List<ManagementDocumentationDTO>> getManageDocs(int pageSize, int offset,  String sortBy) {
-        PageRequest manageDocRequest = PageRequest.of(offset, pageSize, Sort.by(sortBy).ascending());
+    public ResponseEntity<List<ManagementDocumentationDTO>> getManageDocs(
+        @RequestParam(required = false, defaultValue = "10") int pageSize,
+        @RequestParam(required = false, defaultValue = "1")int offset,
+        @RequestParam(required = false, defaultValue = "id")String sortBy,
+        @RequestParam(required = false, defaultValue = "ascending") String orderDirection) {
+
+        Sort SortByOrdered = orderDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+		: Sort.by(sortBy).descending();
+
+        PageRequest manageDocRequest = PageRequest.of(offset, pageSize, SortByOrdered);
         var manageDocs = manageService.getAllManageDocs();
         var DTOs = new ArrayList<ManagementDocumentationDTO>();
         for(var manageDoc : manageDocs) {
@@ -85,7 +93,7 @@ public class ManagementDocumentationController {
     }
 
     @DeleteMapping("/{manageDocId}")
-    public void deleteTechnicalDocumentation(@PathVariable(value = "manageDocId") Long manageId )  {
+    public void deleteManageDoc(@PathVariable(value = "manageDocId") Long manageId )  {
         manageService.deleteManageDoc(manageId);
     }
 }
