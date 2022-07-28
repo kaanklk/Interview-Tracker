@@ -46,25 +46,25 @@ public class TechnicalDocumentation {
     private Integer technicalSkills1;
 
     @Column(name = "tech_skill_comment1", nullable = true)
-    private Integer techSkillComment1;
+    private String techSkillComment1;
 
     @Column(name = "technical_skills2", nullable = true)
     private Integer technicalSkills2;
 
     @Column(name = "tech_skill_comment2", nullable = true       )
-    private Integer techSkillComment2;
+    private String techSkillComment2;
 
     @Column(name = "technical_skills3", nullable = true)
     private Integer technicalSkills3;
 
     @Column(name = "tech_skill_comment3", nullable = true)
-    private Integer techSkillComment3;
+    private String techSkillComment3;
 
     @Column(name = "technical_skills4", nullable = true)
     private Integer technicalSkills4;
 
     @Column(name = "tech_skill_comment4", nullable = true)
-    private Integer techSkillComment4;
+    private String techSkillComment4;
 
     @Column(name = "total_experience", nullable = true)
     private Integer totalExperience;
@@ -76,7 +76,7 @@ public class TechnicalDocumentation {
     private Boolean isReccomended;
 
     @Column(name = "last_comments")
-    private Integer lastComments;
+    private String lastComments;
 
     @JoinColumn(name = "interviewer_one", referencedColumnName = "id", nullable = false)
     @ManyToOne
@@ -95,12 +95,11 @@ public class TechnicalDocumentation {
     public TechnicalDocumentation() {
     }
 
-    public TechnicalDocumentation( Candidate candidate, Date date, int duration, String understandingOfRole,
-            String understandingComment, int technicalSkills1, int techSkillComment1, int technicalSkills2,
-            int techSkillComment2, int technicalSkills3, int techSkillComment3, int technicalSkills4,
-            int techSkillComment4, int totalExperience, int roleExperience, boolean isReccomended, int lastComments,
-            User interviewerOne, User interviewerTwo, int designationOne, int designationTwo) {
-
+    public TechnicalDocumentation(Candidate candidate, Date date, Integer duration, String understandingOfRole,
+            String understandingComment, Integer technicalSkills1, String techSkillComment1, Integer technicalSkills2,
+            String techSkillComment2, Integer technicalSkills3, String techSkillComment3, Integer technicalSkills4,
+            String techSkillComment4, Integer totalExperience, Integer roleExperience, Boolean isReccomended,
+            String lastComments, User interviewerOne, User interviewerTwo, int designationOne, int designationTwo) {
         this.candidate = candidate;
         this.date = date;
         this.duration = duration;
@@ -124,5 +123,6 @@ public class TechnicalDocumentation {
         this.designationTwo = designationTwo;
     }
 
+   
 
 }
