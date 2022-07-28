@@ -99,7 +99,6 @@ public class PositionController {
     }
 
 
-
     private PositionDTO convertToDto(Position position) {
         PositionDTO positionDTO = modelMapper.map(position, PositionDTO.class);
         return positionDTO;
