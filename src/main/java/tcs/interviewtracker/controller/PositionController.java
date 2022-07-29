@@ -41,7 +41,6 @@ public class PositionController {
                     .map(this::convertToDto)
                     .collect(Collectors.toList());
 
-
             return new ResponseEntity<>(positions, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -50,32 +49,32 @@ public class PositionController {
 
     }
 
-    //TODO convert uuid to int
+    // TODO convert uuid to int
     @GetMapping("{id}")
     ResponseEntity<PositionDTO> findById(@PathVariable Long id) {
 
-        var position =  positionService.findById(id);
-        if(position.isPresent()){
+        var position = positionService.findById(id);
+        if (position.isPresent()) {
             return new ResponseEntity<>(this.convertToDto(position.get()), HttpStatus.OK);
-        }else{
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
     }
 
     @PostMapping
-    ResponseEntity<PositionDTO> newPost(@RequestBody PositionDTO position){
-       try {
-        var returnPosition = this.convertToDto(positionService.save(convertToEntity(position)));
-        return new ResponseEntity<PositionDTO>(returnPosition, HttpStatus.CREATED);
-       } catch (Exception e) {
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-       }
+    ResponseEntity<PositionDTO> newPost(@RequestBody PositionDTO position) {
+        try {
+            var returnPosition = this.convertToDto(positionService.save(convertToEntity(position)));
+            return new ResponseEntity<PositionDTO>(returnPosition, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    //TODO ask team, delete should not return anything
+    // TODO ask team, delete should not return anything
     @DeleteMapping("{id}")
-    public ResponseEntity<PositionDTO> deletePosition(@RequestParam Long id){
+    public ResponseEntity<PositionDTO> deletePosition(@RequestParam Long id) {
         try {
             this.positionService.delete(id);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -85,10 +84,10 @@ public class PositionController {
     }
 
     @PutMapping
-    public ResponseEntity<PositionDTO> updatePosition(PositionDTO positionDTO){
-        if(!positionService.findById(positionDTO.getId()).isPresent())
-             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        else{
+    public ResponseEntity<PositionDTO> updatePosition(PositionDTO positionDTO) {
+        if (!positionService.findById(positionDTO.getId()).isPresent())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        else {
             try {
                 positionService.update(convertToEntity(positionDTO));
                 return new ResponseEntity<>(HttpStatus.OK);
@@ -97,7 +96,6 @@ public class PositionController {
             }
         }
     }
-
 
     private PositionDTO convertToDto(Position position) {
         PositionDTO positionDTO = modelMapper.map(position, PositionDTO.class);

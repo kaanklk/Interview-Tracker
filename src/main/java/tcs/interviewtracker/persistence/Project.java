@@ -62,10 +62,6 @@ public class Project {
     private String deadline;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "project")
-    // @JoinTable(name = "position")
-    // @JoinColumns({ @JoinColumn(name = "id", referencedColumnName = "id"),
-    // @JoinColumn(name = "projectPositions", referencedColumnName = "positionName")
-    // })
     private List<Position> projectPositions;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "projects")
