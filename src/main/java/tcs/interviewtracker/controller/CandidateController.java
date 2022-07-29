@@ -66,7 +66,6 @@ public class CandidateController {
     public ResponseEntity<CandidateDTO> postCandidate(
         @RequestBody(required = true) CandidateDTO dto
     ) {
-
         var candidate = CandidateMapper.INSTANCE.toEntity(dto);
         var responseDTO = CandidateMapper.INSTANCE.toDTO(candidateService.save(candidate));
         return new ResponseEntity<CandidateDTO>(responseDTO, HttpStatus.CREATED);

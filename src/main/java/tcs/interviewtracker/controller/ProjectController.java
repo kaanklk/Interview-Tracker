@@ -59,10 +59,12 @@ public class ProjectController {
             @Validated @RequestBody Project projectDetails)
             throws Exception {
 
-        Project project = projectService.getById(id);
+        /*
         User projectManager = userService.getUserWithSpesificRole(projectDetails.getId(), PM);
         User sourcer = userService.getUserWithSpesificRole(projectDetails.getId(), SOURCER);
         User recruiter = userService.getUserWithSpesificRole(projectDetails.getId(), RECRUITER);
+
+        Project project = projectService.getById(id);
 
         project.setName(projectDetails.getName());
         project.setProjectManager(projectManager);
@@ -73,6 +75,8 @@ public class ProjectController {
 
         final Project updatedProject = projectService.saveProject(project);
         return ResponseEntity.ok(updatedProject);
+         */
+        return null;
     }
 
     @DeleteMapping("/{id}")

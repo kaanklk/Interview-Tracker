@@ -68,7 +68,7 @@ public class Project {
     // })
     private List<Position> projectPositions;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "projects")
+    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<User> projectAssocicates;
 
 }
