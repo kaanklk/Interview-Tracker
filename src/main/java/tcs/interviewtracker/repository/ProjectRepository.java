@@ -2,11 +2,13 @@ package tcs.interviewtracker.repository;
 
 import java.util.List;
 
+import org.hibernate.type.TrueFalseType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.Project;
 import tcs.interviewtracker.persistence.Timeslot;
 
@@ -14,9 +16,18 @@ import tcs.interviewtracker.persistence.Timeslot;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     Project findByName(String name);
 
-    @Query("SELECT ts.id, ts.is_completed FROM timeslot AS ts JOIN person_has_timeslot AS pht ON ts.id= pht.timeslot_id WHERE ts.is_completed=true AND (SELECT person_id FROM person_has_timeslot JOIN users_projects ON projects_id = ?#{project.id})")
+    @Query(value = "SELECT P.id as projectid, I.id AS interviewid, I.type_id AS typeid FROM project AS P JOIN interview AS I ON P.id = I.project_id WHERE I.is_completed = true AND I.project_id = ?#{project.id}", nativeQuery = true)
     List<Timeslot> findByIsCompletedTrue(@Param("project") Project project);
 
-    @Query("SELECT ts.id, ts.is_completed FROM timeslot AS ts JOIN person_has_timeslot AS pht ON ts.id= pht.timeslot_id WHERE ts.is_completed=true AND (SELECT person_id FROM person_has_timeslot JOIN users_projects ON projects_id = ?#{project.id})")
+    @Query(value = "SELECT P.id as projectid, I.id AS interviewid, I.type_id AS typeid FROM project AS P JOIN interview AS I ON P.id = I.project_id WHERE I.is_completed = false AND I.project_id = ?#{project.id}", nativeQuery = true)
     List<Timeslot> findByIsCompletedFalse(@Param("project") Project project);
+
+    @Query(value = "SELECT C.id, C.project_id, C.person_id FROM candidate AS C JOIN project AS P ON C.id = P.id WHERE status='accepted'", nativeQuery = true)
+    List<Candidate> findAcceptedCandidates();
+
+    @Query(value = "SELECT C.id, C.project_id, C.person_id FROM candidate AS C JOIN project AS P ON C.id = P.id WHERE status='rejected'", nativeQuery = true)
+    List<Candidate> findRejectedCandidates();
+
+    @Query(value = "SELECT C.id, C.project_id, C.person_id FROM candidate AS C JOIN project AS P ON C.id = P.id WHERE NOT status='accepted' AND status='rejected'", nativeQuery = true)
+    List<Candidate> findPendingCandidates();
 }

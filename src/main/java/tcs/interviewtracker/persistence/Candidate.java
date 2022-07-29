@@ -16,7 +16,7 @@ import lombok.Data;
 @Data
 @Table(name = "candidate")
 public class Candidate {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -29,6 +29,9 @@ public class Candidate {
 
     @Column(columnDefinition = "varchar(128)")
     private String status;
+
+    @Column(name = "projectId")
+    private Long projectId;
 
     @Column(columnDefinition = "varchar(256)")
     @Nullable
