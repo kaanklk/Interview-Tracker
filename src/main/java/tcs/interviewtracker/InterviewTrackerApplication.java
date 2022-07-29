@@ -19,7 +19,6 @@ import tcs.interviewtracker.properties.CvStorageProperties;
 @EnableConfigurationProperties({
 		CvStorageProperties.class
 })
-@ComponentScan(basePackages = { "tcs.interviewtracker.exceptions" })
 public class InterviewTrackerApplication {
 
 	public static void main(String[] args) {
