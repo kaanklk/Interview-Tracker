@@ -2,6 +2,7 @@ package tcs.interviewtracker.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -62,7 +63,7 @@ public class UserService {
         return userRepo.save(updateUser);
     }
 
-    public void deleteUser(Long id) throws ResourceNotFoundException {
+    public void deleteUser(Long id) throws ResourceNotFoundException{
         Optional<User> user = userRepo.findById(id);
         if(!user.isPresent()){
             throw new ResourceNotFoundException();
