@@ -82,7 +82,7 @@ public class CandidateService {
         return statusChangeRepository.getByCandidate(candidate);
     }
 
-    public StatusChange getCandidateHistoryByUuid(UUID candidateUuid, Long statusChangeUuid)
+    public StatusChange getCandidateHistoryByUuid(UUID candidateUuid, UUID statusChangeUuid)
             throws ResourceNotFoundException {
         Candidate candidate = candidateRepository.getByUuid(candidateUuid);
         if (null == candidate) {
