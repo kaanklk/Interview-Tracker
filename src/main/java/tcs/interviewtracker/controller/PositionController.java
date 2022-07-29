@@ -59,7 +59,6 @@ public class PositionController {
 
     }
 
-    // TODO convert uuid to int
     @GetMapping("{id}")
     ResponseEntity<PositionDTO> findById(@PathVariable UUID id) {
 
