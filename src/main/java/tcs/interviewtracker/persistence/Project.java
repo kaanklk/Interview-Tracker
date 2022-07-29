@@ -1,6 +1,7 @@
 package tcs.interviewtracker.persistence;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -35,6 +36,9 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name="uuid")
+    private UUID uuid;
 
     @Column(name = FLD_NAME, nullable = false)
     private String name;

@@ -2,21 +2,17 @@ package tcs.interviewtracker.persistence;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.JoinColumn;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -36,6 +32,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "uuid")
+    private UUID uuid;
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -54,21 +53,19 @@ public class User {
     @Column(name = "date_of_birth", nullable = false)
     private Date dateOfBirth;
 
-    @Column(nullable = true)
-    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "users")
-    private Set<Role> roles;
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    private Set<Project> projects;
-
     @Column(name = "email", nullable = false)
     private String email;
 
     @Column(name = "phone_number", nullable = false)
     private String phone;
 
+    @Column(name = "admin")
+    private Boolean admin;
+
     @Column(name = "created_at")
     @CreationTimestamp
     private Timestamp create;
 
+    @ManyToMany(mappedBy = "interviewers")
+    Set<Position> likes;
 }

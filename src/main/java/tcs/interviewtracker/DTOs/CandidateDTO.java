@@ -9,8 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CandidateDTO {
-    
-    private UUID id;
+
+    private UUID uuid;
 
     private UUID positionId;
 
@@ -47,5 +47,5 @@ public class CandidateDTO {
     private UUID managementDocumentationId;
 
     private List<TimeslotDTO> possibleTimeslots;
-    
+
 }
