@@ -11,9 +11,9 @@ import tcs.interviewtracker.persistence.Candidate;
 @Data
 public class TechnicalDocumentationDTO {
  
-    private UUID id;
+    private UUID uuid;
 
-    private UUID candidate;
+    private UUID candidateUUID;
 
     private Date date;
 
@@ -47,9 +47,9 @@ public class TechnicalDocumentationDTO {
 
     private Integer lastComments;
 
-    private UUID interviewerOne;
+    private UUID interviewerOneUUID;
 
-    private UUID interviewerTwo;
+    private UUID interviewerTwoUUID;
 
     private int designationOne;
 

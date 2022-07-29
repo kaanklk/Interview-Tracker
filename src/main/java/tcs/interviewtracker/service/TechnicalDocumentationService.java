@@ -3,6 +3,7 @@ package tcs.interviewtracker.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,8 +24,8 @@ public class TechnicalDocumentationService {
         this.techDocRepository = techDocRepository;
     }
     
-    public Optional<TechnicalDocumentation> getById(Long id){
-        return techDocRepository.findById(id);
+    public Optional<TechnicalDocumentation> getById(UUID id){
+        return techDocRepository.findByUuid(id);
     }
 
     public List<TechnicalDocumentation> getAllTechDocs(){
@@ -36,17 +37,19 @@ public class TechnicalDocumentationService {
 
     }
     public TechnicalDocumentation save (TechnicalDocumentation tD){
+        tD.setUuid(UUID.randomUUID());
         return techDocRepository.save(tD);
     }
 
+    
     public TechnicalDocumentation update(Long techId, TechnicalDocumentation techDoc){
 
         TechnicalDocumentation finalTechDoc = techDocRepository.save(techDoc);
         return finalTechDoc;
     }
 
-    public void delete(Long techId){
-        techDocRepository.deleteById(techId);
+    public void delete(TechnicalDocumentation techD){
+        techDocRepository.delete(techD);
         
     }
 }

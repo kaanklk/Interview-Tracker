@@ -14,6 +14,7 @@ import javax.persistence.Column;
 import javax.persistence.GenerationType;
 
 import java.sql.Date;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -25,6 +26,9 @@ public class TechnicalDocumentation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "UUID")
+    private UUID uuid;
+    
     @OneToOne
     @JoinColumn(name = "candidate_id", referencedColumnName = "id", nullable = false)
     private Candidate candidate;
