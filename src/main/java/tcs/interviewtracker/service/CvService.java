@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import tcs.interviewtracker.exceptions.CvNotFoundException;
 import tcs.interviewtracker.exceptions.CvStorageException;
+import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.properties.CvStorageProperties;
 
 @Service
@@ -30,8 +31,8 @@ public class CvService {
         }
     }
 
-    public String storeCv(MultipartFile cv) {
-        String fileName = StringUtils.cleanPath(cv.getOriginalFilename());
+    public String storeCv(MultipartFile cv, Long candidateId) {
+        String fileName = StringUtils.cleanPath(candidateId.toString());
         try {
             if (fileName.contains("..")) {
                 throw new CvStorageException("Invalid filename!");
