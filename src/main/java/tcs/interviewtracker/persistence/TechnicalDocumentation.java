@@ -26,9 +26,9 @@ public class TechnicalDocumentation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "UUID")
+    @Column(name="uuid")
     private UUID uuid;
-    
+
     @OneToOne
     @JoinColumn(name = "candidate_id", referencedColumnName = "id", nullable = false)
     private Candidate candidate;
@@ -90,10 +90,10 @@ public class TechnicalDocumentation {
     private User interviewerTwo;
 
     @Column(name = "designation_one", nullable = true)
-    private int designationOne;
+    private Integer designationOne;
 
     @Column(name = "designation_two", nullable = true)
-    private int designationTwo;
+    private Integer designationTwo;
 
     public TechnicalDocumentation() {
     }
@@ -126,6 +126,6 @@ public class TechnicalDocumentation {
         this.designationTwo = designationTwo;
     }
 
-   
+
 
 }
