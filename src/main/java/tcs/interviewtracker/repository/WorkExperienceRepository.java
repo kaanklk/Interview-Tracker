@@ -2,6 +2,7 @@ package tcs.interviewtracker.repository;
 
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +12,7 @@ import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.WorkExperience;
 
 public interface WorkExperienceRepository extends JpaRepository<WorkExperience, Long> {
+    public WorkExperience getByUuid(UUID uuid);
     public List<WorkExperience> getByCandidate(Candidate candidate);
     public Page<WorkExperience> getByCandidate(Candidate candidate, PageRequest request);
 }
