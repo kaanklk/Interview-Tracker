@@ -58,8 +58,8 @@ public class User {
     @Column(name = "phone_number", nullable = false)
     private String phone;
 
-    @Column(name="admin", nullable = false)
-    private boolean admin;
+    @Column(name="admin")
+    private Boolean admin;
 
     @Column(name="created_at")
     @CreationTimestamp
