@@ -9,13 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
-import tcs.interviewtracker.persistence.Role;
 import tcs.interviewtracker.persistence.UserRoles;
 import tcs.interviewtracker.service.UserRolesService;
 
@@ -33,14 +31,14 @@ public class UserRolesController {
     @GetMapping("/")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public List<Role> getUserRoles(@PathVariable Long userId) throws ResourceNotFoundException{
+    public List<UserRoles> getUserRoles(@PathVariable Long userId) throws ResourceNotFoundException{
         return service.getAllRoles(userId);
     }
 
-    @GetMapping
+    @GetMapping("/{projectId}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public Role getRoleForSpecificProject(@PathVariable Long userId, @RequestParam Long projectId) throws ResourceNotFoundException{
+    public UserRoles getRoleForSpecificProject(@PathVariable Long userId, @PathVariable Long projectId) throws ResourceNotFoundException{
         return service.getRoleForSpecificProject(userId, projectId);
     }
 

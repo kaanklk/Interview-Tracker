@@ -1,6 +1,5 @@
 package tcs.interviewtracker.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +7,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
-import tcs.interviewtracker.persistence.Role;
 import tcs.interviewtracker.persistence.UserRoles;
 import tcs.interviewtracker.repository.UserRolesRepository;
 
@@ -17,32 +15,20 @@ public class UserRolesService {
 
 
     private UserRolesRepository userRolesRepo;
-    private RoleService roleService;
 
     UserRolesService(UserRolesRepository userRolesRepo){
         this.userRolesRepo = userRolesRepo;
     }
 
-    public List<Role> getAllRoles(Long id) throws ResourceNotFoundException{
+    public List<UserRoles> getAllRoles(Long id) throws ResourceNotFoundException{
         List<UserRoles> userRoles = userRolesRepo.findByUserId(id);
-        List<Role> roles = new ArrayList<>();
-
-        for(UserRoles userRole : userRoles){
-            roles.add(roleService.getRoleById(userRole.getRoleId()));
-        }
-
-        return roles;
+        return userRoles;
     }
 
-    public Role getRoleForSpecificProject(Long userId, Long projectId) throws ResourceNotFoundException{
+    public UserRoles getRoleForSpecificProject(Long userId, Long projectId) throws ResourceNotFoundException{
         Optional<UserRoles> userRole = userRolesRepo.findByUserIdAndProjectId(userId, projectId);
-        if(userRole.isPresent()){
-            throw new ResourceNotFoundException();
-        }
 
-        Role role = roleService.getRoleById(userRole.get().getRoleId());
-
-        return role;
+        return userRole.get();
     }
 
     public UserRoles saveUserRole(UserRoles userRole){
@@ -54,7 +40,7 @@ public class UserRolesService {
 
         UserRoles updated = userRoleToUpdate.get();
         updated.setUserId(userRole.getUserId());
-        updated.setRoleId(userRole.getRoleId());
+        updated.setRoles(userRole.getRoles());
         updated.setProjectId(userRole.getProjectId());
 
         return updated;
