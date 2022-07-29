@@ -5,10 +5,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import tcs.interviewtracker.DTOs.PositionDTO;
 import tcs.interviewtracker.persistence.Candidate;
+import tcs.interviewtracker.persistence.CandidateStatus;
 import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.repository.PositionRepository;
 
@@ -17,51 +21,51 @@ public class PositionService {
 
     PositionRepository positionRepository;
 
-
     public PositionService(PositionRepository positionRepository) {
         this.positionRepository = positionRepository;
     }
 
-
-    public List<Position> findAll() {
-        return positionRepository.findAll();
+    public Page<Position> findAll(Pageable paginationData) {
+        return positionRepository.findAll(paginationData);
     }
 
-
-    public Optional<Position> findById(Long id) {
-        return positionRepository.findById(id);
+    public Optional<Position> findById(UUID id) {
+        return positionRepository.findByUuid(id);
     }
-
 
     public Position save(Position position) {
         return positionRepository.save(position);
     }
 
-    public void delete(Long id){
-        positionRepository.deleteById(id);
+    public void delete(UUID id) {
+        positionRepository.deleteByUuid(id);
     }
 
-    public void update(Position position){
+    public void update(Position position) {
 
         positionRepository.save(position);
     }
 
-    /*public int[] getTotalAndHiredCanddateCount(Long positionId, ArrayList<Candidate> candidates){
+    public int getTotalCanddateCount(Long positionId, ArrayList<Candidate> candidates) {
         var total = 0;
+
+        for (Candidate candidate : candidates) {
+            if (candidate.getPosition().getId() == positionId)
+                total++;
+
+        }
+        return total;
+    }
+
+    public int getHiredCandidateCount(Long positionId, ArrayList<Candidate> candidates) {
         var hired = 0;
 
         for (Candidate candidate : candidates) {
-            if(candidate.getPosition().getId() == positionId){
-                total++;
-               // if(candidate.getStatus())
-            }
-
+            if (candidate.getPosition().getId() == positionId
+                    && candidate.getStatus() == CandidateStatus.OFFER_ACCEPTED)
+                hired++;
         }
 
-        return {total; hired};
-    }*/
-
-
-
-
+        return hired;
+    }
 }

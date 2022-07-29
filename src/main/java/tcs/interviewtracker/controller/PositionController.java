@@ -7,6 +7,10 @@ import java.util.stream.Collectors;
 import org.apache.tomcat.util.http.parser.HttpParser;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,24 +38,36 @@ public class PositionController {
     private ModelMapper modelMapper;
 
     @GetMapping
-    ResponseEntity<List<PositionDTO>> all() {
+    ResponseEntity<List<PositionDTO>> all(
+            @RequestParam(required = false, defaultValue = "10") Integer pagesize,
+            @RequestParam(required = false, defaultValue = "0") Integer offset,
+            @RequestParam(required = false, defaultValue = "id") String orderBy,
+            @RequestParam(required = false, defaultValue = "ascending") String orderDirection) {
 
-        try {
-            var positions = positionService.findAll().stream()
-                    .map(this::convertToDto)
-                    .collect(Collectors.toList());
+        Pageable pagingData;
 
+<<<<<<< HEAD
             return new ResponseEntity<>(positions, HttpStatus.OK);
+=======
+        if (orderDirection.equals("ascending"))
+            pagingData = PageRequest.of(offset, pagesize, Sort.by(orderBy).ascending());
+        else
+            pagingData = PageRequest.of(offset, pagesize, Sort.by(orderBy).ascending());
 
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        var positions = positionService.findAll(pagingData).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+>>>>>>> positionEndpoint
+
+        return new ResponseEntity<>(positions, HttpStatus.OK);
 
     }
 
+    <<<<<<<HEAD
     // TODO convert uuid to int
-    @GetMapping("{id}")
-    ResponseEntity<PositionDTO> findById(@PathVariable Long id) {
+    =======>>>>>>>positionEndpoint @GetMapping("{id}")
+
+    ResponseEntity<PositionDTO> findById(@PathVariable UUID id) {
 
         var position = positionService.findById(id);
         if (position.isPresent()) {
@@ -74,26 +90,18 @@ public class PositionController {
 
     // TODO ask team, delete should not return anything
     @DeleteMapping("{id}")
-    public ResponseEntity<PositionDTO> deletePosition(@RequestParam Long id) {
-        try {
-            this.positionService.delete(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<PositionDTO> deletePosition(@RequestParam UUID id) {
+        this.positionService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<PositionDTO> updatePosition(PositionDTO positionDTO) {
-        if (!positionService.findById(positionDTO.getId()).isPresent())
+    @PutMapping("{id}")
+    public ResponseEntity<PositionDTO> updatePosition(@RequestBody PositionDTO positionDTO, @PathVariable UUID id) {
+        if (!positionService.findById(id).isPresent())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         else {
-            try {
-                positionService.update(convertToEntity(positionDTO));
-                return new ResponseEntity<>(HttpStatus.OK);
-            } catch (Exception e) {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+            positionService.update(convertToEntity(positionDTO));
+            return new ResponseEntity<>(HttpStatus.OK);
         }
     }
 
