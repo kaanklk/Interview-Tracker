@@ -28,7 +28,7 @@ public class RoleController {
         this.service = service;
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public List<Role> getAllRoles(){
@@ -42,7 +42,7 @@ public class RoleController {
         return service.getRoleById(id);
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public Role save(@RequestBody Role role){
         return service.saveRole(role);

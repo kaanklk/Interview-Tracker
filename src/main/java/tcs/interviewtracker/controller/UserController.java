@@ -29,7 +29,7 @@ public class UserController {
         this.service = service;
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public List<User> getAllUsers(){
@@ -43,7 +43,7 @@ public class UserController {
         return service.getUserById(id);
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public User save(@RequestBody User user){
         return service.saveUser(user);

@@ -25,8 +25,8 @@ public class UserRolesService {
         return userRoles;
     }
 
-    public UserRoles getRoleForSpecificProject(Long userId, Long projectId) throws ResourceNotFoundException{
-        Optional<UserRoles> userRole = userRolesRepo.findByUserIdAndProjectId(userId, projectId);
+    public UserRoles getRoleForSpecificProject(Long userId, Long userRolesId) throws ResourceNotFoundException{
+        Optional<UserRoles> userRole = userRolesRepo.findById(userRolesId);
 
         return userRole.get();
     }
@@ -35,8 +35,8 @@ public class UserRolesService {
         return userRolesRepo.save(userRole);
     }
 
-    public UserRoles setNewRoleforExistingUser(UserRoles userRole){
-        Optional<UserRoles> userRoleToUpdate = userRolesRepo.findByUserIdAndProjectId(userRole.getUserId(), userRole.getProjectId());
+    public UserRoles setNewRoleforExistingUser(Long id, UserRoles userRole){
+        Optional<UserRoles> userRoleToUpdate = userRolesRepo.findById(id);
 
         UserRoles updated = userRoleToUpdate.get();
         updated.setUserId(userRole.getUserId());
@@ -44,5 +44,9 @@ public class UserRolesService {
         updated.setProjectId(userRole.getProjectId());
 
         return updated;
+    }
+
+    public void deleteUserRole(Long id){
+        userRolesRepo.deleteById(id);
     }
 }

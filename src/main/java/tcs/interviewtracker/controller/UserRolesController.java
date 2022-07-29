@@ -3,6 +3,7 @@ package tcs.interviewtracker.controller;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,31 +29,36 @@ public class UserRolesController {
          this.service = service;
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public List<UserRoles> getUserRoles(@PathVariable Long userId) throws ResourceNotFoundException{
         return service.getAllRoles(userId);
     }
 
-    @GetMapping("/{projectId}")
+    @GetMapping("/{userRolesId}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public UserRoles getRoleForSpecificProject(@PathVariable Long userId, @PathVariable Long projectId) throws ResourceNotFoundException{
-        return service.getRoleForSpecificProject(userId, projectId);
+    public UserRoles getRoleForSpecificProject(@PathVariable Long userId, @PathVariable Long userRolesId) throws ResourceNotFoundException{
+        return service.getRoleForSpecificProject(userId, userRolesId);
     }
 
-
-    @PostMapping("/")
+    @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public UserRoles setRole(@RequestBody UserRoles userRole){
         return service.saveUserRole(userRole);
     }
 
-    @PutMapping("/")
+    @PutMapping("/{userRolesId}")
     @ResponseStatus(HttpStatus.OK)
-    public UserRoles setNewRole(@RequestBody UserRoles userRole){
-        return service.setNewRoleforExistingUser(userRole);
+    public UserRoles setNewRole(@PathVariable Long userRoleId, @RequestBody UserRoles userRole){
+        return service.setNewRoleforExistingUser(userRoleId, userRole);
+    }
+
+    @DeleteMapping("/{userRolesId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteRolesForSpecificProject(@PathVariable Long userRolesId){
+        service.deleteUserRole(userRolesId);
     }
 
 }

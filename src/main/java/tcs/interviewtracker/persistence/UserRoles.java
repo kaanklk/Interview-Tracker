@@ -11,7 +11,8 @@ import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,7 +36,7 @@ public class UserRoles {
     @Column(name = "user_id")
     private Long userId;
 
-    @OneToMany
+    @ManyToMany
     @JoinTable(name = "user_roles_role",
         joinColumns = {@JoinColumn(name = "user_roles_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
