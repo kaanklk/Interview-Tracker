@@ -1,7 +1,6 @@
 package tcs.interviewtracker.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -12,11 +11,19 @@ import lombok.AllArgsConstructor;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.Education;
+import tcs.interviewtracker.persistence.ManagementDocumentation;
+import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.persistence.StatusChange;
+import tcs.interviewtracker.persistence.TechnicalDocumentation;
+import tcs.interviewtracker.persistence.User;
 import tcs.interviewtracker.persistence.WorkExperience;
 import tcs.interviewtracker.repository.CandidateRepository;
 import tcs.interviewtracker.repository.EducationRepository;
+import tcs.interviewtracker.repository.ManagementDocumentationRepository;
+import tcs.interviewtracker.repository.PositionRepository;
 import tcs.interviewtracker.repository.StatusChangeRepository;
+import tcs.interviewtracker.repository.TechnicalDocumentationRepository;
+import tcs.interviewtracker.repository.UserRepository;
 import tcs.interviewtracker.repository.WorkExperienceRepository;
 
 @Service
@@ -26,7 +33,10 @@ public class CandidateService {
     private StatusChangeRepository statusChangeRepository;
     private WorkExperienceRepository workExperienceRepository;
     private EducationRepository educationRepository;
-
+    private UserRepository userRepository;
+    private TechnicalDocumentationRepository technicalDocumentationRepository;
+    private ManagementDocumentationRepository managementDocumentationRepository;
+    private PositionRepository positionRepository;
 
     public List<Candidate> findAll() {
         return candidateRepository.findAll();
@@ -41,6 +51,7 @@ public class CandidateService {
     }
 
     public Candidate save(Candidate candidate) {
+        candidate.setUuid(UUID.randomUUID());
         return candidateRepository.save(candidate);
     }
 
@@ -71,7 +82,7 @@ public class CandidateService {
         return statusChangeRepository.getByCandidate(candidate);
     }
 
-    public StatusChange getCandidateHistoryByUuid(UUID candidateUuid, Long statusChangeUuid)
+    public StatusChange getCandidateHistoryByUuid(UUID candidateUuid, UUID statusChangeUuid)
             throws ResourceNotFoundException {
         Candidate candidate = candidateRepository.getByUuid(candidateUuid);
         if (null == candidate) {
@@ -84,6 +95,38 @@ public class CandidateService {
             }
         }
         throw new ResourceNotFoundException();
+    }
+
+    public User getInterviewer(UUID interviewerUuid) {
+        return userRepository.getReferenceByUuid(interviewerUuid);
+    }
+
+    public TechnicalDocumentation getTechnicalDocumentation(UUID documentationUuid) {
+        return technicalDocumentationRepository.findByUuid(documentationUuid).get();
+    }
+
+    public ManagementDocumentation getManagementDocumentation(UUID documentationUuid) {
+        return managementDocumentationRepository.getReferenceByUuid(documentationUuid);
+    }
+
+    public Position getPosition(UUID positionUuid) {
+        return positionRepository.getReferenceByUuid(positionUuid);
+    }
+
+    public TechnicalDocumentation getTechnicalDocumentationOfCandidate(UUID candidateUuid) {
+        var candidate = candidateRepository.getByUuid(candidateUuid);
+        if (null == candidate) {
+            return null;
+        }
+        return technicalDocumentationRepository.getReferenceByCandidate(candidate).get();
+    }
+
+    public ManagementDocumentation getManagementDocumentationByCandidate(UUID candidateUuid) {
+        var candidate = candidateRepository.getByUuid(candidateUuid);
+        if (null == candidate) {
+            return null;
+        }
+        return managementDocumentationRepository.getReferenceByCandidate(candidate);
     }
 
     //WorkExperience:----------------------------------------------------

@@ -9,6 +9,7 @@ import javax.persistence.criteria.Order;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -25,8 +26,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import tcs.interviewtracker.DTOs.TechnicalDocumentationDTO;
+import tcs.interviewtracker.exceptions.ResourceAlreadyExistsException;
+import tcs.interviewtracker.exceptions.ResourceNotFoundException;
+import tcs.interviewtracker.mappers.TechnicalDocumentationMapper;
 import tcs.interviewtracker.persistence.TechnicalDocumentation;
-import tcs.interviewtracker.repository.TechnicalDocumentationRepository;
 import tcs.interviewtracker.service.TechnicalDocumentationService;
 //PageRequest -> Page tipust ad vissza
 @RestController
@@ -35,13 +38,10 @@ public class TechnicalDocumentationController {
     @Autowired    
     private TechnicalDocumentationService techDocService;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
    @GetMapping("/")
    public ResponseEntity<List<TechnicalDocumentationDTO>> getAllTechDocs(@RequestParam(required = false, defaultValue = "10") Integer page,
     @RequestParam(required = false, defaultValue = "10") Integer offset, @RequestParam(required = false, defaultValue = "id") String orderby, 
-    @RequestParam(required = false, defaultValue = "ascending") String orderDirection){
+    @RequestParam(required = false, defaultValue = "ascending") String orderDirection) throws ResourceNotFoundException{
     PageRequest pRequest;
     if(orderDirection.equals("descending")){
     pRequest = PageRequest.of(page, offset, Sort.by(orderby).descending());
@@ -53,7 +53,7 @@ public class TechnicalDocumentationController {
         var techDocs = techDocService.getAllTechDocs();
         var techDocsDTOs = new ArrayList<TechnicalDocumentationDTO>();
         for(var techDoc : techDocs){
-            var techDocDTO = convertToDto(techDoc);
+            var techDocDTO = TechnicalDocumentationMapper.INSTANCE.convertToDTO(techDoc);
             techDocsDTOs.add(techDocDTO);
         }
         return new ResponseEntity<List<TechnicalDocumentationDTO>>(techDocsDTOs, HttpStatus.OK);
@@ -61,19 +61,19 @@ public class TechnicalDocumentationController {
 }
 
     @PostMapping("/")
-    public ResponseEntity<TechnicalDocumentationDTO> createNewProject(@Validated @RequestBody TechnicalDocumentationDTO techDocDTO){
+    public ResponseEntity<TechnicalDocumentationDTO> createNewProject(@Validated @RequestBody TechnicalDocumentationDTO techDocDTO) throws ResourceAlreadyExistsException{
         
-        TechnicalDocumentation techDoc = convertToEntity(techDocDTO);
-        TechnicalDocumentationDTO savedTechDocDTO = convertToDto( techDocService.save(techDoc));
+        TechnicalDocumentation techDoc = TechnicalDocumentationMapper.INSTANCE.convertToEntity(techDocDTO);
+        TechnicalDocumentationDTO savedTechDocDTO = TechnicalDocumentationMapper.INSTANCE.convertToDTO( techDocService.save(techDoc));
         
         return new ResponseEntity<TechnicalDocumentationDTO>(savedTechDocDTO, HttpStatus.CREATED);
         
     }
 
     @GetMapping("/{technicalId}")
-    public ResponseEntity<TechnicalDocumentationDTO> getProjectById(@PathVariable(value = "technicalId") UUID techDocId) throws Exception{
+    public ResponseEntity<TechnicalDocumentationDTO> getProjectById(@PathVariable(value = "technicalId") UUID techDocId) throws ResourceNotFoundException {
             TechnicalDocumentation technicalDocumentation = techDocService.getById(techDocId).get();
-            TechnicalDocumentationDTO technicalDocumentationDTO = convertToDto(technicalDocumentation);
+            TechnicalDocumentationDTO technicalDocumentationDTO =TechnicalDocumentationMapper.INSTANCE.convertToDTO(technicalDocumentation);
         
             return new ResponseEntity<TechnicalDocumentationDTO>(technicalDocumentationDTO, HttpStatus.OK);      
       
@@ -81,10 +81,10 @@ public class TechnicalDocumentationController {
 
     @PutMapping("/{technicalId}")
     public ResponseEntity<TechnicalDocumentationDTO> updateTechnicalDocumentation(@PathVariable(value = "technicalId") UUID techId,
-     @Validated @RequestBody TechnicalDocumentation techDoc) throws Exception{
+     @Validated @RequestBody TechnicalDocumentation techDoc) throws ResourceNotFoundException{
     
             TechnicalDocumentation technicalDocumentation = techDocService.getById(techId).get();
-            TechnicalDocumentationDTO technicalDocumentationDTO = convertToDto(technicalDocumentation);
+            TechnicalDocumentationDTO technicalDocumentationDTO = TechnicalDocumentationMapper.INSTANCE.convertToDTO(technicalDocumentation);
 
             return new ResponseEntity<TechnicalDocumentationDTO>(technicalDocumentationDTO, HttpStatus.OK);
     
@@ -92,17 +92,9 @@ public class TechnicalDocumentationController {
 
     @DeleteMapping("/{technicalId}")
     public void deleteTechnicalDocumentation(@PathVariable(value = "technicalId") UUID techId ) throws Exception {
-        TechnicalDocumentation techDoc = techDocService.findByUuid(techId);    
-        techDocService.delete(techId);
+        TechnicalDocumentation techDoc = techDocService.getById(techId).get();
+
+        techDocService.delete(techDoc);
     }
 
-    private TechnicalDocumentationDTO convertToDto(TechnicalDocumentation technicalDocumentation) {
-        TechnicalDocumentationDTO techDocDTO = modelMapper.map(technicalDocumentation, TechnicalDocumentationDTO.class);
-        return techDocDTO;
-    }
-
-    private TechnicalDocumentation convertToEntity(TechnicalDocumentationDTO technicalDocumentationDTO) {
-        TechnicalDocumentation techDocEntity = modelMapper.map(technicalDocumentationDTO, TechnicalDocumentation.class);
-        return techDocEntity;
-    }
 }

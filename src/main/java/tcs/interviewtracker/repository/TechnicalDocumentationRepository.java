@@ -9,12 +9,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.TechnicalDocumentation;
 
 @Repository
 public interface TechnicalDocumentationRepository extends JpaRepository<TechnicalDocumentation, Long> {
  
     
-Optional<TechnicalDocumentation> findByUuid(@Param("uuid") UUID uuid);
+public Optional<TechnicalDocumentation> findByUuid(@Param("uuid") UUID uuid);
 
+public Optional<TechnicalDocumentation> getReferenceByCandidate(Candidate candidate);
 }
