@@ -152,7 +152,7 @@ public class ProjectController {
         return ResponseEntity.ok(upcomingTechInterviews);
     }
 
-    @GetMapping(value = "/{id}/upcoming-tecnical-interviews")
+    @GetMapping(value = "/{id}/upcoming-management-interviews")
     public ResponseEntity<List<Interview>> getUpcomingManagementInterviews(@PathVariable(value = "id") Long id) {
         List<Interview> upcomingManagemeInterviews = projectService.fetchUpcomingManagementInterviews(id);
         return ResponseEntity.ok(upcomingManagemeInterviews);
