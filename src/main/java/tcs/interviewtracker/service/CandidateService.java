@@ -1,6 +1,7 @@
 package tcs.interviewtracker.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -109,8 +110,8 @@ public class CandidateService {
         return managementDocumentationRepository.getReferenceByUuid(documentationUuid);
     }
 
-    public Position getPosition(UUID positionUuid) {
-        return positionRepository.getReferenceByUuid(positionUuid);
+    public Optional<Position> getPosition(UUID positionUuid) {
+        return positionRepository.findByUuid(positionUuid);
     }
 
     public TechnicalDocumentation getTechnicalDocumentationOfCandidate(UUID candidateUuid) {
@@ -139,7 +140,7 @@ public class CandidateService {
         return workExperienceRepository.getByCandidate(candidate);
     }
 
-    public Page<WorkExperience> findWorkExperiencesPaginated(UUID candidateUuid, PageRequest request) 
+    public Page<WorkExperience> findWorkExperiencesPaginated(UUID candidateUuid, PageRequest request)
                                     throws ResourceNotFoundException {
         Candidate candidate = candidateRepository.getByUuid(candidateUuid);
         if (null == candidate) {
@@ -148,7 +149,7 @@ public class CandidateService {
         return workExperienceRepository.getByCandidate(candidate, request);
     }
 
-    public WorkExperience getWorkExperienceByUuid(UUID candidateId, UUID experienceUuid) 
+    public WorkExperience getWorkExperienceByUuid(UUID candidateId, UUID experienceUuid)
                                 throws ResourceNotFoundException {
         Candidate candidate = candidateRepository.getByUuid(candidateId);
         if (null == candidate) {
@@ -196,7 +197,7 @@ public class CandidateService {
         return educationRepository.getByCandidate(candidate);
     }
 
-    public Page<Education> findEducationPaginated(UUID candidateUuid, PageRequest request) 
+    public Page<Education> findEducationPaginated(UUID candidateUuid, PageRequest request)
                                     throws ResourceNotFoundException {
         Candidate candidate = candidateRepository.getByUuid(candidateUuid);
         if (null == candidate) {
@@ -205,7 +206,7 @@ public class CandidateService {
         return educationRepository.getByCandidate(candidate, request);
     }
 
-    public Education getEducationByUuid(UUID candidateUuid, UUID educationUuid) 
+    public Education getEducationByUuid(UUID candidateUuid, UUID educationUuid)
                                 throws ResourceNotFoundException {
         Candidate candidate = candidateRepository.getByUuid(candidateUuid);
         if (null == candidate) {
