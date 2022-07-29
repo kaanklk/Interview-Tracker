@@ -46,9 +46,6 @@ public class PositionController {
 
         Pageable pagingData;
 
-<<<<<<< HEAD
-            return new ResponseEntity<>(positions, HttpStatus.OK);
-=======
         if (orderDirection.equals("ascending"))
             pagingData = PageRequest.of(offset, pagesize, Sort.by(orderBy).ascending());
         else
@@ -57,16 +54,13 @@ public class PositionController {
         var positions = positionService.findAll(pagingData).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
->>>>>>> positionEndpoint
 
         return new ResponseEntity<>(positions, HttpStatus.OK);
 
     }
 
-    <<<<<<<HEAD
     // TODO convert uuid to int
-    =======>>>>>>>positionEndpoint @GetMapping("{id}")
-
+    @GetMapping("{id}")
     ResponseEntity<PositionDTO> findById(@PathVariable UUID id) {
 
         var position = positionService.findById(id);
