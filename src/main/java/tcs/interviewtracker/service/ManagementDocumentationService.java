@@ -1,8 +1,11 @@
 package tcs.interviewtracker.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import tcs.interviewtracker.persistence.ManagementDocumentation;
@@ -17,8 +20,12 @@ public class ManagementDocumentationService {
         this.manageRepo = manageRepo;
     }
 
-    public <Optional>ManagementDocumentation getManageDocById(Long manageDocId) {
-        return manageRepo.getReferenceById(manageDocId);
+    public <Optional>ManagementDocumentation getManageDocByUuid(UUID manageDocId) {
+        return manageRepo.getReferenceByUuid(manageDocId);
+    }
+
+    public Page<ManagementDocumentation> findPaginated(PageRequest request) {
+        return manageRepo.findAll(request);
     }
 
     public List<ManagementDocumentation>  getAllManageDocs() {
@@ -29,9 +36,9 @@ public class ManagementDocumentationService {
       return  manageRepo.save(manageDoc);
     }
 
-    public ManagementDocumentation updateManageDoc(Long id,  ManagementDocumentation manageDoc) {
+    public ManagementDocumentation updateManageDoc(UUID id,  ManagementDocumentation manageDoc) {
 
-        ManagementDocumentation updateDoc = manageRepo.findById(id).get();
+        ManagementDocumentation updateDoc = manageRepo.getReferenceByUuid(id);
 
         manageRepo.save(updateDoc);
 
@@ -39,8 +46,8 @@ public class ManagementDocumentationService {
 
     }
 
-    public void deleteManageDoc(Long id) {
-        ManagementDocumentation manageDoc = manageRepo.findById(id).get();
+    public void deleteManageDoc(UUID id) {
+        ManagementDocumentation manageDoc = manageRepo.getReferenceByUuid(id);
         manageRepo.delete(manageDoc);
     }
 
