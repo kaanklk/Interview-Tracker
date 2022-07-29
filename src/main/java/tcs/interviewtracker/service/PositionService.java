@@ -28,8 +28,8 @@ public class PositionService {
     }
 
 
-    public Optional<Position> findById(Long id) {
-        return positionRepository.findById(id);
+    public Position findById(UUID uuid) {
+        return positionRepository.getReferenceByUuid(uuid);
     }
 
 

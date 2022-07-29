@@ -15,11 +15,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.User;
 import tcs.interviewtracker.service.UserService;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/users")
 public class UserController {
 
     private UserService service;
@@ -28,37 +29,36 @@ public class UserController {
         this.service = service;
     }
 
-    @GetMapping("users")
+    @GetMapping("/")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public List<User> getAllUsers(){
         return service.getAllUsers();
     }
 
-    @GetMapping("users/{id}")
+    @GetMapping("/{id}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public User getUserById(@PathVariable Long id){
+    public User getUserById(@PathVariable Long id) throws ResourceNotFoundException{
         return service.getUserById(id);
     }
 
-    @PostMapping("users")
+    @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public void save(@RequestBody User user){
-        service.saveUser(user);
+    public User save(@RequestBody User user){
+        return service.saveUser(user);
     }
 
-    @PutMapping("users/{id}")
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateUserById(@PathVariable Long id, @RequestBody User user){
-        service.updateUser(id,user);
+    public User updateUserById(@PathVariable Long id, @RequestBody User user) throws ResourceNotFoundException{
+        return service.updateUser(id,user);
     }
 
-    @DeleteMapping("users/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUserById(@PathVariable Long id){
+    public void deleteUserById(@PathVariable Long id) throws ResourceNotFoundException{
         service.deleteUser(id);
     }
-
 
 }

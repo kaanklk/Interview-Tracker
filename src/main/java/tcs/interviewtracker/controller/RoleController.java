@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.Role;
 import tcs.interviewtracker.service.RoleService;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/roles")
 public class RoleController {
 
     private RoleService service;
@@ -27,35 +28,35 @@ public class RoleController {
         this.service = service;
     }
 
-    @GetMapping("roles")
+    @GetMapping("/")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public List<Role> getAllRoles(){
         return service.getAllRoles();
     }
 
-    @GetMapping("roles/{id}")
+    @GetMapping("/{id}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public Role getRoleById(@PathVariable Long id){
+    public Role getRoleById(@PathVariable Long id) throws ResourceNotFoundException{
         return service.getRoleById(id);
     }
 
-    @PostMapping("roles")
+    @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public void save(@RequestBody Role role){
-        service.saveRole(role);
+    public Role save(@RequestBody Role role){
+        return service.saveRole(role);
     }
 
-    @PutMapping("roles/{id}")
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateRoleById(@PathVariable Long id, @RequestBody Role role){
-        service.updateRole(id,role);
+    public Role updateRoleById(@PathVariable Long id, @RequestBody Role role) throws ResourceNotFoundException{
+        return service.updateRole(id,role);
     }
 
-    @DeleteMapping("roles/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteRoleById(@PathVariable Long id){
+    public void deleteRoleById(@PathVariable Long id) throws ResourceNotFoundException{
         service.deleteRole(id);
     }
 }

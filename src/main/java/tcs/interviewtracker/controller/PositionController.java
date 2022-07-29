@@ -23,6 +23,7 @@ import tcs.interviewtracker.DTOs.PositionDTO;
 import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.service.PositionService;
 
+/*
 @RestController
 @RequestMapping("/positions")
 public class PositionController {
@@ -86,7 +87,8 @@ public class PositionController {
 
     @PutMapping
     public ResponseEntity<PositionDTO> updatePosition(PositionDTO positionDTO){
-        if(!positionService.findById(positionDTO.getId()).isPresent())
+        var position = positionService.findById(positionDTO.getUuid());
+        if(null == position)
              return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         else{
             try {
@@ -108,5 +110,7 @@ public class PositionController {
 
         return modelMapper.map(positionDTO, Position.class);
     }
-
 }
+ * 
+ */
+
