@@ -6,12 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
-import tcs.interviewtracker.persistence.Project;
-import tcs.interviewtracker.persistence.Role;
 import tcs.interviewtracker.persistence.User;
-import tcs.interviewtracker.persistence.UserRoles;
-import tcs.interviewtracker.repository.ProjectRepository;
-import tcs.interviewtracker.repository.RoleRepository;
 import tcs.interviewtracker.repository.UserRepository;
 
 @Service
@@ -29,8 +24,8 @@ public class UserService {
 
     public User getUserById(Long id) throws ResourceNotFoundException {
         Optional<User> user = userRepo.findById(id);
-        if(!user.isPresent()){
-           throw new ResourceNotFoundException();
+        if (!user.isPresent()) {
+            throw new ResourceNotFoundException();
         }
         return user.get();
     }
@@ -43,8 +38,8 @@ public class UserService {
 
         Optional<User> userToUpdate = userRepo.findById(id);
 
-        if(!userToUpdate.isPresent()){
-           throw new ResourceNotFoundException();
+        if (!userToUpdate.isPresent()) {
+            throw new ResourceNotFoundException();
         }
 
         User updateUser = userToUpdate.get();
@@ -64,30 +59,29 @@ public class UserService {
 
     public void deleteUser(Long id) throws ResourceNotFoundException {
         Optional<User> user = userRepo.findById(id);
-        if(!user.isPresent()){
+        if (!user.isPresent()) {
             throw new ResourceNotFoundException();
         }
         userRepo.deleteById(id);
     }
 
-
     // public User getUserWithSpesificRole(Long projectId, String roleName) {
-    //     User foundedUser = null;
-    //     List<User> users = userRepo.findAll();
-    //     Project project = projectRepo.findById(projectId).get();
-    //     Role role = roleRepo.findByRoleName(roleName);
-    //     for (User user : users) {
-    //         Set<Project> projects = user.getProjects();
-    //         Set<Role> roles = user.getRoles();
-    //         if (projects.contains(project) && roles.contains(role)) {
-    //             foundedUser = user;
-    //         }
-    //     }
-    //     if (foundedUser != null) {
-    //         return foundedUser;
-    //     } else {
-    //         return null;
-    //     }
+    // User foundedUser = null;
+    // List<User> users = userRepo.findAll();
+    // Project project = projectRepo.findById(projectId).get();
+    // Role role = roleRepo.findByRoleName(roleName);
+    // for (User user : users) {
+    // Set<Project> projects = user.getProjects();
+    // Set<Role> roles = user.getRoles();
+    // if (projects.contains(project) && roles.contains(role)) {
+    // foundedUser = user;
+    // }
+    // }
+    // if (foundedUser != null) {
+    // return foundedUser;
+    // } else {
+    // return null;
+    // }
     // }
 
 }
