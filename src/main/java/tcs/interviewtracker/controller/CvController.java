@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import tcs.interviewtracker.DTOs.CvDTO;
 import tcs.interviewtracker.persistence.Candidate;
@@ -30,13 +31,17 @@ import tcs.interviewtracker.service.CvService;
 
 @RestController
 @RequestMapping("api/cv")
-@NoArgsConstructor
 public class CvController {
 
     private static final Logger logger = LoggerFactory.getLogger(CvController.class);
 
     private CvService cvService;
     private CandidateService candidateService;
+
+    public CvController(CvService cvService, CandidateService candidateService) {
+        this.cvService = cvService;
+        this.candidateService = candidateService;
+    }
 
     @PostMapping("/")
     public CvDTO uploadCv(@RequestParam("file") MultipartFile file, @RequestParam("candidateId") Long candidateId) {
