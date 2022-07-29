@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.HttpClientErrorException.BadRequest;
 import org.springframework.web.client.HttpClientErrorException.Forbidden;
 import org.springframework.web.client.HttpClientErrorException.MethodNotAllowed;
 import org.springframework.web.client.HttpClientErrorException.Unauthorized;
@@ -48,5 +49,11 @@ public class RestResponseEntityHandler {
     protected ResponseEntity<Object> handleForbiddenException(Forbidden ex) {
         return new ResponseEntity<>("The user does not have the necessary permissions for the resource.",
                 HttpStatus.FORBIDDEN);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(value = BadRequest.class)
+    protected ResponseEntity<Object> handleBadRequestException(BadRequest ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
     }
 }
