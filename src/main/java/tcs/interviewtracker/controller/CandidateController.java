@@ -47,7 +47,7 @@ public class CandidateController {
 
     @GetMapping
     public ResponseEntity<List<CandidateDTO>> getCandidates(
-                @RequestParam(required = false, defaultValue = "10") Integer pagesize,
+                @RequestParam(required = false, defaultValue = "2") Integer pagesize,
                 @RequestParam(required = false, defaultValue = "0") Integer offset,
                 @RequestParam(required = false, defaultValue = "id") String orderBy,
                 @RequestParam(required = false, defaultValue = "ascending") String orderDirection) 

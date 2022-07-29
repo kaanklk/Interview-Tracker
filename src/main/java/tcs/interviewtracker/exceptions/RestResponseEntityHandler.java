@@ -10,7 +10,7 @@ import org.springframework.web.client.HttpClientErrorException.Forbidden;
 import org.springframework.web.client.HttpClientErrorException.MethodNotAllowed;
 import org.springframework.web.client.HttpClientErrorException.Unauthorized;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class RestResponseEntityHandler {
 
     @ResponseBody

@@ -3,14 +3,8 @@ package tcs.interviewtracker.persistence;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import org.springframework.lang.Nullable;
 import lombok.Data;
 
@@ -33,6 +27,7 @@ public class Candidate {
     @ManyToOne
     private Person person;
 
+    @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(128)")
     private CandidateStatus status;
 
