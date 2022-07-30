@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -14,14 +15,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import tcs.interviewtracker.exceptions.CvNotFoundException;
 import tcs.interviewtracker.exceptions.CvStorageException;
-import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.properties.CvStorageProperties;
 
 @Service
 public class CvService {
     private final Path cvStorageLocation;
 
-    public CvService(CvStorageProperties cvStorageProperties) {
+    @Autowired
+    public CvService(CvStorageProperties cvStorageProperties) throws Exception {
         this.cvStorageLocation = Paths.get(cvStorageProperties.getUploadDirectory())
                 .toAbsolutePath().normalize();
         try {
@@ -31,7 +32,7 @@ public class CvService {
         }
     }
 
-    public String storeCv(MultipartFile cv, Long candidateId) {
+    public String storeCv(MultipartFile cv, Long candidateId) throws Exception {
         String fileName = StringUtils.cleanPath(candidateId.toString());
         try {
             if (fileName.contains("..")) {
@@ -46,7 +47,7 @@ public class CvService {
         }
     }
 
-    public Resource loadCvAsResource(String fileName) {
+    public Resource loadCvAsResource(String fileName) throws Exception {
         try {
             Path filePath = this.cvStorageLocation.resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());

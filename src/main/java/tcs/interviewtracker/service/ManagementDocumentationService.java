@@ -21,7 +21,7 @@ public class ManagementDocumentationService {
         return manageRepo.getReferenceById(manageDocId);
     }
 
-    public List<ManagementDocumentation>  getAllManageDocs() {
+    public List<ManagementDocumentation> getAllManageDocs() {
         return manageRepo.findAll();
     }
 
@@ -29,7 +29,7 @@ public class ManagementDocumentationService {
         manageRepo.save(manageDoc);
     }
 
-    public ManagementDocumentation updateManageDoc(Long id,  ManagementDocumentation manageDoc) {
+    public ManagementDocumentation updateManageDoc(Long id, ManagementDocumentation manageDoc) {
 
         ManagementDocumentation updateDoc = manageRepo.findById(id).get();
 

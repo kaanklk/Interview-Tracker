@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -68,4 +67,8 @@ public class User {
 
     @ManyToMany(mappedBy = "interviewers")
     Set<Position> likes;
+
+    @ManyToMany
+    Set<Project> projects;
+
 }

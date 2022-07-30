@@ -4,10 +4,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.apache.tomcat.util.http.parser.HttpParser;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -46,9 +44,6 @@ public class PositionController {
 
         Pageable pagingData;
 
-<<<<<<< HEAD
-            return new ResponseEntity<>(positions, HttpStatus.OK);
-=======
         if (orderDirection.equals("ascending"))
             pagingData = PageRequest.of(offset, pagesize, Sort.by(orderBy).ascending());
         else
@@ -57,16 +52,12 @@ public class PositionController {
         var positions = positionService.findAll(pagingData).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
->>>>>>> positionEndpoint
 
         return new ResponseEntity<>(positions, HttpStatus.OK);
 
     }
 
-    <<<<<<<HEAD
-    // TODO convert uuid to int
-    =======>>>>>>>positionEndpoint @GetMapping("{id}")
-
+    @GetMapping("{id}")
     ResponseEntity<PositionDTO> findById(@PathVariable UUID id) {
 
         var position = positionService.findById(id);
