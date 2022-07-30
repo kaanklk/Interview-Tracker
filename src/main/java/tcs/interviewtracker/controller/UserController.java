@@ -2,6 +2,7 @@ package tcs.interviewtracker.controller;
 
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,8 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import tcs.interviewtracker.DTOs.UserDTO;
+import tcs.interviewtracker.exceptions.ResourceAlreadyExistsException;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
-import tcs.interviewtracker.persistence.User;
 import tcs.interviewtracker.service.UserService;
 
 @RestController
@@ -32,33 +34,33 @@ public class UserController {
     @GetMapping("")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public List<User> getAllUsers(){
+    public List<UserDTO> getAllUsers(){
         return service.getAllUsers();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{uuid}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public User getUserById(@PathVariable Long id) throws ResourceNotFoundException{
-        return service.getUserById(id);
+    public UserDTO getUserById(@PathVariable UUID uuid) throws ResourceNotFoundException{
+        return service.getUserById(uuid);
     }
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public User save(@RequestBody User user){
-        return service.saveUser(user);
+    public UserDTO save(@RequestBody UserDTO userDTO) throws ResourceAlreadyExistsException{
+        return service.saveUser(userDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public User updateUserById(@PathVariable Long id, @RequestBody User user) throws ResourceNotFoundException{
-        return service.updateUser(id,user);
+    public UserDTO updateUserById(@PathVariable UUID uuid, @RequestBody UserDTO userDTO) throws ResourceNotFoundException{
+        return service.updateUser(uuid,userDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUserById(@PathVariable Long id) throws ResourceNotFoundException{
-        service.deleteUser(id);
+    public void deleteUserById(@PathVariable UUID uuid) throws ResourceNotFoundException{
+        service.deleteUser(uuid);
     }
 
 }

@@ -1,6 +1,7 @@
 package tcs.interviewtracker.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,13 +15,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import tcs.interviewtracker.DTOs.UserRolesDTO;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
-import tcs.interviewtracker.persistence.UserRoles;
 import tcs.interviewtracker.service.UserRolesService;
 
 
 @RestController
-@RequestMapping("/users/{userId}/roles")
+@RequestMapping("/users/{userUuid}/roles")
 public class UserRolesController {
 
     private UserRolesService service;
@@ -32,33 +33,33 @@ public class UserRolesController {
     @GetMapping("")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public List<UserRoles> getUserRoles(@PathVariable Long userId) throws ResourceNotFoundException{
-        return service.getAllRoles(userId);
+    public List<UserRolesDTO> getUserRoles(@PathVariable UUID userUuid) throws ResourceNotFoundException{
+        return service.getAllRoles(userUuid);
     }
 
-    @GetMapping("/{userRolesId}")
+    @GetMapping("/{userRolesUuid}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public UserRoles getRoleForSpecificProject(@PathVariable Long userId, @PathVariable Long userRolesId) throws ResourceNotFoundException{
-        return service.getRoleForSpecificProject(userId, userRolesId);
+    public UserRolesDTO getRoleForSpecificProject(@PathVariable UUID userUuid, @PathVariable UUID userRolesUuid) throws ResourceNotFoundException{
+        return service.getRoleForSpecificProject(userUuid, userRolesUuid);
     }
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserRoles setRole(@RequestBody UserRoles userRole){
-        return service.saveUserRole(userRole);
+    public UserRolesDTO setRole(@RequestBody UserRolesDTO userRoleDTO){
+        return service.saveUserRole(userRoleDTO);
     }
 
-    @PutMapping("/{userRolesId}")
+    @PutMapping("/{userRolesUuid}")
     @ResponseStatus(HttpStatus.OK)
-    public UserRoles setNewRole(@PathVariable Long userRoleId, @RequestBody UserRoles userRole){
-        return service.setNewRoleforExistingUser(userRoleId, userRole);
+    public UserRolesDTO setNewRole(@PathVariable UUID userRolesUuid, @RequestBody UserRolesDTO userRoleDTO){
+        return service.setNewRoleforExistingUser(userRolesUuid, userRoleDTO);
     }
 
-    @DeleteMapping("/{userRolesId}")
+    @DeleteMapping("/{userRolesUuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteRolesForSpecificProject(@PathVariable Long userRolesId){
-        service.deleteUserRole(userRolesId);
+    public void deleteRolesForSpecificProject(@PathVariable UUID userRolesUuid) throws ResourceNotFoundException{
+        service.deleteUserRole(userRolesUuid);
     }
 
 }

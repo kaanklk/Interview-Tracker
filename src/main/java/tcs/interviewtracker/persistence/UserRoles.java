@@ -34,7 +34,7 @@ public class UserRoles {
     private UUID uuid;
 
     @Column(name = "user_id")
-    private Long userId;
+    private UUID userUuid;
 
     @ManyToMany
     @JoinTable(name = "user_roles_role",
@@ -43,5 +43,5 @@ public class UserRoles {
     private List<Role> roles;
 
     @Column(name = "project_id")
-    private Long projectId;
+    private UUID projectUuid;
 }
