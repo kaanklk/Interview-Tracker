@@ -1,8 +1,12 @@
 package tcs.interviewtracker.service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
 import tcs.interviewtracker.persistence.Candidate;
@@ -106,6 +110,10 @@ public class ProjectService {
         Project project = projectRepository.getReferenceById(projectId);
         List<Interview> upcomingManagementInterviews = projectRepository.findUpcomingManagementInterviews(project);
         return upcomingManagementInterviews;
+    }
+
+    public Optional<Project> getByUuid(UUID projectUuid) {
+        return this.projectRepository.getByUuid(projectUuid);
     }
 
 }
