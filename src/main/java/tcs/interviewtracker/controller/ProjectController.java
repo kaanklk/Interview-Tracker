@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import tcs.interviewtracker.exceptions.ResourceAlreadyExistsException;
@@ -24,7 +25,7 @@ import tcs.interviewtracker.persistence.Timeslot;
 import tcs.interviewtracker.service.ProjectService;
 
 @RestController
-@RequestMapping("api/projects")
+@RequestMapping("/projects")
 public class ProjectController {
 
     private ProjectService projectService;
@@ -89,83 +90,95 @@ public class ProjectController {
     }
 
     @GetMapping(value = "/{id}/positions")
-    public List<Position> getProjectPositions(@PathVariable(value = "id") Long id)
+    public List<Position> getProjectPositions(@PathVariable(value = "id") Long id,
+            @RequestParam(name = "project") Long projectId)
             throws ResourceNotFoundException {
         return projectService.fetchProjectPositions(id);
     }
 
     @GetMapping(value = "/{id}/position-count")
-    public ResponseEntity<Integer> getPositionCount(@PathVariable(value = "id") Long id)
+    public ResponseEntity<Integer> getPositionCount(@PathVariable(value = "id") Long id,
+            @RequestParam(name = "project") Long projectId)
             throws ResourceNotFoundException {
         int positionCount = projectService.fetchProjectPositionsCount(id);
         return ResponseEntity.ok(positionCount);
     }
 
     @GetMapping(value = "/{id}/assosciate-count")
-    public ResponseEntity<Integer> getAssosicateCount(@PathVariable(value = "id") Long id)
+    public ResponseEntity<Integer> getAssosicateCount(@PathVariable(value = "id") Long id,
+            @RequestParam(name = "project") Long projectId)
             throws ResourceNotFoundException {
         int associateCount = projectService.fetchProjectAssocicateCount(id);
         return ResponseEntity.ok(associateCount);
     }
 
-    @GetMapping(value = "/{id}/incomplete-interviews")
-    public ResponseEntity<List<Timeslot>> getInCompleteInterviews(@PathVariable(value = "id") Long id)
+    @GetMapping(value = "/{id}/incompleteinterviews")
+    public ResponseEntity<List<Timeslot>> getInCompleteInterviews(@PathVariable(value = "id") Long id,
+            @RequestParam(name = "project", required = true) Long projectId)
             throws ResourceNotFoundException {
         List<Timeslot> timeslots = projectService.fetchIncompletedInterviews(id);
         return ResponseEntity.ok(timeslots);
     }
 
     @GetMapping(value = "/{id}/complete-interviews")
-    public ResponseEntity<List<Timeslot>> getCompletedInterviews(@PathVariable(value = "id") Long id)
+    public ResponseEntity<List<Timeslot>> getCompletedInterviews(@PathVariable(value = "id") Long id,
+            @RequestParam(name = "project") Long projectId)
             throws ResourceNotFoundException {
         List<Timeslot> timeslots = projectService.fetchCompletedInterviews(id);
         return ResponseEntity.ok(timeslots);
     }
 
     @GetMapping(value = "/{id}/pending-candidates")
-    public ResponseEntity<List<Candidate>> getPendingCandidates(@PathVariable(value = "id") Long id)
+    public ResponseEntity<List<Candidate>> getPendingCandidates(@PathVariable(value = "id") Long id,
+            @RequestParam(name = "project") Long projectId)
             throws ResourceNotFoundException {
         List<Candidate> pendingCandidates = projectService.fetchPendingCandidates(id);
         return ResponseEntity.ok(pendingCandidates);
     }
 
     @GetMapping(value = "/{id}/rejected-candidates")
-    public ResponseEntity<List<Candidate>> getRejectedCandidates(@PathVariable(value = "id") Long id)
+    public ResponseEntity<List<Candidate>> getRejectedCandidates(@PathVariable(value = "id") Long id,
+            @RequestParam(name = "project") Long projectId)
             throws ResourceNotFoundException {
         List<Candidate> rejectedCandidates = projectService.fetchRejectedCandidates(id);
         return ResponseEntity.ok(rejectedCandidates);
     }
 
     @GetMapping(value = "/{id}/accepted-candidates")
-    public ResponseEntity<List<Candidate>> getAcceptedCandidates(@PathVariable(value = "id") Long id)
+    public ResponseEntity<List<Candidate>> getAcceptedCandidates(@PathVariable(value = "id") Long id,
+            @RequestParam(name = "project") Long projectId)
             throws ResourceNotFoundException {
         List<Candidate> acceptedCandidates = projectService.fetchAcceptedCandidates(id);
         return ResponseEntity.ok(acceptedCandidates);
     }
 
     @GetMapping(value = "/{id}/techical-interview-count")
-    public ResponseEntity<Integer> getTechnicalInterviewCount(@PathVariable(value = "id") Long id)
+    public ResponseEntity<Integer> getTechnicalInterviewCount(@PathVariable(value = "id") Long id,
+            @RequestParam(name = "project") Long projectId)
             throws ResourceNotFoundException {
         Integer technicalInterviewCount = projectService.fetchTecnicalInterviewCount(id);
         return ResponseEntity.ok(technicalInterviewCount);
     }
 
     @GetMapping(value = "/{id}/management-interview-count")
-    public ResponseEntity<Integer> getManagementInterviewCount(@PathVariable(value = "id") Long id)
+    public ResponseEntity<Integer> getManagementInterviewCount(@PathVariable(value = "id") Long id,
+            @RequestParam(name = "project") Long projectId)
             throws ResourceNotFoundException {
         Integer managemenInterviewCount = projectService.fetchManagementIntervewCount(id);
         return ResponseEntity.ok(managemenInterviewCount);
     }
 
     @GetMapping(value = "/{id}/upcoming-tecnical-interviews")
-    public ResponseEntity<List<Interview>> getUpcomingTechnicalInterviews(@PathVariable(value = "id") Long id)
+    public ResponseEntity<List<Interview>> getUpcomingTechnicalInterviews(@PathVariable(value = "id") Long id,
+            @RequestParam(name = "project") Long projectId)
             throws ResourceNotFoundException {
         List<Interview> upcomingTechInterviews = projectService.fetchUpcomingTecnicalInterviews(id);
         return ResponseEntity.ok(upcomingTechInterviews);
     }
 
     @GetMapping(value = "/{id}/upcoming-management-interviews")
-    public ResponseEntity<List<Interview>> getUpcomingManagementInterviews(@PathVariable(value = "id") Long id)
+    public ResponseEntity<List<Interview>> getUpcomingManagementInterviews(@PathVariable(value = "id") Long id,
+            @RequestParam(name = "project") Long projectId)
             throws ResourceNotFoundException {
         List<Interview> upcomingManagemeInterviews = projectService.fetchUpcomingManagementInterviews(id);
         return ResponseEntity.ok(upcomingManagemeInterviews);
