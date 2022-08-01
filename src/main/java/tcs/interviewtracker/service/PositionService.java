@@ -31,6 +31,7 @@ public class PositionService {
     }
 
     public Position save(Position position) {
+        position.setUuid(UUID.randomUUID());
         return positionRepository.save(position);
     }
 
@@ -38,9 +39,9 @@ public class PositionService {
         positionRepository.deleteByUuid(id);
     }
 
-    public void update(Position position) {
+    public Position update(Position position) {
 
-        positionRepository.save(position);
+        return positionRepository.save(position);
     }
 
     public int getTotalCanddateCount(Long positionId, ArrayList<Candidate> candidates) {

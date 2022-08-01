@@ -91,8 +91,8 @@ public class PositionController {
         if (!positionService.findById(id).isPresent())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         else {
-            positionService.update(convertToEntity(positionDTO));
-            return new ResponseEntity<>(HttpStatus.OK);
+            var updated = positionService.update(convertToEntity(positionDTO));
+            return new ResponseEntity<>(convertToDto(updated), HttpStatus.OK);
         }
     }
 
