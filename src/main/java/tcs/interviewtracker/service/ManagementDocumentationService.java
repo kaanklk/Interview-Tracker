@@ -62,6 +62,7 @@ public class ManagementDocumentationService {
         return page;
     }
 
+    /*
     public List<ManagementDocumentation> findPaginated2(PageRequest request) {
         // return manageRepo.findAll(request);
         Candidate candidate1 = new Candidate();
@@ -91,6 +92,8 @@ public class ManagementDocumentationService {
 
         return list;
     }
+
+    */
 
     public List<ManagementDocumentation> getAllManageDocs() {
         return manageRepo.findAll();

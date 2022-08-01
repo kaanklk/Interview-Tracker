@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tcs.interviewtracker.DTOs.ManagementDocumentationDTO;
 import tcs.interviewtracker.exceptions.ResourceAlreadyExistsException;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
-import tcs.interviewtracker.mappers.ManagementDocumentationMapper;
+// import tcs.interviewtracker.mappers.ManagementDocumentationMapper;
 import tcs.interviewtracker.persistence.ManagementDocumentation;
 import tcs.interviewtracker.service.CandidateService;
 import tcs.interviewtracker.service.ManagementDocumentationService;
@@ -63,7 +63,7 @@ public class ManagementDocumentationController {
 
         PageRequest manageDocRequest = PageRequest.of(offset, pageSize, SortByOrdered);
         var manageDocs = manageService.findPaginated(manageDocRequest);
-        var DTOs = new ArrayList<Optional<ManagementDocumentationDTO>>();
+        var DTOs = new ArrayList<ManagementDocumentationDTO>();
         for(var manageDoc : manageDocs) {
             var manageDTO = MyDtoConverter(manageDoc);
             DTOs.add(manageDTO);
@@ -75,7 +75,7 @@ public class ManagementDocumentationController {
     @GetMapping("/{manageDocId}")
     public ResponseEntity<ManagementDocumentationDTO> getManageDocById(@PathVariable(value = "manageDocId") UUID manageDocId)
     throws ResourceNotFoundException {
-        Optional<ManagementDocumentation> manageEntity= manageService.getManageDocByUuid(manageDocId);
+        ManagementDocumentation manageEntity= manageService.getManageDocByUuid(manageDocId);
         ManagementDocumentationDTO manageDTO = MyDtoConverter(manageEntity);
 
         return new ResponseEntity<ManagementDocumentationDTO>(manageDTO, HttpStatus.OK);
@@ -105,7 +105,7 @@ public class ManagementDocumentationController {
         manageService.deleteManageDoc(manageId);
     }
 
-    private ManagementDocumentationDTO MyDtoConverter(Optional<ManagementDocumentation> manageDoc) {
+    private ManagementDocumentationDTO MyDtoConverter(ManagementDocumentation manageDoc) {
         ManagementDocumentationDTO manageDTO = modelMapper.map(manageDoc, ManagementDocumentationDTO.class);
         return manageDTO;
     }

@@ -1,6 +1,7 @@
 package tcs.interviewtracker.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +47,9 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Project> getProjectsById(@PathVariable(value = "id") UUID uuid)
+    public ResponseEntity<Optional<Project>> getProjectsById(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
-        Project project = projectService.getByUuid(uuid);
+        Optional<Project> project = projectService.getByUuid(uuid);
         return ResponseEntity.ok().body(project);
     }
 
@@ -57,7 +58,7 @@ public class ProjectController {
             @Validated @RequestBody Project projectDetails)
             throws ResourceAlreadyExistsException {
 
-        Project project = projectService.getByUuid(uuid);
+        Optional<Project> project = projectService.getByUuid(uuid);
 
         final Project updatedProject = projectService.updateProject(project, projectDetails);
         projectService.saveProject(updatedProject);
@@ -65,9 +66,9 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Project> deleteProject(@PathVariable(value = "id") UUID uuid)
+    public ResponseEntity<Optional<Project>> deleteProject(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
-        Project project = projectService.getByUuid(uuid);
+        Optional<Project> project = projectService.getByUuid(uuid);
 
         projectService.deleteProject(project);
         return ResponseEntity.ok(project);

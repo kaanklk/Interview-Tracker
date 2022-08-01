@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +25,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import tcs.interviewtracker.DTOs.PositionDTO;
+import tcs.interviewtracker.exceptions.ResourceNotFoundException;
+//import tcs.interviewtracker.mappers.PositionMapper;
 import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.service.PositionService;
+import tcs.interviewtracker.service.ProjectService;
 
 @RestController
 @RequestMapping("/positions")
@@ -31,6 +37,9 @@ public class PositionController {
 
     @Autowired
     private PositionService positionService;
+
+    @Autowired
+    private ProjectService projectService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -47,7 +56,7 @@ public class PositionController {
         if (orderDirection.equals("ascending"))
             pagingData = PageRequest.of(offset, pagesize, Sort.by(orderBy).ascending());
         else
-            pagingData = PageRequest.of(offset, pagesize, Sort.by(orderBy).ascending());
+            pagingData = PageRequest.of(offset, pagesize, Sort.by(orderBy).descending());
 
         var positions = positionService.findAll(pagingData).stream()
                 .map(this::convertToDto)
@@ -60,7 +69,7 @@ public class PositionController {
     @GetMapping("{id}")
     ResponseEntity<PositionDTO> findById(@PathVariable UUID id) {
 
-        var position = positionService.findById(id);
+        var position = positionService.findByUuid(id);
         if (position.isPresent()) {
             return new ResponseEntity<>(this.convertToDto(position.get()), HttpStatus.OK);
         } else {
@@ -69,41 +78,41 @@ public class PositionController {
 
     }
 
+    @GetMapping("/{positionId}/candidate-count")
+    ResponseEntity<Integer> candidateCount(@PathVariable(value = "positionId") UUID uuid)
+            throws ResourceNotFoundException {
+        var position = positionService.findByUuid(uuid);
+        if (position.isPresent()) {
+            var candidateCount = positionService.getTotalCandidateCount(uuid);
+            return new ResponseEntity<>(candidateCount, HttpStatus.OK);
+        } else {
+            throw new ResourceNotFoundException("Position not found");
+        }
+
+    }
+
     @PostMapping
     ResponseEntity<PositionDTO> newPost(@RequestBody PositionDTO position) {
-        try {
-            var returnPosition = this.convertToDto(positionService.save(convertToEntity(position)));
-            return new ResponseEntity<PositionDTO>(returnPosition, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        var returnPosition = this.convertToDto(positionService.save(convertToEntity(position)));
+        return new ResponseEntity<PositionDTO>(returnPosition, HttpStatus.CREATED);
+
     }
 
-    @PutMapping
-    public ResponseEntity<PositionDTO> updatePosition(PositionDTO positionDTO) {
-        var position = positionService.findById(positionDTO.getUuid());
-        if (null == position)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        else {
-            positionService.update(convertToEntity(positionDTO));
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-    }
-
-    // TODO ask team, delete should not return anything
-    @DeleteMapping("{id}")
-    public ResponseEntity<PositionDTO> deletePosition(@RequestParam UUID id) {
-        this.positionService.delete(id);
+    @DeleteMapping("{uuid}")
+    public ResponseEntity<PositionDTO> deletePosition(@RequestParam UUID uuid) {
+        this.positionService.delete(uuid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<PositionDTO> updatePosition(@RequestBody PositionDTO positionDTO, @PathVariable UUID id) {
-        if (!positionService.findById(id).isPresent())
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @PutMapping("{uuid}")
+    public ResponseEntity<PositionDTO> updatePosition(@RequestBody PositionDTO positionDTO, @PathVariable UUID uuid)
+            throws ResourceNotFoundException {
+        if (!positionService.findByUuid(uuid).isPresent())
+            throw new ResourceNotFoundException("Position not found");
         else {
-            positionService.update(convertToEntity(positionDTO));
-            return new ResponseEntity<>(HttpStatus.OK);
+            positionDTO.setUuid(uuid);
+            var updated = positionService.update(convertToEntity(positionDTO));
+            return new ResponseEntity<>(convertToDto(updated), HttpStatus.OK);
         }
     }
 
@@ -114,6 +123,22 @@ public class PositionController {
 
     private Position convertToEntity(PositionDTO positionDTO) {
 
-        return modelMapper.map(positionDTO, Position.class);
+        // modelMapper.addMappings(mapper -> mapper.skip(Position::setProject));
+        // var position = PositionMapper.INSTANCE.toEntity(positionDTO);
+
+        /*
+         * var project = projectService.getByUuid(positionDTO.getProjectId());
+         * position.setProject(project.get());
+         */
+
+        // return modelMapper.map(positionDTO, Position.class);
+        var pos = new Position();
+        pos.setUuid(positionDTO.getUuid());
+        pos.setHiredCount(positionDTO.getHiredCount());
+        pos.setOpen(positionDTO.getOpen());
+        pos.setPositionName(positionDTO.getPositionName());
+        pos.setTotalCount(positionDTO.getTotalCount());
+        pos.setProject(projectService.getByUuid(positionDTO.getProjectUuid()).get());
+        return pos;
     }
 }
