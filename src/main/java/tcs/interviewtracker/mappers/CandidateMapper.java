@@ -10,8 +10,7 @@ import tcs.interviewtracker.service.CandidateService;
 import tcs.interviewtracker.service.PersonService;
 import tcs.interviewtracker.service.PositionService;
 
-@Mapper(componentModel = "spring", 
-        uses = {CandidateService.class, PersonService.class, PositionService.class})
+@Mapper(componentModel = "spring", uses = { CandidateService.class, PersonService.class, PositionService.class })
 public interface CandidateMapper {
     CandidateMapper INSTANCE = Mappers.getMapper(CandidateMapper.class);
 
@@ -20,7 +19,6 @@ public interface CandidateMapper {
     @Mapping(source = "middleName", target = "person.middleName")
     @Mapping(source = "lastName", target = "person.lastName")
     Candidate toEntity(CandidateDTO candidateDTO);
-
 
     @Mapping(source = "position", target = "positionId")
     CandidateDTO toDTO(Candidate candidate);

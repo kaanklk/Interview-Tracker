@@ -1,6 +1,8 @@
 package tcs.interviewtracker.service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,10 @@ public class ProjectService {
 
     public Project getById(Long id) {
         return projectRepository.getReferenceById(id);
+    }
+
+    public Optional<Project> getByUuid(UUID uuid) {
+        return projectRepository.getByUuid(uuid);
     }
 
     public List<Project> getAllProjects() {
