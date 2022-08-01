@@ -50,9 +50,9 @@ public class CandidateController {
                 @RequestParam(required = false, defaultValue = "10") Integer pagesize,
                 @RequestParam(required = false, defaultValue = "0") Integer offset,
                 @RequestParam(required = false, defaultValue = "id") String orderBy,
-                @RequestParam(required = false, defaultValue = "ascending") String orderDirection) 
+                @RequestParam(required = false, defaultValue = "ascending") String orderDirection)
     {
-        PageRequest request = PageRequest.of(offset, pagesize, 
+        PageRequest request = PageRequest.of(offset, pagesize,
                         (orderDirection.equals("ascending"))? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending());
         var candidates = candidateService.findPaginated(request);
         var dtos = new ArrayList<CandidateDTO>();
@@ -123,5 +123,7 @@ public class CandidateController {
         var responseDto = StatusChangeMapper.INSTANCE.toDTO(statusChange);
         return new ResponseEntity<StatusChangeDTO>(responseDto, HttpStatus.OK);
     }
+
+
 
 }

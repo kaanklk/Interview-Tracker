@@ -42,8 +42,6 @@ public class UserService {
 
     public UserDTO saveUser(UserDTO userDTO) throws ResourceAlreadyExistsException {
 
-
-
         UUID uuid = UUID.randomUUID();
         userDTO.setUuid(uuid);
 
@@ -51,7 +49,7 @@ public class UserService {
 
         Optional<User> existingUser = userRepo.findByEmail(user.getEmail());
 
-        if(!existingUser.isEmpty()){
+        if (!existingUser.isEmpty()) {
             throw new ResourceAlreadyExistsException("User registered for provided email");
         }
 
@@ -82,7 +80,7 @@ public class UserService {
         return entityToDto(userRepo.save(updateUser));
     }
 
-    public void deleteUser(UUID id) throws ResourceNotFoundException{
+    public void deleteUser(UUID id) throws ResourceNotFoundException {
         Optional<User> user = userRepo.findByUuid(id);
         if (!user.isPresent()) {
             throw new ResourceNotFoundException("User not found for provided Id");
@@ -90,11 +88,11 @@ public class UserService {
         userRepo.delete(user.get());
     }
 
-    public User dtoToEntity(UserDTO userDTO){
-         return modelMapper.map(userDTO, User.class);
+    public User dtoToEntity(UserDTO userDTO) {
+        return modelMapper.map(userDTO, User.class);
     }
 
-    public UserDTO entityToDto(User user){
+    public UserDTO entityToDto(User user) {
         return modelMapper.map(user, UserDTO.class);
     }
 

@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
 import tcs.interviewtracker.persistence.Candidate;
@@ -23,15 +25,11 @@ public class ProjectService {
         this.projectRepository = projectRepository;
     }
 
-    public Project getByUuid(UUID uuid) {
-        return projectRepository.findByUuid(uuid);
-    }
-
     public Project getById(Long id) {
         return projectRepository.getReferenceById(id);
     }
 
-    public Optional<Project> getByUuid(UUID uuid) {
+    public Optional<Project> getByUuidOpt(UUID uuid) {
         return projectRepository.getByUuid(uuid);
     }
 
@@ -46,7 +44,7 @@ public class ProjectService {
         return projectRepository.save(savedProject);
     }
 
-    public void deleteProject(Project project) {
+    public void deleteProject(Optional<Project> project) {
         projectRepository.delete(project);
     }
 
@@ -119,6 +117,14 @@ public class ProjectService {
         Project project = projectRepository.findByUuid(uuid);
         List<Interview> upcomingManagementInterviews = projectRepository.findUpcomingManagementInterviews(project);
         return upcomingManagementInterviews;
+    }
+
+    public Optional<Project> getByUuid(UUID projectUuid) {
+        return this.projectRepository.getByUuid(projectUuid);
+    }
+
+    public Project updateProject(Optional<Project> project, Project projectDetails) {
+        return null;
     }
 
 }
