@@ -25,6 +25,7 @@ import tcs.interviewtracker.DTOs.PositionDTO;
 import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.service.PositionService;
 
+
 @RestController
 @RequestMapping("/positions")
 public class PositionController {
@@ -105,5 +106,6 @@ public class PositionController {
 
         return modelMapper.map(positionDTO, Position.class);
     }
-
 }
+ 
+

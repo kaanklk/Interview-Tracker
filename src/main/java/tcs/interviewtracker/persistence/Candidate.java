@@ -49,4 +49,7 @@ public class Candidate {
     @OneToMany(mappedBy = "candidate")
     private Set<Education> educations;
 
+    @OneToMany(mappedBy = "candidate")
+    private Set<Language> langugages;
+
 }
