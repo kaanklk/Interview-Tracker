@@ -2,6 +2,7 @@ package tcs.interviewtracker.persistence;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -10,11 +11,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import antlr.collections.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,7 +35,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="uuid")
+    @Column(name = "uuid")
     private UUID uuid;
 
     @Column(name = "first_name", nullable = false)
@@ -52,17 +56,23 @@ public class User {
     @Column(name = "date_of_birth", nullable = false)
     private Date dateOfBirth;
 
-    @Column(name="email",nullable = false)
+    @Column(name = "email", nullable = false)
     private String email;
 
     @Column(name = "phone_number", nullable = false)
     private String phone;
 
-    @Column(name="admin")
+    @Column(name = "admin")
     private Boolean admin;
 
-    @Column(name="created_at")
+    @Column(name = "created_at")
     @CreationTimestamp
     private Timestamp create;
+
+    @ManyToMany(mappedBy = "interviewers")
+    Set<Position> likes;
+
+    @ManyToMany
+    Set<Project> projects;
 
 }

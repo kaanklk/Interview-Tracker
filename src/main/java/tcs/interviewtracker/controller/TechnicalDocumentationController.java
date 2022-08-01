@@ -33,15 +33,15 @@ import tcs.interviewtracker.persistence.TechnicalDocumentation;
 import tcs.interviewtracker.service.TechnicalDocumentationService;
 //PageRequest -> Page tipust ad vissza
 @RestController
-@RequestMapping("api/technical-documentations")
+@RequestMapping("/technical-documentations")
 public class TechnicalDocumentationController {
     @Autowired    
     private TechnicalDocumentationService techDocService;
 
-   @GetMapping("/")
+   @GetMapping
    public ResponseEntity<List<TechnicalDocumentationDTO>> getAllTechDocs(@RequestParam(required = false, defaultValue = "10") Integer page,
     @RequestParam(required = false, defaultValue = "10") Integer offset, @RequestParam(required = false, defaultValue = "id") String orderby, 
-    @RequestParam(required = false, defaultValue = "ascending") String orderDirection) throws ResourceNotFoundException{
+    @RequestParam(required = false, defaultValue = "ascending") String orderDirection){
     PageRequest pRequest;
     if(orderDirection.equals("descending")){
     pRequest = PageRequest.of(page, offset, Sort.by(orderby).descending());
@@ -50,7 +50,7 @@ public class TechnicalDocumentationController {
     pRequest = PageRequest.of(page, offset, Sort.by(orderby).ascending());
         
     }
-        var techDocs = techDocService.getAllTechDocs();
+        var techDocs = techDocService.getPaginatedTechDocs(pRequest);
         var techDocsDTOs = new ArrayList<TechnicalDocumentationDTO>();
         for(var techDoc : techDocs){
             var techDocDTO = TechnicalDocumentationMapper.INSTANCE.convertToDTO(techDoc);

@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -37,7 +39,7 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="uuid")
+    @Column(name = "uuid")
     private UUID uuid;
 
     @Column(name = FLD_NAME, nullable = false)
@@ -62,13 +64,12 @@ public class Project {
     private String deadline;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "project")
-    // @JoinTable(name = "position")
-    // @JoinColumns({ @JoinColumn(name = "id", referencedColumnName = "id"),
-    // @JoinColumn(name = "projectPositions", referencedColumnName = "positionName")
-    // })
     private List<Position> projectPositions;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "projects")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "projects")
+    // @JoinTable(name = "users_projects", joinColumns = { @JoinColumn(name =
+    // "project_id") }, inverseJoinColumns = {
+    // @JoinColumn(name = "user_id") })
     private List<User> projectAssocicates;
 
 }

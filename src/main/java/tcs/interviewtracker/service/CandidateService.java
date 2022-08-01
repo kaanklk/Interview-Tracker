@@ -1,6 +1,7 @@
 package tcs.interviewtracker.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -109,8 +110,8 @@ public class CandidateService {
         return managementDocumentationRepository.getReferenceByUuid(documentationUuid);
     }
 
-    public Position getPosition(UUID positionUuid) {
-        return positionRepository.getReferenceByUuid(positionUuid);
+    public Optional<Position> getPosition(UUID positionUuid) {
+        return positionRepository.findByUuid(positionUuid);
     }
 
     public TechnicalDocumentation getTechnicalDocumentationOfCandidate(UUID candidateUuid) {

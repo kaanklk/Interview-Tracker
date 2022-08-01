@@ -10,43 +10,35 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NonNull;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Table(name="timeslot")
+@Table(name = "timeslot")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Timeslot {
 
     @Id
-    @NonNull
-    @Column(name="id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long timeslotId;
 
-    @Column(name="uuid")
+    @Column(name = "uuid")
     private UUID uuid;
 
-    @Column(name="start")
+    @Column(name = "start")
     private Timestamp timeslotStart;
 
-    @Column(name="end")
+    @Column(name = "endTime")
     private Timestamp timeslotEnd;
 
-    @Column(name="type")
+    @Column(name = "type")
     private String timeslotType;
 
-    @Column(name="isCompleted")
+    @Column(name = "isCompleted")
     private boolean isCompleted = false;
-
-    public Timeslot() {
-
-    }
-
-    public Timeslot(Timestamp timeslotStart, Timestamp timeslotEnd, String timeslotType) {
-        this.timeslotStart = timeslotStart;
-        this.timeslotEnd = timeslotEnd;
-        this.timeslotType = timeslotType;
-    }
 
 }
