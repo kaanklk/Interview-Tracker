@@ -1,6 +1,7 @@
 package tcs.interviewtracker.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,9 @@ import tcs.interviewtracker.persistence.Timeslot;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
+
+    Project findByUuid(UUID uuid);
+
     Project findByName(String name);
 
     @Query(value = "SELECT P.id as projectid, I.id AS interviewid, I.type_id AS typeid FROM project AS P JOIN interview AS I ON P.id = I.project_id WHERE I.is_completed = true AND I.project_id = ?#{project.id}", nativeQuery = true)

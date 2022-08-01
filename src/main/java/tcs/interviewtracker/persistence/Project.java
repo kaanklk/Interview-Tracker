@@ -20,11 +20,13 @@ import javax.persistence.Table;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = Project.TBL_NAME)
 @Data
 @NoArgsConstructor
+@SuperBuilder
 public class Project {
     protected static final String TBL_NAME = "project";
 
