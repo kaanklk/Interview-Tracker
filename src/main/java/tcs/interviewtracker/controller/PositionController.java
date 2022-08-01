@@ -90,14 +90,13 @@ public class PositionController {
                 positionService.update(convertToEntity(positionDTO));
                 return new ResponseEntity<>(HttpStatus.OK);
         }
-        }
+    }
 
-    // TODO ask team, delete should not return anything
+// TODO ask team, delete should not return anything
     @DeleteMapping("{id}")
     public ResponseEntity<PositionDTO> deletePosition(@RequestParam UUID id) {
         this.positionService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
 
     @PutMapping("{id}")
