@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import tcs.interviewtracker.exceptions.CvNotFoundException;
 import tcs.interviewtracker.exceptions.CvStorageException;
-import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.properties.CvStorageProperties;
 
 @Service
