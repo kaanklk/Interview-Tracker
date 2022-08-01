@@ -30,12 +30,6 @@ import tcs.interviewtracker.service.ProjectService;
 public class ProjectController {
 
     private ProjectService projectService;
-    // private UserService userService;
-    // private PositionService positionService;
-
-    // private static final String PM = "Project Manager";
-    // private static final String SOURCER = "Sourcer";
-    // private static final String RECRUITER = "Project Manager";
 
     public ProjectController(@Autowired ProjectService projectService) {
         this.projectService = projectService;
@@ -65,14 +59,8 @@ public class ProjectController {
 
         Project project = projectService.getByUuid(uuid);
 
-        project.setName(projectDetails.getName());
-        project.setProjectManager(projectDetails.getProjectManager());
-        project.setDescription(projectDetails.getDescription());
-        project.setRecruiter(projectDetails.getProjectManager());
-        project.setSourcer(projectDetails.getProjectManager());
-        project.setDeadline(projectDetails.getDeadline());
-
-        final Project updatedProject = projectService.saveProject(project);
+        final Project updatedProject = projectService.updateProject(project, projectDetails);
+        projectService.saveProject(updatedProject);
         return ResponseEntity.ok(updatedProject);
     }
 

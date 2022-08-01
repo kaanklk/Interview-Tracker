@@ -3,7 +3,6 @@ package tcs.interviewtracker.persistence;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.Generated;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;

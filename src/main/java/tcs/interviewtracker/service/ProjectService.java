@@ -30,6 +30,18 @@ public class ProjectService {
         return projectRepository.getReferenceById(id);
     }
 
+    public Project updateProject(Project project, Project projectDetails) {
+
+        project.setName(projectDetails.getName());
+        project.setProjectManager(projectDetails.getProjectManager());
+        project.setDescription(projectDetails.getDescription());
+        project.setRecruiter(projectDetails.getProjectManager());
+        project.setSourcer(projectDetails.getProjectManager());
+        project.setDeadline(projectDetails.getDeadline());
+
+        return project;
+    }
+
     public List<Project> getAllProjects() {
         return projectRepository.findAll();
     }
