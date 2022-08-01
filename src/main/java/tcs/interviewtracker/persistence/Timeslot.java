@@ -41,4 +41,7 @@ public class Timeslot {
     @Column(name = "isCompleted")
     private boolean isCompleted = false;
 
+    @Column(name = "projectId")
+    private Long projectId;
+
 }

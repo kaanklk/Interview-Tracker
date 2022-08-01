@@ -25,7 +25,6 @@ import tcs.interviewtracker.DTOs.PositionDTO;
 import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.service.PositionService;
 
-
 @RestController
 @RequestMapping("/positions")
 public class PositionController {
@@ -80,22 +79,18 @@ public class PositionController {
         }
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     @PutMapping
-    public ResponseEntity<PositionDTO> updatePosition(PositionDTO positionDTO){
+    public ResponseEntity<PositionDTO> updatePosition(PositionDTO positionDTO) {
         var position = positionService.findById(positionDTO.getUuid());
-        if(null == position)
-             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        else{
-            try {
-                positionService.update(convertToEntity(positionDTO));
-                return new ResponseEntity<>(HttpStatus.OK);
-            } catch (Exception e) {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        if (null == position)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        else {
+            positionService.update(convertToEntity(positionDTO));
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-// TODO ask team, delete should not return anything
+    }
+
+    // TODO ask team, delete should not return anything
     @DeleteMapping("{id}")
     public ResponseEntity<PositionDTO> deletePosition(@RequestParam UUID id) {
         this.positionService.delete(id);
@@ -122,5 +117,3 @@ public class PositionController {
         return modelMapper.map(positionDTO, Position.class);
     }
 }
- 
-
