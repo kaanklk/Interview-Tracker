@@ -15,8 +15,10 @@ import tcs.interviewtracker.DTOs.RoleDTO;
 import tcs.interviewtracker.DTOs.UserRolesDTO;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.Role;
+import tcs.interviewtracker.persistence.User;
 import tcs.interviewtracker.persistence.UserRoles;
 import tcs.interviewtracker.repository.RoleRepository;
+import tcs.interviewtracker.repository.UserRepository;
 import tcs.interviewtracker.repository.UserRolesRepository;
 
 @Service
@@ -24,10 +26,13 @@ public class UserRolesService {
 
     @Autowired
     private ModelMapper modelMapper;
-    private UserRolesRepository userRolesRepo;
     @Autowired
     private RoleRepository roleRepo;
+    @Autowired
+    private UserRepository userRepo;
 
+
+    private UserRolesRepository userRolesRepo;
     UserRolesService(UserRolesRepository userRolesRepo){
         this.userRolesRepo = userRolesRepo;
     }
@@ -97,6 +102,36 @@ public class UserRolesService {
 
         userRolesRepo.delete(userRole.get());
     }
+
+
+    public void updateProject(UserRolesDTO userRolesDTO){
+
+        UUID user_id = userRolesDTO.getUserUuid();
+        UUID project_id = userRolesDTO.getProjectUuid();
+        User user = userRepo.findByUuid(user_id).get();
+
+        List<RoleDTO> roles = userRolesDTO.getRoles();
+
+        UUID project_manager_id = roleRepo.findByRoleName("Project Manager").get().getUuid();
+        UUID recruiter_id = roleRepo.findByRoleName("Recruiter").get().getUuid();
+        UUID sourcer_id = roleRepo.findByRoleName("Sourcer").get().getUuid();
+
+
+        for(RoleDTO role : roles){
+            if(role.getUuid().equals(project_manager_id)){
+
+            }else if(role.getUuid().equals(recruiter_id)){
+
+            }else if(role.getUuid().equals(sourcer_id)){
+
+            }
+        }
+
+
+    }
+
+
+
 
 
     public UserRolesDTO entityToDto(UserRoles userRoles){
