@@ -3,10 +3,7 @@ package tcs.interviewtracker.DTOs;
 import java.sql.Date;
 import java.util.UUID;
 
-import org.apache.catalina.User;
-
 import lombok.Data;
-import tcs.interviewtracker.persistence.Candidate;
 
 @Data
 public class TechnicalDocumentationDTO {
@@ -57,7 +54,5 @@ public class TechnicalDocumentationDTO {
 
     public TechnicalDocumentationDTO() {
     }
-
-
 
 }
