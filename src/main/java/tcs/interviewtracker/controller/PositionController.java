@@ -85,14 +85,9 @@ public class PositionController {
         if (null == position)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         else {
-            try {
-                positionService.update(convertToEntity(positionDTO));
-                return new ResponseEntity<>(HttpStatus.OK);
-            } catch (Exception e) {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+            positionService.update(convertToEntity(positionDTO));
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-
     }
 
     // TODO ask team, delete should not return anything
