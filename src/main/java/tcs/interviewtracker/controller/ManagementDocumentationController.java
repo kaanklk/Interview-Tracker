@@ -2,8 +2,10 @@ package tcs.interviewtracker.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -25,7 +27,10 @@ import tcs.interviewtracker.exceptions.ResourceAlreadyExistsException;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.mappers.ManagementDocumentationMapper;
 import tcs.interviewtracker.persistence.ManagementDocumentation;
+import tcs.interviewtracker.service.CandidateService;
 import tcs.interviewtracker.service.ManagementDocumentationService;
+import tcs.interviewtracker.service.ProjectService;
+import tcs.interviewtracker.service.UserService;
 
 @RestController
 @RequestMapping("management-documentations")
@@ -33,6 +38,18 @@ public class ManagementDocumentationController {
 
     @Autowired
     private ManagementDocumentationService manageService;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private CandidateService candidateSerivce;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ProjectService projectService;
 
     @GetMapping("/")
     public ResponseEntity<List<ManagementDocumentationDTO>> getManageDocs(
@@ -45,21 +62,21 @@ public class ManagementDocumentationController {
 		: Sort.by(sortBy).descending();
 
         PageRequest manageDocRequest = PageRequest.of(offset, pageSize, SortByOrdered);
-        var manageDocs = manageService.findPaginated2(manageDocRequest);
-        var DTOs = new ArrayList<ManagementDocumentationDTO>();
+        var manageDocs = manageService.findPaginated(manageDocRequest);
+        var DTOs = new ArrayList<Optional<ManagementDocumentationDTO>>();
         for(var manageDoc : manageDocs) {
-            var manageDTO = ManagementDocumentationMapper.INSTANCE.MyDtoConverter(manageDoc);
+            var manageDTO = MyDtoConverter(manageDoc);
             DTOs.add(manageDTO);
         }
 
-        return new ResponseEntity<List<ManagementDocumentationDTO>>(DTOs, HttpStatus.OK);
+        return new ResponseEntity<List<ManagementDocumentationDTO>>(HttpStatus.OK);
     }
 
     @GetMapping("/{manageDocId}")
     public ResponseEntity<ManagementDocumentationDTO> getManageDocById(@PathVariable(value = "manageDocId") UUID manageDocId)
     throws ResourceNotFoundException {
-        ManagementDocumentation manageEntity= manageService.getManageDocByUuid(manageDocId);
-        ManagementDocumentationDTO manageDTO = ManagementDocumentationMapper.INSTANCE.MyDtoConverter(manageEntity);
+        Optional<ManagementDocumentation> manageEntity= manageService.getManageDocByUuid(manageDocId);
+        ManagementDocumentationDTO manageDTO = MyDtoConverter(manageEntity);
 
         return new ResponseEntity<ManagementDocumentationDTO>(manageDTO, HttpStatus.OK);
     }
@@ -67,8 +84,8 @@ public class ManagementDocumentationController {
     @PostMapping("/")
     public ResponseEntity<ManagementDocumentationDTO>  createNewDoc(@Validated @RequestBody ManagementDocumentationDTO manageDTO)
     throws ResourceAlreadyExistsException {
-        var manageEntity = ManagementDocumentationMapper.INSTANCE.MyEntityConverter(manageDTO);
-        ManagementDocumentationDTO savedDTO = ManagementDocumentationMapper.INSTANCE.MyDtoConverter(manageEntity);
+        var manageEntity = MyEntityConverter(manageDTO);
+        ManagementDocumentationDTO savedDTO = MyDtoConverter(manageEntity);
 
         return new ResponseEntity<ManagementDocumentationDTO>(savedDTO, HttpStatus.CREATED);
     }
@@ -78,7 +95,7 @@ public class ManagementDocumentationController {
     @Validated @ RequestBody ManagementDocumentationDTO manageDTO) throws ResourceNotFoundException {
 
         ManagementDocumentation manageDoc = manageService.getManageDocByUuid(manageId);
-        ManagementDocumentationDTO updatedDocDTO = ManagementDocumentationMapper.INSTANCE.MyDtoConverter(manageDoc);
+        ManagementDocumentationDTO updatedDocDTO = MyDtoConverter(manageDoc);
 
         return new ResponseEntity<ManagementDocumentationDTO>(updatedDocDTO, HttpStatus.OK);
     }
@@ -86,5 +103,36 @@ public class ManagementDocumentationController {
     @DeleteMapping("/{manageDocId}")
     public void deleteManageDoc(@PathVariable(value = "manageDocId") UUID manageId )  throws ResourceNotFoundException {
         manageService.deleteManageDoc(manageId);
+    }
+
+    private ManagementDocumentationDTO MyDtoConverter(Optional<ManagementDocumentation> manageDoc) {
+        ManagementDocumentationDTO manageDTO = modelMapper.map(manageDoc, ManagementDocumentationDTO.class);
+        return manageDTO;
+    }
+
+    private ManagementDocumentation MyEntityConverter(ManagementDocumentationDTO manageDTO) {
+        var manageDoc = new ManagementDocumentation();
+        manageDoc.setUuid(manageDTO.getUuid());
+        manageDoc.setDateOfInterview(manageDTO.getDateOfInterview());
+        manageDoc.setMobileToWork(manageDTO.getMobileToWork());
+        manageDoc.setFloorVisit(manageDTO.getFloorVisit());
+        manageDoc.setMotivation(manageDTO.getMotivation());
+        manageDoc.setCareerAspiration(manageDTO.getCareerAspiration());
+        manageDoc.setFitment(manageDTO.getFitment());
+        manageDoc.setOpennessToDiversity(manageDTO.getOpennessToDiversity());
+        manageDoc.setProactiveness(manageDTO.getProactiveness());
+        manageDoc.setPotentionalConflict(manageDTO.getPotentionalConflict());
+        manageDoc.setTeamFit(manageDTO.getTeamFit());
+        manageDoc.setObservations(manageDTO.getObservations());
+        manageDoc.setOtherComments(manageDTO.getOtherComments());
+        manageDoc.setOtherStrengths(manageDTO.getOtherStrengths());
+        manageDoc.setOtherWeaknesses(manageDTO.getOtherWeaknesses());
+        manageDoc.setRelevantExperience(manageDTO.getRelevantExperience());
+        manageDoc.setTotalExperience(manageDTO.getTotalExperience());
+        manageDoc.setRecommended(manageDTO.getRecommended());
+        manageDoc.setRGSID(manageDTO.getRGSID());
+        manageDoc.setDirectSupervisorName(manageDTO.getDirectSupervisorName());
+
+        return manageDoc;
     }
 }

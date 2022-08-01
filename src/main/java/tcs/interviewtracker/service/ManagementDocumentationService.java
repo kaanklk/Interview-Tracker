@@ -2,6 +2,7 @@ package tcs.interviewtracker.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class ManagementDocumentationService {
         this.manageRepo = manageRepo;
     }
 
-    public <Optional> ManagementDocumentation getManageDocByUuid(UUID manageDocId) {
+    public Optional<ManagementDocumentation> getManageDocByUuid(UUID manageDocId) {
         return manageRepo.getReferenceByUuid(manageDocId);
     }
 
@@ -101,16 +102,14 @@ public class ManagementDocumentationService {
 
     public ManagementDocumentation updateManageDoc(UUID id, ManagementDocumentation manageDoc) {
 
-        ManagementDocumentation updateDoc = manageRepo.getReferenceByUuid(id);
+        Optional<ManagementDocumentation> updateDoc = manageRepo.getReferenceByUuid(id);
 
-        manageRepo.save(updateDoc);
-
-        return updateDoc;
+        return manageRepo.save(updateDoc);
 
     }
 
     public void deleteManageDoc(UUID id) {
-        ManagementDocumentation manageDoc = manageRepo.getReferenceByUuid(id);
+        Optional<ManagementDocumentation> manageDoc = manageRepo.getReferenceByUuid(id);
         manageRepo.delete(manageDoc);
     }
 
