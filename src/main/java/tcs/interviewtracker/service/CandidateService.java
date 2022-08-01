@@ -141,11 +141,7 @@ public class CandidateService {
     }
 
     public Page<WorkExperience> findWorkExperiencesPaginated(UUID candidateUuid, PageRequest request)
-<<<<<<< HEAD
-                                    throws ResourceNotFoundException {
-=======
             throws ResourceNotFoundException {
->>>>>>> be26fe4dfd34d1dc413ae83e266b852aba159379
         Candidate candidate = candidateRepository.getByUuid(candidateUuid);
         if (null == candidate) {
             throw new ResourceNotFoundException();
@@ -154,11 +150,7 @@ public class CandidateService {
     }
 
     public WorkExperience getWorkExperienceByUuid(UUID candidateId, UUID experienceUuid)
-<<<<<<< HEAD
-                                throws ResourceNotFoundException {
-=======
             throws ResourceNotFoundException {
->>>>>>> be26fe4dfd34d1dc413ae83e266b852aba159379
         Candidate candidate = candidateRepository.getByUuid(candidateId);
         if (null == candidate) {
             throw new ResourceNotFoundException();
@@ -206,11 +198,7 @@ public class CandidateService {
     }
 
     public Page<Education> findEducationPaginated(UUID candidateUuid, PageRequest request)
-<<<<<<< HEAD
-                                    throws ResourceNotFoundException {
-=======
             throws ResourceNotFoundException {
->>>>>>> be26fe4dfd34d1dc413ae83e266b852aba159379
         Candidate candidate = candidateRepository.getByUuid(candidateUuid);
         if (null == candidate) {
             throw new ResourceNotFoundException();
@@ -219,11 +207,7 @@ public class CandidateService {
     }
 
     public Education getEducationByUuid(UUID candidateUuid, UUID educationUuid)
-<<<<<<< HEAD
-                                throws ResourceNotFoundException {
-=======
             throws ResourceNotFoundException {
->>>>>>> be26fe4dfd34d1dc413ae83e266b852aba159379
         Candidate candidate = candidateRepository.getByUuid(candidateUuid);
         if (null == candidate) {
             throw new ResourceNotFoundException();

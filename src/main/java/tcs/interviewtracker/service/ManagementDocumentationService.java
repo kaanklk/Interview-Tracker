@@ -36,11 +36,7 @@ public class ManagementDocumentationService {
       return  manageRepo.save(manageDoc);
     }
 
-<<<<<<< HEAD
-    public ManagementDocumentation updateManageDoc(UUID id,  ManagementDocumentation manageDoc) {
-=======
-    public ManagementDocumentation updateManageDoc(Long id, ManagementDocumentation manageDoc) {
->>>>>>> be26fe4dfd34d1dc413ae83e266b852aba159379
+    public ManagementDocumentation updateManageDoc(UUID id, ManagementDocumentation manageDoc) {
 
         ManagementDocumentation updateDoc = manageRepo.getReferenceByUuid(id);
 
