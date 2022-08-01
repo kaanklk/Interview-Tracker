@@ -1,6 +1,7 @@
 package tcs.interviewtracker.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -33,13 +34,10 @@ public class CandidateService {
     private StatusChangeRepository statusChangeRepository;
     private WorkExperienceRepository workExperienceRepository;
     private EducationRepository educationRepository;
-<<<<<<< HEAD
     private UserRepository userRepository;
     private TechnicalDocumentationRepository technicalDocumentationRepository;
     private ManagementDocumentationRepository managementDocumentationRepository;
     private PositionRepository positionRepository;
-=======
->>>>>>> origin/dev
 
     public List<Candidate> findAll() {
         return candidateRepository.findAll();
@@ -100,9 +98,8 @@ public class CandidateService {
         throw new ResourceNotFoundException();
     }
 
-<<<<<<< HEAD
-    public User getInterviewer(UUID interviewerUuid) {
-        return userRepository.getReferenceByUuid(interviewerUuid);
+    public Optional<User> getInterviewer(UUID interviewerUuid) {
+        return userRepository.findByUuid(interviewerUuid);
     }
 
     public TechnicalDocumentation getTechnicalDocumentation(UUID documentationUuid) {
@@ -134,9 +131,6 @@ public class CandidateService {
     }
 
     //WorkExperience:----------------------------------------------------
-=======
-    // WorkExperience:----------------------------------------------------
->>>>>>> origin/dev
 
     public List<WorkExperience> findWorkExperiences(UUID candidateUuid) throws ResourceNotFoundException {
         Candidate candidate = candidateRepository.getByUuid(candidateUuid);
