@@ -7,6 +7,7 @@ INSERT INTO technical_documentation VALUES (
 	8,
 	'I think he does not understand the way of Ukulele',
 	'He understood the role',
+  	'ea51f356-118d-11ed-861d-0242ac120002'
 	1, 4
 )
 INSERT INTO technical_documentation VALUES (
@@ -18,6 +19,7 @@ INSERT INTO technical_documentation VALUES (
 	10,
 	'I think he does understand the way of Ukulele!',
 	'He understood the role',
+	'3322197a-118f-11ed-861d-0242ac120002',
 	2, 1
 )
 INSERT INTO technical_documentation VALUES (
@@ -29,6 +31,7 @@ INSERT INTO technical_documentation VALUES (
 	2,
 	'Actually he can play the guitar',
 	'He does not understand the role, or anything else',
+  	'z4288cfd0-118f-11ed-861d-0242ac120002',
 	3, 3
 )
 
@@ -41,6 +44,7 @@ INSERT INTO technical_documentation VALUES (
 	7,
 	'Actually he can play the piano',
 	'I think he should be the boss because he knows everything about the role',
+  	'6aab2c10-118f-11ed-861d-0242ac120002'
 	5, 5
 )
 
@@ -53,5 +57,6 @@ INSERT INTO technical_documentation VALUES (
 	9,
 	'Actually he can play the guitar',
 	'He does know everything, he is John Snow',
+	'784bf660-118f-11ed-861d-0242ac120002'
 	5, 2
 )
