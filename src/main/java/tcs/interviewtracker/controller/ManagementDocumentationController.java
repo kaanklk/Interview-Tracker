@@ -45,7 +45,7 @@ public class ManagementDocumentationController {
 		: Sort.by(sortBy).descending();
 
         PageRequest manageDocRequest = PageRequest.of(offset, pageSize, SortByOrdered);
-        var manageDocs = manageService.findPaginated2(manageDocRequest);
+        var manageDocs = manageService.findPaginated(manageDocRequest);
         var DTOs = new ArrayList<ManagementDocumentationDTO>();
         for(var manageDoc : manageDocs) {
             var manageDTO = ManagementDocumentationMapper.INSTANCE.MyDtoConverter(manageDoc);

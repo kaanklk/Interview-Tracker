@@ -1,6 +1,7 @@
 package tcs.interviewtracker.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,16 +31,8 @@ public class ProjectService {
         return projectRepository.getReferenceById(id);
     }
 
-    public Project updateProject(Project project, Project projectDetails) {
-
-        project.setName(projectDetails.getName());
-        project.setProjectManager(projectDetails.getProjectManager());
-        project.setDescription(projectDetails.getDescription());
-        project.setRecruiter(projectDetails.getProjectManager());
-        project.setSourcer(projectDetails.getProjectManager());
-        project.setDeadline(projectDetails.getDeadline());
-
-        return project;
+    public Optional<Project> getByUuid(UUID uuid) {
+        return projectRepository.getByUuid(uuid);
     }
 
     public List<Project> getAllProjects() {
