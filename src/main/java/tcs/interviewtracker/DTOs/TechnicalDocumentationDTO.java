@@ -3,17 +3,14 @@ package tcs.interviewtracker.DTOs;
 import java.sql.Date;
 import java.util.UUID;
 
-import org.apache.catalina.User;
-
 import lombok.Data;
-import tcs.interviewtracker.persistence.Candidate;
 
 @Data
 public class TechnicalDocumentationDTO {
-
+ 
     private UUID uuid;
 
-    private UUID candidate;
+    private UUID candidateUUID;
 
     private Date date;
 
@@ -25,19 +22,19 @@ public class TechnicalDocumentationDTO {
 
     private Integer technicalSkills1;
 
-    private Integer techSkillComment1;
+    private String techSkillComment1;
 
     private Integer technicalSkills2;
 
-    private Integer techSkillComment2;
+    private String techSkillComment2;
 
     private Integer technicalSkills3;
 
-    private Integer techSkillComment3;
+    private String techSkillComment3;
 
     private Integer technicalSkills4;
 
-    private Integer techSkillComment4;
+    private String techSkillComment4;
 
     private Integer totalExperience;
 
@@ -45,11 +42,11 @@ public class TechnicalDocumentationDTO {
 
     private Boolean isReccomended;
 
-    private Integer lastComments;
+    private String lastComments;
 
-    private UUID interviewerOne;
+    private UUID interviewerOneUUID;
 
-    private UUID interviewerTwo;
+    private UUID interviewerTwoUUID;
 
     private int designationOne;
 
@@ -57,7 +54,5 @@ public class TechnicalDocumentationDTO {
 
     public TechnicalDocumentationDTO() {
     }
-
-
 
 }
