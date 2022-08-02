@@ -27,7 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import tcs.interviewtracker.DTOs.CandidateDTO;
+import tcs.interviewtracker.DTOs.EducationDTO;
+import tcs.interviewtracker.DTOs.LanguageDTO;
 import tcs.interviewtracker.DTOs.StatusChangeDTO;
+import tcs.interviewtracker.DTOs.WorkExperienceDTO;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.mappers.CandidateMapper;
 import tcs.interviewtracker.mappers.StatusChangeMapper;
@@ -47,7 +50,7 @@ public class CandidateController {
 
     @GetMapping
     public ResponseEntity<List<CandidateDTO>> getCandidates(
-                @RequestParam(required = false, defaultValue = "2") Integer pagesize,
+                @RequestParam(required = false, defaultValue = "10") Integer pagesize,
                 @RequestParam(required = false, defaultValue = "0") Integer offset,
                 @RequestParam(required = false, defaultValue = "id") String orderBy,
                 @RequestParam(required = false, defaultValue = "ascending") String orderDirection) 
@@ -66,6 +69,7 @@ public class CandidateController {
     public ResponseEntity<CandidateDTO> postCandidate(
         @RequestBody(required = true) CandidateDTO dto
     ) {
+
         var candidate = CandidateMapper.INSTANCE.toEntity(dto);
         var responseDTO = CandidateMapper.INSTANCE.toDTO(candidateService.save(candidate));
         return new ResponseEntity<CandidateDTO>(responseDTO, HttpStatus.CREATED);
@@ -123,4 +127,53 @@ public class CandidateController {
         return new ResponseEntity<StatusChangeDTO>(responseDto, HttpStatus.OK);
     }
 
+    private Candidate candidateDtoToEntity(CandidateDTO dto) {
+        var entity = new Candidate();
+        //TODO cv path
+        entity.setUuid(dto.getUuid());
+        return entity;
+    }
+
+    private CandidateDTO candidateEntityToDto(Candidate entity) {
+        var dto = new CandidateDTO();
+        dto.setUuid(entity.getUuid());
+        var person = entity.getPerson();
+        if (null != person) {
+            dto.setPositionId(person.getUuid());
+            dto.setFirstName(person.getFirstName());
+            dto.setMiddleName(person.getMiddleName());
+            dto.setLastName(person.getLastName());
+            dto.setEmail(person.getEmail());
+            dto.setPhone(person.getPhone());
+        }
+        dto.setLanguages(new ArrayList<LanguageDTO>());
+        for (var lang : entity.getLangugages()) {
+            var langDto = new LanguageDTO();
+            langDto.setLanguage(lang.getLanguage());
+            langDto.setLevel(lang.getLevel());
+            dto.getLanguages().add(langDto);
+        }
+        dto.setWorkExperiences(new ArrayList<WorkExperienceDTO>());
+        for (var work : entity.getWorkExperiences()) {
+            var workDto = new WorkExperienceDTO();
+            workDto.setStart(work.getStartDate().toString());
+            workDto.setEnd(work.getEndDate().toString());
+            workDto.setInstitution(work.getInstitution());
+            workDto.setSummary(work.getSummary());
+            dto.getWorkExperiences().add(workDto);
+        }
+        dto.setEducations(new ArrayList<EducationDTO>());
+        for (var education : entity.getEducations()) {
+            var eDto = new EducationDTO();
+            eDto.setStart(education.getStartDate().toString());
+            eDto.setEnd(education.getEndDate().toString());
+            eDto.setInstitution(education.getInstitution());
+            eDto.setInformation(education.getInformation());
+            dto.getEducations().add(eDto);
+        }
+        if () {
+
+        }
+        return dto;
+    }
 }
