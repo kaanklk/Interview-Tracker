@@ -90,7 +90,7 @@ public class ManagementDocumentationController {
     }
 
     @PutMapping("/{manageDocId}")
-    public ResponseEntity<ManagementDocumentationDTO>  updateDoc(@PathVariable(value = "mangeDocId") UUID manageId,
+    public ResponseEntity<ManagementDocumentationDTO>  updateDoc(@PathVariable(value = "manageDocId") UUID manageId,
     @Validated @ RequestBody ManagementDocumentationDTO manageDTO) throws ResourceNotFoundException {
 
         ManagementDocumentation manageDoc = MyEntityConverter(manageDTO);
@@ -148,7 +148,6 @@ public class ManagementDocumentationController {
         manageDoc.setDirectSupervisorName(manageDTO.getDirectSupervisorName());
         manageDoc.setCandidate(candidateService.getByUuid(manageDTO.getCandidateUuid()));
         manageDoc.setProject(projectService.getByUuid(manageDTO.getProjectUuid()));
-
         manageDoc.setInterviewer1(userService.getUserById(manageDTO.getInterviewer1Uuid()));
         manageDoc.setInterviewer2(userService.getUserById(manageDTO.getInterviewer2Uuid()));
 
