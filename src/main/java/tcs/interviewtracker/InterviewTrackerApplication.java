@@ -5,7 +5,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
@@ -19,7 +18,6 @@ import tcs.interviewtracker.properties.CvStorageProperties;
 @EnableConfigurationProperties({
 		CvStorageProperties.class
 })
-@ComponentScan(basePackages = { "tcs.interviewtracker.exceptions" })
 public class InterviewTrackerApplication {
 
 	public static void main(String[] args) {

@@ -98,8 +98,8 @@ public class CandidateService {
         throw new ResourceNotFoundException();
     }
 
-    public User getInterviewer(UUID interviewerUuid) {
-        return userRepository.getReferenceByUuid(interviewerUuid);
+    public Optional<User> getInterviewer(UUID interviewerUuid) {
+        return userRepository.findByUuid(interviewerUuid);
     }
 
     public TechnicalDocumentation getTechnicalDocumentation(UUID documentationUuid) {
@@ -140,8 +140,8 @@ public class CandidateService {
         return workExperienceRepository.getByCandidate(candidate);
     }
 
-    public Page<WorkExperience> findWorkExperiencesPaginated(UUID candidateUuid, PageRequest request) 
-                                    throws ResourceNotFoundException {
+    public Page<WorkExperience> findWorkExperiencesPaginated(UUID candidateUuid, PageRequest request)
+            throws ResourceNotFoundException {
         Candidate candidate = candidateRepository.getByUuid(candidateUuid);
         if (null == candidate) {
             throw new ResourceNotFoundException();
@@ -149,8 +149,8 @@ public class CandidateService {
         return workExperienceRepository.getByCandidate(candidate, request);
     }
 
-    public WorkExperience getWorkExperienceByUuid(UUID candidateId, UUID experienceUuid) 
-                                throws ResourceNotFoundException {
+    public WorkExperience getWorkExperienceByUuid(UUID candidateId, UUID experienceUuid)
+            throws ResourceNotFoundException {
         Candidate candidate = candidateRepository.getByUuid(candidateId);
         if (null == candidate) {
             throw new ResourceNotFoundException();
@@ -167,7 +167,8 @@ public class CandidateService {
         return workExperienceRepository.save(workExperience);
     }
 
-    public WorkExperience updateWorkExperience(UUID workExperienceUuid, WorkExperience workExperience) throws ResourceNotFoundException {
+    public WorkExperience updateWorkExperience(UUID workExperienceUuid, WorkExperience workExperience)
+            throws ResourceNotFoundException {
         WorkExperience oldWorkExperience = workExperienceRepository.getByUuid(workExperienceUuid);
         if (null == oldWorkExperience) {
             throw new ResourceNotFoundException();
@@ -186,8 +187,7 @@ public class CandidateService {
         return toDelete;
     }
 
-
-    //Education:----------------------------------------------------------------
+    // Education:----------------------------------------------------------------
 
     public List<Education> findEducation(UUID candidateUuid) throws ResourceNotFoundException {
         Candidate candidate = candidateRepository.getByUuid(candidateUuid);
@@ -197,8 +197,8 @@ public class CandidateService {
         return educationRepository.getByCandidate(candidate);
     }
 
-    public Page<Education> findEducationPaginated(UUID candidateUuid, PageRequest request) 
-                                    throws ResourceNotFoundException {
+    public Page<Education> findEducationPaginated(UUID candidateUuid, PageRequest request)
+            throws ResourceNotFoundException {
         Candidate candidate = candidateRepository.getByUuid(candidateUuid);
         if (null == candidate) {
             throw new ResourceNotFoundException();
@@ -206,8 +206,8 @@ public class CandidateService {
         return educationRepository.getByCandidate(candidate, request);
     }
 
-    public Education getEducationByUuid(UUID candidateUuid, UUID educationUuid) 
-                                throws ResourceNotFoundException {
+    public Education getEducationByUuid(UUID candidateUuid, UUID educationUuid)
+            throws ResourceNotFoundException {
         Candidate candidate = candidateRepository.getByUuid(candidateUuid);
         if (null == candidate) {
             throw new ResourceNotFoundException();

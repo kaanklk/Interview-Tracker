@@ -1,8 +1,11 @@
 package tcs.interviewtracker.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import tcs.interviewtracker.persistence.ManagementDocumentation;
@@ -17,45 +20,25 @@ public class ManagementDocumentationService {
         this.manageRepo = manageRepo;
     }
 
-    public ManagementDocumentation getManageDocById(Long manageDocId) {
-        return manageRepo.getReferenceById(manageDocId);
+    public <Optional>ManagementDocumentation getManageDocByUuid(UUID manageDocId) {
+        return manageRepo.getReferenceByUuid(manageDocId);
     }
 
-    public List<ManagementDocumentation>  getAllManageDocs() {
+    public Page<ManagementDocumentation> findPaginated(PageRequest request) {
+        return manageRepo.findAll(request);
+    }
+
+    public List<ManagementDocumentation> getAllManageDocs() {
         return manageRepo.findAll();
     }
 
-    public void saveManageDoc(ManagementDocumentation manageDoc) {
-        manageRepo.save(manageDoc);
+    public ManagementDocumentation saveManageDoc(ManagementDocumentation manageDoc) {
+      return  manageRepo.save(manageDoc);
     }
 
-    public ManagementDocumentation updateManageDoc(Long id,  ManagementDocumentation manageDoc) {
+    public ManagementDocumentation updateManageDoc(UUID id, ManagementDocumentation manageDoc) {
 
-        ManagementDocumentation updateDoc = manageRepo.findById(id).get();
-
-        updateDoc.setDateOfInterview(manageDoc.getDateOfInterview());
-        updateDoc.setMobileToWork(manageDoc.getMobileToWork());
-        updateDoc.setFloorVisit(manageDoc.getFloorVisit());
-        updateDoc.setMotivation(manageDoc.getMotivation());
-        updateDoc.setCareerAspiration(manageDoc.getCareerAspiration());
-        updateDoc.setFitment(manageDoc.getFitment());
-        updateDoc.setOpennessToDiversity(manageDoc.getOpennessToDiversity());
-        updateDoc.setProactiveness(manageDoc.getProactiveness());
-        updateDoc.setPotentionalConflict(manageDoc.getPotentionalConflict());
-        updateDoc.setTeamFit(manageDoc.getTeamFit());
-        updateDoc.setObservations(manageDoc.getObservations());
-        updateDoc.setOtherComments(manageDoc.getOtherComments());
-        updateDoc.setOtherStrengths(manageDoc.getOtherStrengths());
-        updateDoc.setOtherWeaknesses(manageDoc.getOtherWeaknesses());
-        updateDoc.setRelevantExperience(manageDoc.getRelevantExperience());
-        updateDoc.setTotalExperience(manageDoc.getTotalExperience());
-        updateDoc.setRecommended(manageDoc.getRecommended());
-        updateDoc.setRGSID(manageDoc.getRGSID());
-        updateDoc.setDirectSupervisorName(manageDoc.getDirectSupervisorName());
-        updateDoc.setCandidate(manageDoc.getCandidate());
-        updateDoc.setProject(manageDoc.getProject());
-        updateDoc.setInterviewer1(manageDoc.getInterviewer1());
-        updateDoc.setInterviewer2(manageDoc.getInterviewer2());
+        ManagementDocumentation updateDoc = manageRepo.getReferenceByUuid(id);
 
         manageRepo.save(updateDoc);
 
@@ -63,8 +46,8 @@ public class ManagementDocumentationService {
 
     }
 
-    public void deleteManageDoc(Long id) {
-        ManagementDocumentation manageDoc = manageRepo.findById(id).get();
+    public void deleteManageDoc(UUID id) {
+        ManagementDocumentation manageDoc = manageRepo.getReferenceByUuid(id);
         manageRepo.delete(manageDoc);
     }
 

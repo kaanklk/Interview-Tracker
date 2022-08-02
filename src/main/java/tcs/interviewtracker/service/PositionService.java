@@ -1,16 +1,13 @@
 package tcs.interviewtracker.service;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import tcs.interviewtracker.DTOs.PositionDTO;
 import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.CandidateStatus;
 import tcs.interviewtracker.persistence.Position;
