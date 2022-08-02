@@ -9,7 +9,7 @@ values
     (15, 'Medor Python Developer', 5, 4, 3, false, '6f19e030-a18e-11ed-861d-0242ac120002'),
     (16, 'Junior HR Assistant', 3, 10, 3, true, '6f19e030-118e-1aed-861d-0242ac120002');
 
-    
+
 INSERT INTO project (id, name, project_manager, description, recruiter, sourcer, deadline, uuid)
     VALUES
         (1, 'alpha', 1, 'This is a project to build a new developer team', 4, 6, 2022-06-20, '79a7f7a0-1196-11ed-861d-0242ac120002'),
@@ -37,12 +37,12 @@ values ('Management Interviewer', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e1'),
 	   ('Sourcer', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e4'),
 	   ('Technical Interviewer', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e5');
 
-insert into user_roles (uuid, user_id, project_id)
-values ('f239c6c8-1194-11ed-861d-0242ac120002', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e1', '6f19e030158e-11ed-861d-0242ac120002'),
-       ('1c74d04a-1195-11ed-861d-0242ac120002', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e2', '6f19e030118e-11ed-841d-0242ac120002'),
-       ('2560cbd2-1195-11ed-861d-0242ac120002', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e3', '6f19e030118e-11ed-841d-0242ac120002'),
-	   ('29279002-1195-11ed-861d-0242ac120002', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e4', '6f19e030118e-11ed-861d-0242ac120002'),
-	   ('2c8599b0-1195-11ed-861d-0242ac120002', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e5', '6f19e030118e-11ed-861d-0242ac120002');
+insert into user_roles (user_id, project_id)
+values (1, 1),
+       (2, 2),
+       (3, 3),
+	   (4, 4),
+	   (4, 5);
 
 insert into user_roles_role (user_roles_id, role_id)
 values (1,2),

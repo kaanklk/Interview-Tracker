@@ -19,13 +19,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import tcs.interviewtracker.DTOs.ProjectDTO;
 import tcs.interviewtracker.DTOs.RoleDTO;
+import tcs.interviewtracker.DTOs.UserDTO;
 import tcs.interviewtracker.DTOs.UserRolesDTO;
+import tcs.interviewtracker.exceptions.ResourceAlreadyExistsException;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
+import tcs.interviewtracker.persistence.Project;
 import tcs.interviewtracker.persistence.Role;
+import tcs.interviewtracker.persistence.User;
 import tcs.interviewtracker.persistence.UserRoles;
-import tcs.interviewtracker.repository.RoleRepository;
+import tcs.interviewtracker.service.ProjectService;
+import tcs.interviewtracker.service.RoleService;
 import tcs.interviewtracker.service.UserRolesService;
+import tcs.interviewtracker.service.UserService;
 
 
 @RestController
@@ -33,7 +40,11 @@ import tcs.interviewtracker.service.UserRolesService;
 public class UserRolesController {
 
     @Autowired
-    private RoleRepository roleRepo;
+    private RoleService roleService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private ProjectService projectService;
     @Autowired
     private ModelMapper modelMapper;
     private UserRolesService service;
@@ -46,30 +57,34 @@ public class UserRolesController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public List<UserRolesDTO> getUserRoles(@PathVariable UUID userUuid) throws ResourceNotFoundException{
-        return service.getAllRoles(userUuid);
+        List<UserRolesDTO> userRolesDTO = Arrays.asList(modelMapper.map(service.getAllRoles(userUuid), UserRolesDTO[].class));
+
+        return userRolesDTO;
     }
 
-    @GetMapping("/{userRolesUuid}")
+    @GetMapping("/{projectUuid}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public UserRolesDTO getRoleForSpecificProject(@PathVariable UUID userUuid, @PathVariable UUID userRolesUuid) throws ResourceNotFoundException{
-        return entityToDto(service.getRoleForSpecificProject(userUuid, userRolesUuid));
+    public UserRolesDTO getRoleForSpecificProject(@PathVariable UUID userUuid, @PathVariable UUID projectUuid) throws ResourceNotFoundException{
+        return entityToDto(service.getRoleForSpecificProject(userUuid, projectUuid));
     }
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserRolesDTO setRole(@RequestBody UserRolesDTO userRoleDTO){
+    public UserRolesDTO setRole(@RequestBody UserRolesDTO userRoleDTO) throws ResourceNotFoundException, ResourceAlreadyExistsException{
 
         UserRoles userRoles = new UserRoles();
 
-        userRoles.setUserUuid(userRoleDTO.getUserUuid());
-        userRoles.setProjectUuid(userRoleDTO.getProjectUuid());
-
         List<Role> roles = new ArrayList<>();
+        User user = userService.getUserById(userRoleDTO.getUser().getUuid());
+        Project project = projectService.getByUuid(userRoleDTO.getProject().getUuid());
 
         for(RoleDTO r : userRoleDTO.getRoles()){
-            roles.add(roleRepo.findByUuid(r.getUuid()).get());
+            roles.add(roleService.getRoleById(r.getUuid()));
         }
+
+        userRoles.setUser(user);
+        userRoles.setProject(project);
         userRoles.setRoles(roles);
 
         UserRoles created = service.saveUserRole(userRoles);
@@ -77,45 +92,67 @@ public class UserRolesController {
         List<RoleDTO> roleCreated = Arrays.asList(modelMapper.map(created.getRoles(), RoleDTO[].class));
 
         UserRolesDTO createdDTO = new UserRolesDTO();
-        createdDTO.setUuid(created.getUuid());
-        createdDTO.setUserUuid(created.getUserUuid());
-        createdDTO.setProjectUuid(created.getProjectUuid());
+        createdDTO.setUser(entityToDto(created.getUser()));
+        createdDTO.setProject(entityToDto(created.getProject()));
         createdDTO.setRoles(roleCreated);
 
         return createdDTO;
     }
 
-    @PutMapping("/{userRolesUuid}")
+    @PutMapping("/{projectUuid}")
     @ResponseStatus(HttpStatus.OK)
-    public UserRolesDTO setNewRole(@PathVariable UUID userRolesUuid, @RequestBody UserRolesDTO userRoleDTO) throws ResourceNotFoundException{
+    public UserRolesDTO setNewRole(@PathVariable UUID userUuid, @PathVariable UUID projectUuid, @RequestBody UserRolesDTO userRoleDTO) throws ResourceNotFoundException{
 
-        UserRoles userRole = service.getRoleForSpecificProject(userRoleDTO.getUserUuid(), userRolesUuid);
+        UserRoles userRole = service.getRoleForSpecificProject(userUuid, projectUuid);
 
         List<Role> roles = new ArrayList<>();
 
         for(RoleDTO r : userRoleDTO.getRoles()){
-           roles.add(roleRepo.findByUuid(r.getUuid()).get());
+           roles.add(roleService.getRoleById(r.getUuid()));
         }
 
         userRole.setRoles(roles);
-        UserRoles updated = service.setNewRoleforExistingUser(userRolesUuid, userRole);
+        service.setNewRoleforExistingUser(userRole);
 
-        userRoleDTO.setUuid(updated.getUuid());
+        userRoleDTO.setUser(entityToDto(userRole.getUser()));
+        userRoleDTO.setProject(entityToDto(userRole.getProject()));
+
         return userRoleDTO;
     }
 
-    @DeleteMapping("/{userRolesUuid}")
+    @DeleteMapping("/{projectUuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteRolesForSpecificProject(@PathVariable UUID userRolesUuid) throws ResourceNotFoundException{
-        service.deleteUserRole(userRolesUuid);
+    public void deleteRolesForSpecificProject(@PathVariable UUID userUuid, @PathVariable UUID projectUuid) throws ResourceNotFoundException{
+        service.deleteUserRole(userUuid, projectUuid);
     }
+
+
+
+    ////////////////////Mapping dto to entity methods/////////////////////////
 
     public UserRolesDTO entityToDto(UserRoles userRoles){
         return modelMapper.map(userRoles, UserRolesDTO.class);
     }
 
+
     public UserRoles dtoToEntity(UserRolesDTO userRolesDTO){
         return modelMapper.map(userRolesDTO, UserRoles.class);
+    }
+
+    public User dtoToEntity(UserDTO userDTO){
+        return modelMapper.map(userDTO, User.class);
+    }
+
+    public UserDTO entityToDto(User user){
+       return modelMapper.map(user, UserDTO.class);
+    }
+
+    public Project dtoToEntity(ProjectDTO projectDTO){
+       return modelMapper.map(projectDTO, Project.class);
+    }
+
+    public ProjectDTO entityToDto(Project project){
+       return modelMapper.map(project, ProjectDTO.class);
     }
 
 }

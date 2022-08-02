@@ -17,14 +17,14 @@ values ('Management Interviewer', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e1'),
 	   ('Sourcer', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e4'),
 	   ('Technical Interviewer', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e5');
 
-insert into users_roles (uuid, user_id, project_id)
-values ('ggg79789-98ff-4709-b2a2-f9a6d760f1e2', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e1', 'ggb79789-98ff-4709-b2a2-f9a6d760f1e1'),
-       ('hhh79789-98ff-4709-b2a2-f9a6d760f1e2', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e2', 'klh79789-98ff-4709-b2a2-f9a6d760f1e2'),
-       ('ppp79789-98ff-4709-b2a2-f9a6d760f1e2', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e3', 'ikl79789-98ff-4709-b2a2-f9a6d760f1e2'),
-	   ('qwe79789-98ff-4709-b2a2-f9a6d760f1e2', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e4', 'asd79789-98ff-4709-b2a2-f9a6d760f1e2'),
-	   ('azs79789-98ff-4709-b2a2-f9a6d760f1e2', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e5', 'vbc79789-98ff-4709-b2a2-f9a6d760f1e2');
+insert into user_roles (user_id, project_id)
+values (1, 1),
+       (2, 2),
+       (3, 3),
+	   (4, 4),
+	   (4, 5);
 
-insert into users_roles_role (user_roles_id, role_id)
+insert into user_roles_role (user_roles_id, role_id)
 values (1,2),
        (1,3),
        (2,5),
