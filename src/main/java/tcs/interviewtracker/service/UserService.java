@@ -43,7 +43,7 @@ public class UserService {
 
         Optional<User> existingUser = userRepo.findByEmail(user.getEmail());
 
-        if(!existingUser.isEmpty()){
+        if (!existingUser.isEmpty()) {
             throw new ResourceAlreadyExistsException("User registered for provided email");
         }
 
@@ -73,7 +73,7 @@ public class UserService {
         return userRepo.save(updateUser);
     }
 
-    public void deleteUser(UUID id) throws ResourceNotFoundException{
+    public void deleteUser(UUID id) throws ResourceNotFoundException {
         Optional<User> user = userRepo.findByUuid(id);
         if (!user.isPresent()) {
             throw new ResourceNotFoundException("User not found for provided Id");
