@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tcs.interviewtracker.DTOs.UserDTO;
 import tcs.interviewtracker.exceptions.ResourceAlreadyExistsException;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
+import tcs.interviewtracker.persistence.User;
 import tcs.interviewtracker.service.UserService;
 
 @RestController
@@ -41,7 +42,7 @@ public class UserController {
     @GetMapping("/{uuid}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public UserDTO getUserById(@PathVariable UUID uuid) throws ResourceNotFoundException{
+    public User getUserById(@PathVariable UUID uuid) throws ResourceNotFoundException{
         return service.getUserById(uuid);
     }
 
