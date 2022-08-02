@@ -1,6 +1,7 @@
 package tcs.interviewtracker.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +66,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Project> deleteProject(@PathVariable(value = "id") UUID uuid)
+    public ResponseEntity <Project> deleteProject(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         Project project = projectService.getByUuid(uuid);
 

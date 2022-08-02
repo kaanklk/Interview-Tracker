@@ -2,6 +2,7 @@ package tcs.interviewtracker.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
@@ -68,7 +69,7 @@ public class ManagementDocumentationController {
             DTOs.add(manageDTO);
         }
 
-        return new ResponseEntity<List<ManagementDocumentationDTO>>(DTOs, HttpStatus.OK);
+        return new ResponseEntity<List<ManagementDocumentationDTO>>(HttpStatus.OK);
     }
 
     @GetMapping("/{manageDocId}")
