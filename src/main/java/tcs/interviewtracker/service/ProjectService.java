@@ -130,8 +130,4 @@ public class ProjectService {
         return upcomingManagementInterviews;
     }
 
-    public Optional<Project> getByUuid(UUID projectUuid) {
-        return this.projectRepository.getByUuid(projectUuid);
-    }
-
 }

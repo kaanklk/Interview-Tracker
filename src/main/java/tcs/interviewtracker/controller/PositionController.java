@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tcs.interviewtracker.DTOs.PositionDTO;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
-import tcs.interviewtracker.mappers.PositionMapper;
 import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.service.PositionService;
 import tcs.interviewtracker.service.ProjectService;
@@ -138,7 +137,7 @@ public class PositionController {
         pos.setOpen(positionDTO.getOpen());
         pos.setPositionName(positionDTO.getPositionName());
         pos.setTotalCount(positionDTO.getTotalCount());
-        pos.setProject(projectService.getByUuid(positionDTO.getProjectUuid()).get());
+        pos.setProject(projectService.getByUuid(positionDTO.getProjectUuid()));
         return pos;
     }
 }
