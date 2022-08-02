@@ -37,14 +37,13 @@ public class UserController {
     public List<UserDTO> getAllUsers(){
         return service.getAllUsers();
     }
-
+/* 
     @GetMapping("/{uuid}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public UserDTO getUserById(@PathVariable UUID uuid) throws ResourceNotFoundException{
         return service.getUserById(uuid);
     }
-
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDTO save(@RequestBody UserDTO userDTO) throws ResourceAlreadyExistsException{
@@ -62,5 +61,5 @@ public class UserController {
     public void deleteUserById(@PathVariable UUID uuid) throws ResourceNotFoundException{
         service.deleteUser(uuid);
     }
-
+*/
 }

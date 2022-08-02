@@ -79,8 +79,21 @@ public class PositionController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    // TODO ask team, delete should not return anything
+    @PutMapping
+    public ResponseEntity<PositionDTO> updatePosition(PositionDTO positionDTO){
+        var position = positionService.findById(positionDTO.getUuid());
+        if(null == position)
+             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        else{
+            try {
+                positionService.update(convertToEntity(positionDTO));
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+// TODO ask team, delete should not return anything
     @DeleteMapping("{id}")
     public ResponseEntity<PositionDTO> deletePosition(@RequestParam UUID id) {
         this.positionService.delete(id);

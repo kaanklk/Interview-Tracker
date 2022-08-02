@@ -11,14 +11,17 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.util.UUID;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "person")
 public class Person {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

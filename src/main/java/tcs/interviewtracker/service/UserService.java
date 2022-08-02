@@ -32,12 +32,12 @@ public class UserService {
         return userDTO;
     }
 
-    public UserDTO getUserById(UUID uuid) throws ResourceNotFoundException {
+    public User getUserById(UUID uuid) throws ResourceNotFoundException {
         Optional<User> user = userRepo.findByUuid(uuid);
         if (!user.isPresent()) {
             throw new ResourceNotFoundException("User not found for provided Id");
         }
-        return entityToDto(user.get());
+        return user.get();
     }
 
     public UserDTO saveUser(UserDTO userDTO) throws ResourceAlreadyExistsException {

@@ -10,8 +10,7 @@ public class TechnicalDocumentationDTO {
  
     private UUID uuid;
 
-    private UUID candidateUUID;
-
+    private UUID candidateUuid;   
     private Date date;
 
     private Integer duration;
