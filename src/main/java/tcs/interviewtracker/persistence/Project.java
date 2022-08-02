@@ -30,10 +30,10 @@ public class Project {
     protected static final String TBL_NAME = "project";
 
     protected static final String FLD_NAME = "name";
-    protected static final String FLD_PROJECT_MANAGER = "project_manager";
+    protected static final String FLD_PROJECT_MANAGER = "project_manager_id";
     protected static final String FLD_DESCRIPTION = "description";
-    protected static final String FLD_RECRUITER = "recruiter";
-    protected static final String FLD_SOURCER = "sourcer";
+    protected static final String FLD_RECRUITER = "recruiter_id";
+    protected static final String FLD_SOURCER = "sourcer_id";
     protected static final String FLD_DEADLINE = "deadline";
 
     @Id
