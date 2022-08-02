@@ -1,6 +1,7 @@
 package tcs.interviewtracker.repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -46,4 +47,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     @Query(value = "SELECT P.id AS projectid, I.id AS interviewId FROM project as P JOIN interview AS I ON P.id = I.project_id JOIN interview_type AS IT ON I.type_id = IT.id WHERE IT.type_name='management_interview' AND I.project_id = ?#{project.id}", nativeQuery = true)
     List<Interview> findUpcomingManagementInterviews(@Param("project") Project project);
+
+    Optional<Project> getByUuid(UUID projectUuid);
 }
