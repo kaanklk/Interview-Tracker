@@ -2,6 +2,7 @@ package tcs.interviewtracker.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
@@ -68,7 +69,7 @@ public class ManagementDocumentationController {
             DTOs.add(manageDTO);
         }
 
-        return new ResponseEntity<List<ManagementDocumentationDTO>>(DTOs, HttpStatus.OK);
+        return new ResponseEntity<List<ManagementDocumentationDTO>>(HttpStatus.OK);
     }
 
     @GetMapping("/{manageDocId}")
@@ -148,7 +149,6 @@ public class ManagementDocumentationController {
         manageDoc.setDirectSupervisorName(manageDTO.getDirectSupervisorName());
         manageDoc.setCandidate(candidateService.getByUuid(manageDTO.getCandidateUuid()));
         manageDoc.setProject(projectService.getByUuid(manageDTO.getProjectUuid()));
-
         manageDoc.setInterviewer1(userService.getUserById(manageDTO.getInterviewer1Uuid()));
         manageDoc.setInterviewer2(userService.getUserById(manageDTO.getInterviewer2Uuid()));
 
