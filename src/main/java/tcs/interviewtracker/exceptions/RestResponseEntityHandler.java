@@ -1,5 +1,7 @@
 package tcs.interviewtracker.exceptions;
 
+import java.util.Date;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -9,14 +11,22 @@ import org.springframework.web.client.HttpClientErrorException.BadRequest;
 import org.springframework.web.client.HttpClientErrorException.Forbidden;
 import org.springframework.web.client.HttpClientErrorException.MethodNotAllowed;
 import org.springframework.web.client.HttpClientErrorException.Unauthorized;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @ControllerAdvice
 public class RestResponseEntityHandler {
 
     @ResponseBody
     @ExceptionHandler(value = ResourceAlreadyExistsException.class)
-    protected ResponseEntity<Object> handleAlreadyExists(ResourceAlreadyExistsException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    protected ResponseEntity<ErrorObject> handleAlreadyExists(ResourceAlreadyExistsException ex) {
+
+        ErrorObject errorObj = new ErrorObject();
+        errorObj.setStatusCode(HttpStatus.CONFLICT.value());
+        errorObj.setMessage(ex.getMessage());
+        errorObj.setTimestamp(new Date());
+
+
+        return new ResponseEntity<ErrorObject>(errorObj, HttpStatus.CONFLICT);
     }
 
     @ResponseBody
@@ -27,8 +37,14 @@ public class RestResponseEntityHandler {
 
     @ResponseBody
     @ExceptionHandler(value = ResourceNotFoundException.class)
-    protected ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    protected ResponseEntity<ErrorObject> handleResourceNotFoundException(ResourceNotFoundException ex) {
+
+        ErrorObject errorObj = new ErrorObject();
+        errorObj.setStatusCode(HttpStatus.NOT_FOUND.value());
+        errorObj.setMessage(ex.getMessage());
+        errorObj.setTimestamp(new Date());
+
+        return new ResponseEntity<ErrorObject>(errorObj, HttpStatus.NOT_FOUND);
     }
 
     @ResponseBody
@@ -55,5 +71,16 @@ public class RestResponseEntityHandler {
     @ExceptionHandler(value = BadRequest.class)
     protected ResponseEntity<Object> handleBadRequestException(BadRequest ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+    protected ResponseEntity<ErrorObject> handleMethodArgumentMismatchException(MethodArgumentTypeMismatchException ex) {
+        ErrorObject errorObj = new ErrorObject();
+        errorObj.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        errorObj.setMessage(ex.getMessage());
+        errorObj.setTimestamp(new Date());
+
+        return new ResponseEntity<ErrorObject>(errorObj, HttpStatus.BAD_REQUEST);
     }
 }

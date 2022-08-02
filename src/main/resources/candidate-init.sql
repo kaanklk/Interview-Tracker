@@ -1,6 +1,3 @@
--- DB init script --
-
-
 INSERT INTO person (date_of_birth, email, fname, lname, mname, phone, profile_picture_url)
     VALUES
         ('1999-01-01', 'helloman@gmail.com', 'John', 'Doe', '', '+36912345678', 'resources/pictures/profil/pp_001.jpg'),
@@ -8,24 +5,6 @@ INSERT INTO person (date_of_birth, email, fname, lname, mname, phone, profile_pi
         ('1993-08-15', 'marta.1993@gmail.com', 'Marta', 'Szabo', '', '+3656231489', 'resources/pictures/profil/pp_003.jpg'),
         ('1982-07-02', 'janos.kovacs@gmail.com', 'Janos', 'Kovacs', '', '+36852741933', 'resources/pictures/profil/pp_004.jpg'),
         ('1975-04-03', 'peter.kovacs@gmail.com', 'Peter', 'Kovacs', '', '+36953214552', 'resources/pictures/profil/pp_005.jpg');
-
-INSERT INTO project (name, projectManager, description, recruiter, sourcer, deadline)
-    VALUES
-        ('alpha', 1, 'This is a project to build a new developer team', 4, 6, DATE(2022 - 06 - 20)),
-        ('beta', 2, 'This is a project to build a new hr team', 9, 8, DATE(2022 - 01 - 23)),
-        ('gamma', 3, 'This is a project to build a new data engineer team', 11, 33, DATE(2021 - 03 - 03)),
-        ('epsilon', 4, 'This is a project to build a new frontend team', 21, 45, DATE(2022 - 02 - 02)),
-        ('omega', 5, 'This is a project to build a new backend team', 23, 7, DATE(2019 - 07 - 03));
-
-insert into postion(position_name, project_id, total_count, hired_count, open)
-vaues(
-    ("Junior Java Developer", 1, 7, 3, true),
-    ("Junior C# Developer", 2, 10, 5, true),
-    ("Senior Java Developer", 2, 11, 9, false),
-    ("Junior Data Engineer", 1, 5, 3, true),
-    ("Medor Python Developer", 2, 4, 3, false),
-    ("Junior HR Assistant", 3, 10, , true)
-)
 
 INSERT INTO candidate (cv_path, status, person_id, position_id)
     VALUES
@@ -63,28 +42,60 @@ INSERT INTO education (start_date, end_date, information, institution, candidate
         ('2008-09-01', '2011-01-04', 'MSc', 'OLTE', 4),
         ('2019-10-01', '2020-01-11', 'OKJ', 'ELTE', 5);
 
-insert into users (created_at, date_of_birth, email, employee_id, first_name, last_name, middle_name, phone_number, photo)
-values (now(), '1997-02-02', 'john.doe1@mail.ru', '1234567', 'John1', 'Doe1', 'Diego1', '+3687238323', 'url1'),
-       (now(), '1998-02-02', 'john.doe2@mail.ru', '4234567', 'John2', 'Doe2', 'Diego2', '+3687238323', 'url2'),
-	   (now(), '1999-02-02', 'john.doe3@mail.ru', '1236567', 'John3', 'Doe3', 'Diego3', '+3687238323', 'url3'),
-	   (now(), '1992-02-02', 'john.doe4@mail.ru', '1234727', 'John4', 'Doe4', 'Diego4', '+3687238323', 'url4'),
-	   (now(), '1993-02-02', 'john.doe5@mail.ru', '6734567', 'John5', 'Doe5', 'Diego5', '+3687238323', 'url5'),
-	   (now(), '1991-02-02', 'john.doe6@mail.ru', '1454567', 'John6', 'Doe6', 'Diego6', '+3687238323', 'url6'),
-	   (now(), '1996-02-02', 'john.doe7@mail.ru', '1234567', 'John7', 'Doe7', 'Diego7', '+3687238323', 'url7'),
-	   (now(), '1994-02-02', 'john.doe8@mail.ru', '3454567', 'John8', 'Doe8', 'Diego8', '+3687238323', 'url8'),
-	   (now(), '1995-02-02', 'john.doe9@mail.ru', '4344567', 'John9', 'Doe9', 'Diego9', '+3687238323', 'url9'),
-	   (now(), '1993-02-02', 'john.doe0@mail.ru', '8754567', 'John10', 'Doe10', 'Diego10', '+3687238323', 'url10');
+        INSERT INTO technical_documentation VALUES (
+1, '2000-12-12', 1, 2, 120, FALSE, 'This is the end of you', 3, 'Tech skill comment num1',
+	'Tech skill comment num2',
+	'Tech skill comment num3',
+	'Tech skill comment num4',
+	1,2,3,4,
+	8,
+	'I think he does not understand the way of Ukulele',
+	'He understood the role',
+	1, 4
+)
+INSERT INTO technical_documentation VALUES (
+2, '2010-10-10', 1, 4, 170, TRUE, 'This is not the end of you', 5, 'High leveled',
+	'High',
+	'High',
+	'VERY High',
+	2,1,5,1,
+	10,
+	'I think he does understand the way of Ukulele!',
+	'He understood the role',
+	2, 1
+)
+INSERT INTO technical_documentation VALUES (
+3, '2003-03-03', 2, 3, 200, FALSE, 'This is the biggest mistake', 3, 'Low leveled',
+	'He can turn on the computer',
+	'Wonderful',
+	'VERY High',
+	1,4,3,5,
+	2,
+	'Actually he can play the guitar',
+	'He does not understand the role, or anything else',
+	3, 3
+)
 
-insert into roles (role_name)
-values ('Adminstrator'),
-       ('Project Manager'),
-       ('Recruiter'),
-	   ('Sourcer'),
-	   ('Interviewer');
+INSERT INTO technical_documentation VALUES (
+4, '2004-04-04', 3, 2, 111, TRUE, 'This is gonna be a good idea', 5, 'Knows everything',
+	'He can turn on the computer',
+	'He can turn off the computer',
+	'Actually (s)he is a girl',
+	5,3,4,5,
+	7,
+	'Actually he can play the piano',
+	'I think he should be the boss because he knows everything about the role',
+	5, 5
+)
 
-insert into users_roles (user_id, role_id)
-values (2,4),
-       (1,3),
-       (2,5),
-	   (2,1),
-	   (4,4);
+INSERT INTO technical_documentation VALUES (
+5, '2022-11-10', 2, 1, 95, FALSE, 'Mister Architect', 4, 'MAXIMUM level',
+	'He can do everything',
+	'He can do programming in C',
+	'He does know even C++',
+	4,4,4,5,
+	9,
+	'Actually he can play the guitar',
+	'He does know everything, he is John Snow',
+	5, 2
+)

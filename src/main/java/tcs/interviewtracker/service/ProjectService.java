@@ -1,8 +1,12 @@
 package tcs.interviewtracker.service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
 import tcs.interviewtracker.persistence.Candidate;
@@ -25,87 +29,102 @@ public class ProjectService {
         return projectRepository.getReferenceById(id);
     }
 
+    public Optional<Project> getByUuidOpt(UUID uuid) {
+        return projectRepository.getByUuid(uuid);
+    }
+
     public List<Project> getAllProjects() {
         return projectRepository.findAll();
     }
 
     public Project saveProject(Project project) {
-        return projectRepository.save(project);
+        UUID newUuid = UUID.randomUUID();
+        Project savedProject = Project.builder().uuid(newUuid).recruiter(project.getRecruiter())
+                .sourcer(project.getSourcer()).deadline(project.getDeadline()).name(project.getName()).build();
+        return projectRepository.save(savedProject);
     }
 
-    public void deleteProject(Project project) {
+    public void deleteProject(Optional<Project> project) {
         projectRepository.delete(project);
     }
 
-    public List<Position> fetchProjectPositions(Long projectId) {
-        Project project = projectRepository.getReferenceById(projectId);
+    public List<Position> fetchProjectPositions(UUID uuid) {
+        Project project = projectRepository.findByUuid(uuid);
         List<Position> projectPositions = project.getProjectPositions();
         return projectPositions;
     }
 
-    public int fetchProjectPositionsCount(Long projectId) {
-        List<Position> positions = fetchProjectPositions(projectId);
+    public int fetchProjectPositionsCount(UUID uuid) {
+        List<Position> positions = fetchProjectPositions(uuid);
         return positions.size();
     }
 
-    public int fetchProjectAssocicateCount(Long projectId) {
-        Project project = projectRepository.getReferenceById(projectId);
+    public int fetchProjectAssocicateCount(UUID uuid) {
+        Project project = projectRepository.findByUuid(uuid);
         List<Position> projePositions = project.getProjectPositions();
         return projePositions.size();
     }
 
-    public List<Timeslot> fetchCompletedInterviews(Long projectId) {
-        Project project = projectRepository.getReferenceById(projectId);
+    public List<Timeslot> fetchCompletedInterviews(UUID uuid) {
+        Project project = projectRepository.findByUuid(uuid);
         List<Timeslot> timeslots = projectRepository.findByIsCompletedTrue(project);
         return timeslots;
     }
 
-    public List<Timeslot> fetchIncompletedInterviews(Long projectId) {
-        Project project = projectRepository.getReferenceById(projectId);
+    public List<Timeslot> fetchIncompletedInterviews(UUID uuid) {
+        Project project = projectRepository.findByUuid(uuid);
         List<Timeslot> timeslots = projectRepository.findByIsCompletedFalse(project);
         return timeslots;
     }
 
-    public List<Candidate> fetchPendingCandidates(Long projectId) {
-        Project project = projectRepository.getReferenceById(projectId);
+    public List<Candidate> fetchPendingCandidates(UUID uuid) {
+        Project project = projectRepository.findByUuid(uuid);
         List<Candidate> candidates = projectRepository.findPendingCandidates(project);
         return candidates;
     }
 
-    public List<Candidate> fetchRejectedCandidates(Long projectId) {
-        Project project = projectRepository.getReferenceById(projectId);
+    public List<Candidate> fetchRejectedCandidates(UUID uuid) {
+        Project project = projectRepository.findByUuid(uuid);
         List<Candidate> candidates = projectRepository.findRejectedCandidates(project);
         return candidates;
     }
 
-    public List<Candidate> fetchAcceptedCandidates(Long projectId) {
-        Project project = projectRepository.getReferenceById(projectId);
+    public List<Candidate> fetchAcceptedCandidates(UUID uuid) {
+        Project project = projectRepository.findByUuid(uuid);
         List<Candidate> candidates = projectRepository.findAcceptedCandidates(project);
         return candidates;
     }
 
-    public Integer fetchTecnicalInterviewCount(Long projectId) {
-        Project project = projectRepository.getReferenceById(projectId);
+    public Integer fetchTecnicalInterviewCount(UUID uuid) {
+        Project project = projectRepository.findByUuid(uuid);
         Integer techInterviewCount = projectRepository.findTechnicalInterviewCount(project);
         return techInterviewCount;
     }
 
-    public Integer fetchManagementIntervewCount(Long projectId) {
-        Project project = projectRepository.getReferenceById(projectId);
+    public Integer fetchManagementIntervewCount(UUID uuid) {
+        Project project = projectRepository.findByUuid(uuid);
         Integer techInterviewCount = projectRepository.findManagementInterviewCount(project);
         return techInterviewCount;
     }
 
-    public List<Interview> fetchUpcomingTecnicalInterviews(Long projectId) {
-        Project project = projectRepository.getReferenceById(projectId);
+    public List<Interview> fetchUpcomingTecnicalInterviews(UUID uuid) {
+        Project project = projectRepository.findByUuid(uuid);
         List<Interview> upcomingTechInterviews = projectRepository.findUpcomingTechnicalInterviews(project);
         return upcomingTechInterviews;
     }
 
-    public List<Interview> fetchUpcomingManagementInterviews(Long projectId) {
-        Project project = projectRepository.getReferenceById(projectId);
+    public List<Interview> fetchUpcomingManagementInterviews(UUID uuid) {
+        Project project = projectRepository.findByUuid(uuid);
         List<Interview> upcomingManagementInterviews = projectRepository.findUpcomingManagementInterviews(project);
         return upcomingManagementInterviews;
+    }
+
+    public Optional<Project> getByUuid(UUID projectUuid) {
+        return this.projectRepository.getByUuid(projectUuid);
+    }
+
+    public Project updateProject(Optional<Project> project, Project projectDetails) {
+        return null;
     }
 
 }

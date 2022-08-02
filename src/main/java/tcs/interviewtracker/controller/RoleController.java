@@ -1,6 +1,7 @@
 package tcs.interviewtracker.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,8 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import tcs.interviewtracker.DTOs.RoleDTO;
+import tcs.interviewtracker.exceptions.ResourceAlreadyExistsException;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
-import tcs.interviewtracker.persistence.Role;
 import tcs.interviewtracker.service.RoleService;
 
 @RestController
@@ -28,35 +30,35 @@ public class RoleController {
         this.service = service;
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public List<Role> getAllRoles(){
+    public List<RoleDTO> getAllRoles(){
         return service.getAllRoles();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{uuid}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public Role getRoleById(@PathVariable Long id) throws ResourceNotFoundException{
-        return service.getRoleById(id);
+    public RoleDTO getRoleById(@PathVariable UUID uuid) throws ResourceNotFoundException{
+        return service.getRoleById(uuid);
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public Role save(@RequestBody Role role){
-        return service.saveRole(role);
+    public RoleDTO save(@RequestBody RoleDTO roleDTO) throws ResourceAlreadyExistsException{
+        return service.saveRole(roleDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{uuid}")
     @ResponseStatus(HttpStatus.OK)
-    public Role updateRoleById(@PathVariable Long id, @RequestBody Role role) throws ResourceNotFoundException{
-        return service.updateRole(id,role);
+    public RoleDTO updateRoleById(@PathVariable UUID uuid, @RequestBody RoleDTO role) throws ResourceNotFoundException{
+        return service.updateRole(uuid,role);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{uuid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteRoleById(@PathVariable Long id) throws ResourceNotFoundException{
-        service.deleteRole(id);
+    public void deleteRoleById(@PathVariable UUID uuid) throws ResourceNotFoundException{
+        service.deleteRole(uuid);
     }
 }
