@@ -1,5 +1,6 @@
 package tcs.interviewtracker.DTOs;
 
+import java.util.Date;
 import java.util.UUID;
 
 import lombok.Data;
@@ -13,4 +14,5 @@ public class PositionDTO {
     private Boolean open;
     private Integer hiredCount;
     private Integer totalCount;
+    private Date deadline;
 }

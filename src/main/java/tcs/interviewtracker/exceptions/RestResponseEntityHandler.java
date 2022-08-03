@@ -25,7 +25,6 @@ public class RestResponseEntityHandler {
         errorObj.setMessage(ex.getMessage());
         errorObj.setTimestamp(new Date());
 
-
         return new ResponseEntity<ErrorObject>(errorObj, HttpStatus.CONFLICT);
     }
 
@@ -68,14 +67,15 @@ public class RestResponseEntityHandler {
     }
 
     @ResponseBody
-    @ExceptionHandler(value = BadRequest.class)
-    protected ResponseEntity<Object> handleBadRequestException(BadRequest ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+    @ExceptionHandler(value = BadRequestException.class)
+    protected ResponseEntity<Object> handleBadRequestException(BadRequestException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ResponseBody
     @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
-    protected ResponseEntity<ErrorObject> handleMethodArgumentMismatchException(MethodArgumentTypeMismatchException ex) {
+    protected ResponseEntity<ErrorObject> handleMethodArgumentMismatchException(
+            MethodArgumentTypeMismatchException ex) {
         ErrorObject errorObj = new ErrorObject();
         errorObj.setStatusCode(HttpStatus.BAD_REQUEST.value());
         errorObj.setMessage(ex.getMessage());

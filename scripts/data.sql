@@ -3,11 +3,11 @@ SET session_replication_role = 'replica';
 insert into position(id, position_name, project_id, total_count, hired_count, open, uuid)
 values
     (10, 'Junior Java Developer', 1, 7, 3, true, 'b9dc902a-11a9-11ed-861d-0242ac120002'),
-    (12,'Junior C# Developer', 2, 10, 5, true, '6d19e030-118e-11ed-861d-0242ac120002'),
-    (13,'Senior Java Developer', 3, 11, 9, false, '6f19e030118e-11ed-861d-0242ac120002'),
-    (14,'Junior Data Engineer', 4, 5, 3, true, '6f19e030-118e-11ed-861d-0242aa120002'),
-    (15, 'Medor Python Developer', 5, 4, 3, false, '6f19e030-a18e-11ed-861d-0242ac120002'),
-    (16, 'Junior HR Assistant', 3, 10, 3, true, '6f19e030-118e-1aed-861d-0242ac120002');
+    (12,'Junior C# Developer', 2, 10, 5, true, '3e157c50-1306-11ed-861d-0242ac120002'),
+    (13,'Senior Java Developer', 3, 11, 9, false, '438a7cd0-1306-11ed-861d-0242ac120002'),
+    (14,'Junior Data Engineer', 4, 5, 3, true, '46dc6b1e-1306-11ed-861d-0242ac120002'),
+    (15, 'Medor Python Developer', 5, 4, 3, false, '4ddc35d4-1306-11ed-861d-0242ac120002'),
+    (16, 'Junior HR Assistant', 3, 10, 3, true, '54fafe36-1306-11ed-861d-0242ac120002');
 
     
 INSERT INTO project (id, name, project_manager, description, recruiter, sourcer, deadline, uuid)

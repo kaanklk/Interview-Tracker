@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import tcs.interviewtracker.exceptions.ResourceAlreadyExistsException;
+import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.CandidateStatus;
 import tcs.interviewtracker.persistence.Position;
@@ -34,7 +37,12 @@ public class PositionService {
     }
 
     public Optional<Position> findByUuid(UUID id) {
-        return positionRepository.findByUuid(id);
+        var pos = positionRepository.findByUuid(id);
+
+        if (!pos.isPresent())
+            throw new ResourceNotFoundException("Position not found");
+
+        return pos;
     }
 
     public Position save(Position position) {
@@ -43,7 +51,11 @@ public class PositionService {
         return positionRepository.save(position);
     }
 
-    public void delete(UUID id) {
+    @Transactional
+    public void delete(UUID id) throws ResourceNotFoundException {
+
+        if (!positionRepository.findByUuid(id).isPresent())
+            throw new ResourceNotFoundException("Position not found");
         positionRepository.deleteByUuid(id);
     }
 

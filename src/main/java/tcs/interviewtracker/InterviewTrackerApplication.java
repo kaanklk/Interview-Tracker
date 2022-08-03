@@ -24,8 +24,4 @@ public class InterviewTrackerApplication {
 		SpringApplication.run(InterviewTrackerApplication.class, args);
 	}
 
-	@Bean
-	public ModelMapper modelMapper() {
-		return new ModelMapper();
-	}
 }
