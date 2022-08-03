@@ -10,7 +10,7 @@ import tcs.interviewtracker.service.CandidateService;
 import tcs.interviewtracker.service.PersonService;
 import tcs.interviewtracker.service.PositionService;
 
-@Mapper(componentModel = "spring", 
+@Mapper(componentModel = "spring",
         uses = {CandidateService.class, PersonService.class, PositionService.class})
 public interface CandidateMapper {
     CandidateMapper INSTANCE = Mappers.getMapper(CandidateMapper.class);

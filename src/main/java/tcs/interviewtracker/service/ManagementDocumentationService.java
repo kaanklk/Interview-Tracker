@@ -1,11 +1,19 @@
 package tcs.interviewtracker.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.ManagementDocumentation;
+import tcs.interviewtracker.persistence.Project;
+import tcs.interviewtracker.persistence.User;
 import tcs.interviewtracker.repository.ManagementDocumentationRepository;
 
 @Service
@@ -17,45 +25,83 @@ public class ManagementDocumentationService {
         this.manageRepo = manageRepo;
     }
 
-    public ManagementDocumentation getManageDocById(Long manageDocId) {
-        return manageRepo.getReferenceById(manageDocId);
+    public <Optional> ManagementDocumentation getManageDocByUuid(UUID manageDocId) {
+        return manageRepo.getReferenceByUuid(manageDocId);
     }
 
-    public List<ManagementDocumentation>  getAllManageDocs() {
+    public Page<ManagementDocumentation> findPaginated(PageRequest request) {
+        // return manageRepo.findAll(request);
+        Candidate candidate1 = new Candidate();
+        Project project1 = new Project();
+        User user1 = new User();
+        User user2 = new User();
+
+        candidate1.setId(1L);
+        candidate1.setUuid(UUID.randomUUID());
+        project1.setId(1L);
+        project1.setUuid(UUID.randomUUID());
+        user1.setId(1L);
+        user1.setUuid(UUID.randomUUID());
+        user2.setId(1L);
+        user2.setUuid(UUID.randomUUID());
+
+        ManagementDocumentation manageDoc1 = new ManagementDocumentation();
+        manageDoc1.setCandidate(candidate1);
+        manageDoc1.setProject(project1);
+        manageDoc1.setInterviewer1(user1);
+        manageDoc1.setInterviewer1(user2);
+        manageDoc1.setFitment("he/she fits");
+        manageDoc1.setOtherComments("this is a comment!");
+
+        ArrayList list = new ArrayList<>();
+        list.add(manageDoc1);
+
+        Page<ManagementDocumentation> page = new PageImpl<>(list);
+
+        return page;
+    }
+
+    public List<ManagementDocumentation> findPaginated2(PageRequest request) {
+        // return manageRepo.findAll(request);
+        Candidate candidate1 = new Candidate();
+        Project project1 = new Project();
+        User user1 = new User();
+        User user2 = new User();
+
+        candidate1.setId(1L);
+        candidate1.setUuid(UUID.randomUUID());
+        project1.setId(1L);
+        project1.setUuid(UUID.randomUUID());
+        user1.setId(1L);
+        user1.setUuid(UUID.randomUUID());
+        user2.setId(1L);
+        user2.setUuid(UUID.randomUUID());
+
+        ManagementDocumentation manageDoc1 = new ManagementDocumentation();
+        manageDoc1.setCandidate(candidate1);
+        manageDoc1.setProject(project1);
+        manageDoc1.setInterviewer1(user1);
+        manageDoc1.setInterviewer1(user2);
+        manageDoc1.setFitment("he/she fits");
+        manageDoc1.setOtherComments("this is a comment!");
+
+        ArrayList<ManagementDocumentation> list = new ArrayList<ManagementDocumentation>();
+        list.add(manageDoc1);
+
+        return list;
+    }
+
+    public List<ManagementDocumentation> getAllManageDocs() {
         return manageRepo.findAll();
     }
 
-    public void saveManageDoc(ManagementDocumentation manageDoc) {
-        manageRepo.save(manageDoc);
+    public ManagementDocumentation saveManageDoc(ManagementDocumentation manageDoc) {
+        return manageRepo.save(manageDoc);
     }
 
-    public ManagementDocumentation updateManageDoc(Long id,  ManagementDocumentation manageDoc) {
+    public ManagementDocumentation updateManageDoc(UUID id, ManagementDocumentation manageDoc) {
 
-        ManagementDocumentation updateDoc = manageRepo.findById(id).get();
-
-        updateDoc.setDateOfInterview(manageDoc.getDateOfInterview());
-        updateDoc.setMobileToWork(manageDoc.getMobileToWork());
-        updateDoc.setFloorVisit(manageDoc.getFloorVisit());
-        updateDoc.setMotivation(manageDoc.getMotivation());
-        updateDoc.setCareerAspiration(manageDoc.getCareerAspiration());
-        updateDoc.setFitment(manageDoc.getFitment());
-        updateDoc.setOpennessToDiversity(manageDoc.getOpennessToDiversity());
-        updateDoc.setProactiveness(manageDoc.getProactiveness());
-        updateDoc.setPotentionalConflict(manageDoc.getPotentionalConflict());
-        updateDoc.setTeamFit(manageDoc.getTeamFit());
-        updateDoc.setObservations(manageDoc.getObservations());
-        updateDoc.setOtherComments(manageDoc.getOtherComments());
-        updateDoc.setOtherStrengths(manageDoc.getOtherStrengths());
-        updateDoc.setOtherWeaknesses(manageDoc.getOtherWeaknesses());
-        updateDoc.setRelevantExperience(manageDoc.getRelevantExperience());
-        updateDoc.setTotalExperience(manageDoc.getTotalExperience());
-        updateDoc.setRecommended(manageDoc.getRecommended());
-        updateDoc.setRGSID(manageDoc.getRGSID());
-        updateDoc.setDirectSupervisorName(manageDoc.getDirectSupervisorName());
-        updateDoc.setCandidate(manageDoc.getCandidate());
-        updateDoc.setProject(manageDoc.getProject());
-        updateDoc.setInterviewer1(manageDoc.getInterviewer1());
-        updateDoc.setInterviewer2(manageDoc.getInterviewer2());
+        ManagementDocumentation updateDoc = manageRepo.getReferenceByUuid(id);
 
         manageRepo.save(updateDoc);
 
@@ -63,8 +109,8 @@ public class ManagementDocumentationService {
 
     }
 
-    public void deleteManageDoc(Long id) {
-        ManagementDocumentation manageDoc = manageRepo.findById(id).get();
+    public void deleteManageDoc(UUID id) {
+        ManagementDocumentation manageDoc = manageRepo.getReferenceByUuid(id);
         manageRepo.delete(manageDoc);
     }
 

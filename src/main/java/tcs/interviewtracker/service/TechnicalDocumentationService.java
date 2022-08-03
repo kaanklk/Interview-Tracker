@@ -1,14 +1,21 @@
 package tcs.interviewtracker.service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import tcs.interviewtracker.persistence.Candidate;
+import tcs.interviewtracker.persistence.Person;
+import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.persistence.TechnicalDocumentation;
+import tcs.interviewtracker.persistence.User;
 import tcs.interviewtracker.repository.TechnicalDocumentationRepository;
 
 @Service
@@ -22,26 +29,33 @@ public class TechnicalDocumentationService {
         this.techDocRepository = techDocRepository;
     }
     
-    public Optional<TechnicalDocumentation> getById(Long id){
-        return techDocRepository.findById(id);
+    public Optional<TechnicalDocumentation> getById(UUID id){
+        return techDocRepository.findByUuid(id);
     }
 
-    public List<TechnicalDocumentation> getAllTechDocs(PageRequest pageRequest){
+    public List<TechnicalDocumentation> getAllTechDocs(){
         
         return techDocRepository.findAll();
     }
+    public Page<TechnicalDocumentation> getPaginatedTechDocs(PageRequest pageRequest){
+    
+        return techDocRepository.findAll(pageRequest);
+
+    }
     public TechnicalDocumentation save (TechnicalDocumentation tD){
+        tD.setUuid(UUID.randomUUID());
         return techDocRepository.save(tD);
     }
 
+    
     public TechnicalDocumentation update(Long techId, TechnicalDocumentation techDoc){
 
         TechnicalDocumentation finalTechDoc = techDocRepository.save(techDoc);
         return finalTechDoc;
     }
 
-    public void delete(Long techId){
-        techDocRepository.deleteById(techId);
+    public void delete(TechnicalDocumentation techD){
+        techDocRepository.delete(techD);
         
     }
 }

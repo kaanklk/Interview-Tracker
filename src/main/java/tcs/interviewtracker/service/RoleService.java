@@ -1,10 +1,15 @@
 package tcs.interviewtracker.service;
 
-import java.util.List;
-import java.util.Optional;
 
+import java.util.Optional;
+import java.util.UUID;
+
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import tcs.interviewtracker.exceptions.ResourceAlreadyExistsException;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.Role;
 import tcs.interviewtracker.repository.RoleRepository;
@@ -12,49 +17,63 @@ import tcs.interviewtracker.repository.RoleRepository;
 @Service
 public class RoleService {
 
+
     private RoleRepository roleRepo;
 
     RoleService(RoleRepository repo){
        this.roleRepo = repo;
     }
 
-    public List<Role> getAllRoles(){
-       return roleRepo.findAll();
+    public Page<Role> getAllRoles(Pageable page){
+
+        Page<Role> roles = roleRepo.findAll(page);
+        return roles;
     }
 
-    public Role getRoleById(Long id) throws ResourceNotFoundException{
-        Optional<Role> role = roleRepo.findById(id);
+    public Role getRoleById(UUID uuid) throws ResourceNotFoundException{
+        Optional<Role> role = roleRepo.findByUuid(uuid);
         if(!role.isPresent()){
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException("Role name not found");
         }
         return role.get();
     }
 
-    public Role saveRole(Role role){
+    public Role saveRole(Role role) throws ResourceAlreadyExistsException{
+
+        Optional<Role> existingRole = roleRepo.findByRoleName(role.getRoleName());
+
+        if(!existingRole.isEmpty()){
+            throw new ResourceAlreadyExistsException("Role name already exists");
+        }
+
+        UUID uuid = UUID.randomUUID();
+        role.setUuid(uuid);
+
         return roleRepo.save(role);
     }
 
-    public Role updateRole(Long id, Role user) throws ResourceNotFoundException{
-        Optional<Role> roleToUpdate = roleRepo.findById(id);
+    public Role updateRole(UUID uuid, Role role) throws ResourceNotFoundException{
+        Optional<Role> roleToUpdate = roleRepo.findByUuid(uuid);
         if(!roleToUpdate.isPresent()){
-           throw new ResourceNotFoundException();
+           throw new ResourceNotFoundException("Role name not found");
         }
 
         Role updateRole = roleToUpdate.get();
-        updateRole.setRoleName(user.getRoleName());
+
+        updateRole.setRoleName(role.getRoleName());
 
         return roleRepo.save(updateRole);
     }
 
-    public void deleteRole(Long id) throws ResourceNotFoundException{
-        Optional<Role> roleToUpdate = roleRepo.findById(id);
-        if(!roleToUpdate.isPresent()){
-           throw new ResourceNotFoundException();
+    public void deleteRole(UUID uuid) throws ResourceNotFoundException{
+        Optional<Role> role = roleRepo.findByUuid(uuid);
+        if(!role.isPresent()){
+           throw new ResourceNotFoundException("Role name not found");
         }
-       roleRepo.deleteById(id);
+       roleRepo.delete(role.get());
     }
 
     public Role getByName(String roleName){
-        return roleRepo.findByRoleName(roleName);
+        return roleRepo.findByRoleName(roleName).get();
     }
 }

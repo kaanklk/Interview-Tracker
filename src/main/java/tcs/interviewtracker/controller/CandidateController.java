@@ -171,9 +171,6 @@ public class CandidateController {
             eDto.setInformation(education.getInformation());
             dto.getEducations().add(eDto);
         }
-        if () {
-
-        }
         return dto;
     }
 }

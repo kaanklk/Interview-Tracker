@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +14,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -51,6 +52,7 @@ public class User {
     private String profilePicture;
 
     @Column(name = "date_of_birth", nullable = false)
+    @JsonFormat(pattern="EEE MMM dd yyyy HH:mm:ss", timezone = "UTC")
     private Date dateOfBirth;
 
     @Column(name = "email", nullable = false)
@@ -68,4 +70,8 @@ public class User {
 
     @ManyToMany(mappedBy = "interviewers")
     Set<Position> likes;
+
+    @ManyToMany
+    Set<Project> projects;
+
 }

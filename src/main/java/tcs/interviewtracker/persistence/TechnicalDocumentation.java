@@ -90,10 +90,10 @@ public class TechnicalDocumentation {
     private User interviewerTwo;
 
     @Column(name = "designation_one", nullable = true)
-    private int designationOne;
+    private Integer designationOne;
 
     @Column(name = "designation_two", nullable = true)
-    private int designationTwo;
+    private Integer designationTwo;
 
     public TechnicalDocumentation() {
     }

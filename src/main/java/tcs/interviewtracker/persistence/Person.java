@@ -20,6 +20,7 @@ import java.util.UUID;
 @Table(name = "person")
 public class Person {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @NonNull
