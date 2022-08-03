@@ -1,13 +1,13 @@
 -- DB init script --
 
 
-INSERT INTO person(id, date_of_birth, email, fname, lname, mname, phone, profile_picture_url)
+INSERT INTO person(id, email, uuid, fname, lname, mname, phone, date_of_birth, profile_picture_url)
     VALUES
-        (1, '1999-01-01', 'helloman@gmail.com', 'John', 'Doe', 'd', '+36912345678', 'resources/pictures/profil/pp_001.jpg'),
-        (2, '1980-11-04', 'justaname@gmail.com', 'David', 'Keresztes', 'd', '+3698765432', 'resources/pictures/profil/pp_002.jpg'),
-        (3, '1993-08-15', 'marta.1993@gmail.com', 'Marta', 'Szabo', 'd', '+3656231489', 'resources/pictures/profil/pp_003.jpg'),
-        (4, '1982-07-02', 'janos.kovacs@gmail.com', 'Janos', 'Kovacs', 'd', '+36852741933', 'resources/pictures/profil/pp_004.jpg'),
-        (5, '1975-04-03', 'peter.kovacs@gmail.com', 'Peter', 'Kovacs', 'd', '+36953214552', 'resources/pictures/profil/pp_005.jpg');
+        (1,  'helloman@gmail.com', '07f16e6c-10a4-4fbf-9330-8404125b046f', 'John', 'Doe', 'd', '+36912345678', '1993-05-12', 'resources/pictures/profil/pp_001.jpg'),
+        (2,  'justaname@gmail.com', '9bacd258-0995-4295-8c79-8fe3de6da6ab', 'David', 'Keresztes', 'd', '+3698765432', '1995-05-12', 'resources/pictures/profil/pp_002.jpg'),
+        (3,  'marta.1993@gmail.com', 'b2b36375-354c-462a-a3c0-4b71bcf6e127', 'Marta', 'Sabo', 'd', '+3656231489', '1985-05-02', 'resources/pictures/profil/pp_003.jpg'),
+        (4,  'janos.kovacs@gmail.com', '0b3c5a27-7922-416d-baab-46c73ec0b7b0', 'Janos', 'Kovacs', 'd', '+36852741933', '1948-05-10', 'resources/pictures/profil/pp_004.jpg'),
+        (5,  'peter.kovacs@gmail.com', '5b6613f0-9faa-488e-95c2-418af8e6f438', 'Peter', 'Kovacs', 'd', '+36953214552', '1989-05-30', 'resources/pictures/profil/pp_005.jpg');
 
 INSERT INTO users (id, created_at, date_of_birth, email, employee_id, first_name, last_name, middle_name, phone_number, photo)
 VALUES (1, now(), '1997-02-02', 'john.doe1@mail.ru', '1234567', 'John1', 'Doe1', 'Diego1', '+3687238323', 'url1'),
@@ -39,14 +39,14 @@ values
     (5, 'Medor Python Developer', 2, 4, 3, false),
     (6, 'Junior HR Assistant', 3, 10, 4, true);
 
-INSERT INTO candidate (id, cv_path, status, person_id, position_id)
+INSERT INTO candidate (id, uuid, status, cv_path, person_id, position_id)
     VALUES
-        (1, 'resources/cv/cv_000.pdf', 'ACCEPTED', 1, 1),
-        (2, 'resources/cv/cv_001.pdf', 'REJECTED', 1, 2),
-        (3, 'resources/cv/cv_002.pdf', 'ACCEPTED', 2, 1),
-        (4, 'resources/cv/cv_003.pdf', 'ACCEPTED', 3, 2),
-        (5, 'resources/cv/cv_004.pdf', 'REJECTED', 4, 2),
-        (6, 'resources/cv/cv_005.pdf', 'ACCEPTED', 5, 2);
+        (1, '131f1987-ea30-40b1-bf0b-0791e5063599', 'ACCEPTED', 'resources/cv/cv_000.pdf',  1, 1),
+        (2, '24cc06fe-2ee2-4963-ac55-3263f1917a1c', 'REJECTED', 'resources/cv/cv_001.pdf',  1, 2),
+        (3, 'f0ea1a0a-2527-4b79-9151-e7373f95f51c', 'ACCEPTED', 'resources/cv/cv_002.pdf', 2, 1),
+        (4, '879d3947-2bd8-43bf-a089-f77fe709c25d', 'ACCEPTED', 'resources/cv/cv_003.pdf',  3, 2),
+        (5, 'ec75a941-1bdc-4000-ab09-a6a82c5cb4c4', 'REJECTED', 'resources/cv/cv_004.pdf',  4, 2),
+        (6, '20bab9a9-6058-450e-b1d6-e886dc08d53b', 'ACCEPTED', 'resources/cv/cv_005.pdf', 5, 2);
 
 INSERT INTO language (id, language, LEVEL, candidate_id)
     VALUES 
