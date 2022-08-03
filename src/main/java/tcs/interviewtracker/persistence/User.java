@@ -15,6 +15,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,6 +52,7 @@ public class User {
     private String profilePicture;
 
     @Column(name = "date_of_birth", nullable = false)
+    @JsonFormat(pattern="EEE MMM dd yyyy HH:mm:ss", timezone = "UTC")
     private Date dateOfBirth;
 
     @Column(name = "email", nullable = false)
