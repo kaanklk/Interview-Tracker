@@ -1,7 +1,8 @@
 package tcs.interviewtracker.persistence;
 
-import java.sql.Date;
+
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,6 +15,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -50,6 +53,7 @@ public class User {
     private String profilePicture;
 
     @Column(name = "date_of_birth", nullable = false)
+    @JsonFormat(pattern = "EEE MMM dd yyyy HH:mm:ss")
     private Date dateOfBirth;
 
     @Column(name = "email", nullable = false)
