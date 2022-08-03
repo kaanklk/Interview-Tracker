@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import javax.websocket.server.PathParam;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,6 @@ import tcs.interviewtracker.DTOs.LanguageDTO;
 import tcs.interviewtracker.DTOs.StatusChangeDTO;
 import tcs.interviewtracker.DTOs.WorkExperienceDTO;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
-import tcs.interviewtracker.mappers.CandidateMapper;
 import tcs.interviewtracker.mappers.StatusChangeMapper;
 import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.StatusChange;
@@ -48,6 +48,10 @@ public class CandidateController {
     @NonNull
     private PersonService personService;
 
+    @NonNull
+    @Qualifier("candidateMapper")
+    private ModelMapper candidateMapper;
+
     @GetMapping
     public ResponseEntity<List<CandidateDTO>> getCandidates(
                 @RequestParam(required = false, defaultValue = "10") Integer pagesize,
@@ -60,7 +64,7 @@ public class CandidateController {
         var candidates = candidateService.findPaginated(request);
         var dtos = new ArrayList<CandidateDTO>();
         for (var candidate : candidates) {
-            dtos.add(CandidateMapper.INSTANCE.toDTO(candidate));
+            dtos.add(convertToDTO(candidate));
         }
         return new ResponseEntity<List<CandidateDTO>>(dtos, HttpStatus.OK);
     }
@@ -70,8 +74,8 @@ public class CandidateController {
         @RequestBody(required = true) CandidateDTO dto
     ) {
 
-        var candidate = CandidateMapper.INSTANCE.toEntity(dto);
-        var responseDTO = CandidateMapper.INSTANCE.toDTO(candidateService.save(candidate));
+        var candidate = convertToEntity(dto);
+        var responseDTO = convertToDTO(candidateService.save(candidate));
         return new ResponseEntity<CandidateDTO>(responseDTO, HttpStatus.CREATED);
     }
 
@@ -81,7 +85,7 @@ public class CandidateController {
     ) {
 
         var candidate = candidateService.getByUuid(candidateUuid);
-        var responseDto = CandidateMapper.INSTANCE.toDTO(candidate);
+        var responseDto = convertToDTO(candidate);
         return new ResponseEntity<CandidateDTO>(responseDto, HttpStatus.OK);
     }
 
@@ -90,9 +94,9 @@ public class CandidateController {
                 @PathVariable(name = "candidateId", required = true) UUID candidateUuid,
                 @RequestBody CandidateDTO candidateDTO
     ) throws ResourceNotFoundException {
-        var candidate = CandidateMapper.INSTANCE.toEntity(candidateDTO);
+        var candidate = convertToEntity(candidateDTO);
         var updatedCandidate = candidateService.update(candidateUuid, candidate);
-        var responseDto = CandidateMapper.INSTANCE.toDTO(updatedCandidate);
+        var responseDto = convertToDTO(updatedCandidate);
         return new ResponseEntity<CandidateDTO>(responseDto, HttpStatus.OK);
     }
 
@@ -101,7 +105,7 @@ public class CandidateController {
                 @PathVariable(name = "candidateId", required = true) UUID candidateUuid
     ) throws ResourceNotFoundException {
         var deletedCandidate = candidateService.delete(candidateUuid);
-        var responseDto = CandidateMapper.INSTANCE.toDTO(deletedCandidate);
+        var responseDto = convertToDTO(deletedCandidate);
         return new ResponseEntity<CandidateDTO>(responseDto, HttpStatus.OK);
     }
 
@@ -127,50 +131,11 @@ public class CandidateController {
         return new ResponseEntity<StatusChangeDTO>(responseDto, HttpStatus.OK);
     }
 
-    private Candidate candidateDtoToEntity(CandidateDTO dto) {
-        var entity = new Candidate();
-        //TODO cv path
-        entity.setUuid(dto.getUuid());
-        return entity;
+    private Candidate convertToEntity(CandidateDTO dto) {
+        return candidateMapper.map(dto, Candidate.class);
     }
 
-    private CandidateDTO candidateEntityToDto(Candidate entity) {
-        var dto = new CandidateDTO();
-        dto.setUuid(entity.getUuid());
-        var person = entity.getPerson();
-        if (null != person) {
-            dto.setPositionId(person.getUuid());
-            dto.setFirstName(person.getFirstName());
-            dto.setMiddleName(person.getMiddleName());
-            dto.setLastName(person.getLastName());
-            dto.setEmail(person.getEmail());
-            dto.setPhone(person.getPhone());
-        }
-        dto.setLanguages(new ArrayList<LanguageDTO>());
-        for (var lang : entity.getLangugages()) {
-            var langDto = new LanguageDTO();
-            langDto.setLanguage(lang.getLanguage());
-            langDto.setLevel(lang.getLevel());
-            dto.getLanguages().add(langDto);
-        }
-        dto.setWorkExperiences(new ArrayList<WorkExperienceDTO>());
-        for (var work : entity.getWorkExperiences()) {
-            var workDto = new WorkExperienceDTO();
-            workDto.setStart(work.getStartDate().toString());
-            workDto.setEnd(work.getEndDate().toString());
-            workDto.setInstitution(work.getInstitution());
-            workDto.setSummary(work.getSummary());
-            dto.getWorkExperiences().add(workDto);
-        }
-        dto.setEducations(new ArrayList<EducationDTO>());
-        for (var education : entity.getEducations()) {
-            var eDto = new EducationDTO();
-            eDto.setStart(education.getStartDate().toString());
-            eDto.setEnd(education.getEndDate().toString());
-            eDto.setInstitution(education.getInstitution());
-            eDto.setInformation(education.getInformation());
-            dto.getEducations().add(eDto);
-        }
-        return dto;
+    private CandidateDTO convertToDTO(Candidate entity) {
+        return candidateMapper.map(entity, CandidateDTO.class);
     }
 }

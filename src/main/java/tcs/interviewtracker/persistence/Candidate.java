@@ -10,7 +10,6 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "candidate")
 public class Candidate {
 
     @Id
@@ -31,13 +30,14 @@ public class Candidate {
     @Column(columnDefinition = "varchar(128)")
     private CandidateStatus status;
 
-    @Column(name = "projectId")
-    private Long projectId;
+    @ManyToOne
+    private Project project;
 
     @Column(columnDefinition = "varchar(256)")
     @Nullable
     private String cvPath;
 
+    /*
     @OneToMany(mappedBy = "candidate")
     private Set<WorkExperience> workExperiences;
 
@@ -46,5 +46,6 @@ public class Candidate {
 
     @OneToMany(mappedBy = "candidate")
     private Set<Language> langugages;
+     */
 
 }
