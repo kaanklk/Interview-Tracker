@@ -136,6 +136,7 @@ public class CandidateController {
     }
 
     private CandidateDTO convertToDTO(Candidate entity) {
-        return candidateMapper.map(entity, CandidateDTO.class);
+        var dto = candidateMapper.map(entity, CandidateDTO.class);
+        return dto;
     }
 }

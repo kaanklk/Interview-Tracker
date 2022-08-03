@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 import org.springframework.lang.Nullable;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -21,19 +22,23 @@ public class Candidate {
     private UUID uuid;
 
     @ManyToOne
+    @ToString.Exclude
     private Position position;
 
     @ManyToOne
+    @JoinColumn(name="person_id", columnDefinition = "int4")
+    @ToString.Exclude
     private Person person;
 
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "varchar(128)")
-    private CandidateStatus status;
+//    @Enumerated(EnumType.STRING)
+//    @Column(columnDefinition = "varchar(128)")
+//    private CandidateStatus status;
 
     @ManyToOne
+    @ToString.Exclude
     private Project project;
 
-    @Column(columnDefinition = "varchar(256)")
+    @Column(columnDefinition = "varchar(255)")
     @Nullable
     private String cvPath;
 
@@ -47,5 +52,7 @@ public class Candidate {
     @OneToMany(mappedBy = "candidate")
     private Set<Language> langugages;
      */
+
+
 
 }

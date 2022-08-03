@@ -43,8 +43,8 @@ public class CandidateService {
         return candidateRepository.findAll();
     }
 
-    public List<Candidate> findPaginated(PageRequest request) {
-        return candidateRepository.findAll(/*request*/);
+    public Page<Candidate> findPaginated(PageRequest request) {
+        return candidateRepository.findAll(request);
     }
 
     public Candidate getByUuid(UUID uuid) {

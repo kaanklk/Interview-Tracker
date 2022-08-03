@@ -41,12 +41,12 @@ values
 
 INSERT INTO candidate (id, cv_path, status, person_id, position_id)
     VALUES
-        (1, 'resources/cv/cv_000.pdf', 'accepted', 1, 1),
-        (2, 'resources/cv/cv_001.pdf', 'rejected', 1, 2),
-        (3, 'resources/cv/cv_002.pdf', 'accepted', 2, 1),
-        (4, 'resources/cv/cv_003.pdf', 'accepted', 3, 2),
-        (5, 'resources/cv/cv_004.pdf', 'accepted', 4, 2),
-        (6, 'resources/cv/cv_005.pdf', 'accepted', 5, 2);
+        (1, 'resources/cv/cv_000.pdf', 'ACCEPTED', 1, 1),
+        (2, 'resources/cv/cv_001.pdf', 'REJECTED', 1, 2),
+        (3, 'resources/cv/cv_002.pdf', 'ACCEPTED', 2, 1),
+        (4, 'resources/cv/cv_003.pdf', 'ACCEPTED', 3, 2),
+        (5, 'resources/cv/cv_004.pdf', 'REJECTED', 4, 2),
+        (6, 'resources/cv/cv_005.pdf', 'ACCEPTED', 5, 2);
 
 INSERT INTO language (id, language, LEVEL, candidate_id)
     VALUES 
@@ -81,13 +81,13 @@ VALUES (1, 'Management Interviewer', 'aa8b7a22-4da4-41d9-8e91-023303383f4d'),
 	   (4, 'Sourcer', 'e5b73f8d-d858-468c-9934-4cbe2f083563'),
 	   (5, 'Technical Interviewer', 'ba9766e1-e3b3-4229-8639-53db4676294d');
 
-INSERT INTO user_roles (id, project_id, user_id, uuid)
+INSERT INTO user_roles (id, user_id, project_id)
 	VALUES 	
-			(1, 'd5692d0f-665d-4547-a494-5b6c3011447c', 'd0be0ead-1392-4dc5-a67b-6325d873b255', '8d706a76-e252-4f9c-af2d-c20a3c4d6e2e'),
-			(2, '50bb0218-2537-4fcb-b8c8-83449981b59c', '07bfc7f2-89ad-43d2-af00-61667754c1ce', 'd2866a36-6e15-471a-9b32-163593c4052e'),
-			(3, '0f2b581d-3d08-4d8d-8df0-11944ffa3a54', 'a7a03f20-5214-4d78-8cf5-02c2339b7f7e', 'd8d93f23-bcbb-4d44-9254-49b00253b6ee'),
-			(4, 'be1a8d14-b108-448f-97e3-508566a0b1a0', 'd246a0a7-ce00-48a2-8611-916dd073252c', 'afea27a2-99e1-48d8-9b84-b97876059ad2'),
-			(5, '1bf7c7bb-f4b6-4b9c-8156-56ebf6bdf777', '43174beb-6955-400f-b697-b7df577a6fc1', '6d521dbb-c0bd-492b-a6ff-b3d1f24d28a2');
+        (1, 1, 1),
+        (2, 2, 2),
+        (3, 3, 3),
+        (4, 4, 4),
+        (5, 5, 5);
 
 INSERT INTO users_roles (user_id, roles_role_id)
 	VALUES 	
