@@ -30,9 +30,9 @@ public class Candidate {
     @ToString.Exclude
     private Person person;
 
-//    @Enumerated(EnumType.STRING)
-//    @Column(columnDefinition = "varchar(128)")
-//    private CandidateStatus status;
+    //@Enumerated(EnumType.STRING)
+    @Column(name = "status", columnDefinition = "varchar(128)")
+    private String status;
 
     @ManyToOne
     @ToString.Exclude

@@ -64,6 +64,8 @@ public class CandidateController {
         var candidates = candidateService.findPaginated(request);
         var dtos = new ArrayList<CandidateDTO>();
         for (var candidate : candidates) {
+            var person = candidate.getPerson();
+            
             dtos.add(convertToDTO(candidate));
         }
         return new ResponseEntity<List<CandidateDTO>>(dtos, HttpStatus.OK);
