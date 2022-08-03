@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,16 +29,16 @@ public class UserRoles {
     @Column(name = "id")
     private Long id;
 
-    @Column(name="uuid")
+    @Column(name = "uuid")
     private UUID uuid;
 
     @Column(name = "user_id")
     private UUID userUuid;
 
     @ManyToMany
-    @JoinTable(name = "user_roles_role",
-        joinColumns = {@JoinColumn(name = "user_roles_id", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
+    @JoinTable(name = "user_roles_role", joinColumns = {
+            @JoinColumn(name = "user_roles_id", referencedColumnName = "id") }, inverseJoinColumns = {
+                    @JoinColumn(name = "role_id", referencedColumnName = "id") })
     private List<Role> roles;
 
     @Column(name = "project_id")

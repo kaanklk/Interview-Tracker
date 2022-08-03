@@ -9,8 +9,8 @@ values
     (15, 'Medor Python Developer', 5, 4, 3, false, '6f19e030-a18e-11ed-861d-0242ac120002'),
     (16, 'Junior HR Assistant', 3, 10, 3, true, '6f19e030-118e-1aed-861d-0242ac120002');
 
-    
-INSERT INTO project (id, name, project_manager, description, recruiter, sourcer, deadline, uuid)
+
+INSERT INTO project (id, name, project_manager_id, description, recruiter_id, sourcer_id, deadline, uuid)
     VALUES
         (1, 'alpha', 1, 'This is a project to build a new developer team', 4, 6, 2022-06-20, '79a7f7a0-1196-11ed-861d-0242ac120002'),
         (2, 'beta', 2, 'This is a project to build a new hr team', 9, 8, 2022-01-23, '80903b22-1196-11ed-861d-0242ac120002'),

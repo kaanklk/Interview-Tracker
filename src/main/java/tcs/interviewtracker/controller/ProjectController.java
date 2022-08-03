@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,14 +18,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import tcs.interviewtracker.DTOs.PositionDTO;
+import tcs.interviewtracker.DTOs.ProjectDTO;
 import tcs.interviewtracker.exceptions.ResourceAlreadyExistsException;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.Interview;
-import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.persistence.Project;
 import tcs.interviewtracker.persistence.Timeslot;
 import tcs.interviewtracker.service.ProjectService;
+
+// USE DTOS
 
 @RestController
 @RequestMapping("/projects")
@@ -36,8 +41,12 @@ public class ProjectController {
     }
 
     @GetMapping("/")
-    public List<Project> getAllDoctors() throws ResourceNotFoundException {
-        return projectService.getAllProjects();
+    public ResponseEntity<List<Project>> getAllProjects(
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "5") Integer pageSize,
+            @RequestParam(defaultValue = "name") String sortBy) throws ResourceNotFoundException {
+        List<Project> list = projectService.getAllProjects(pageNo, pageSize, sortBy);
+        return new ResponseEntity<List<Project>>(list, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping("/")
@@ -74,7 +83,7 @@ public class ProjectController {
     }
 
     @GetMapping(value = "/{id}/positions")
-    public List<Position> getProjectPositions(@PathVariable(value = "id") UUID uuid,
+    public List<PositionDTO> getProjectPositions(@PathVariable(value = "id") UUID uuid,
             @RequestParam(name = "project") Long projectId)
             throws ResourceNotFoundException {
         return projectService.fetchProjectPositions(uuid);

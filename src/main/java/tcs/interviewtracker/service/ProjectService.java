@@ -1,28 +1,40 @@
 package tcs.interviewtracker.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort.Order;
-import org.springframework.data.util.Streamable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import lombok.AllArgsConstructor;
+import tcs.interviewtracker.DTOs.PositionDTO;
 import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.Interview;
 import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.persistence.Project;
+import tcs.interviewtracker.persistence.Role;
 import tcs.interviewtracker.persistence.Timeslot;
+import tcs.interviewtracker.persistence.User;
+import tcs.interviewtracker.persistence.UserRoles;
 import tcs.interviewtracker.repository.ProjectRepository;
+import tcs.interviewtracker.repository.RoleRepository;
+import tcs.interviewtracker.repository.UserRepository;
+import tcs.interviewtracker.repository.UserRolesRepository;
 
 @Service
+@AllArgsConstructor
 public class ProjectService {
 
     private ProjectRepository projectRepository;
-
-    public ProjectService(@Autowired ProjectRepository projectRepository) {
-        this.projectRepository = projectRepository;
-    }
+    private UserRolesRepository userRolesRepository;
+    private UserRepository userRepository;
+    private RoleRepository roleRepository;
 
     public Project getByUuid(UUID uuid) {
         return projectRepository.findByUuid(uuid);
@@ -37,21 +49,27 @@ public class ProjectService {
         project.setName(projectDetails.getName());
         project.setProjectManager(projectDetails.getProjectManager());
         project.setDescription(projectDetails.getDescription());
-        project.setRecruiter(projectDetails.getProjectManager());
-        project.setSourcer(projectDetails.getProjectManager());
+        project.setRecruiters(projectDetails.getRecruiters());
+        project.setSourcers(projectDetails.getSourcers());
         project.setDeadline(projectDetails.getDeadline());
 
         return project;
     }
 
-    public List<Project> getAllProjects() {
-        return projectRepository.findAll();
+    public List<Project> getAllProjects(Integer pageNo, Integer pageSize, String sortBy) {
+        PageRequest paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Page<Project> pagedResult = projectRepository.findAll(paging);
+        if (pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<Project>();
+        }
     }
 
     public Project saveProject(Project project) {
         UUID newUuid = UUID.randomUUID();
-        Project savedProject = Project.builder().uuid(newUuid).recruiter(project.getRecruiter())
-                .sourcer(project.getSourcer()).deadline(project.getDeadline()).name(project.getName()).build();
+        Project savedProject = Project.builder().uuid(newUuid).recruiters(project.getRecruiters())
+                .sourcers(project.getSourcers()).deadline(project.getDeadline()).name(project.getName()).build();
         return projectRepository.save(savedProject);
     }
 
@@ -59,14 +77,14 @@ public class ProjectService {
         projectRepository.delete(project);
     }
 
-    public List<Position> fetchProjectPositions(UUID uuid) {
+    public List<PositionDTO> fetchProjectPositions(UUID uuid) {
         Project project = projectRepository.findByUuid(uuid);
         List<Position> projectPositions = project.getProjectPositions();
         return projectPositions;
     }
 
     public int fetchProjectPositionsCount(UUID uuid) {
-        List<Position> positions = fetchProjectPositions(uuid);
+        List<PositionDTO> positions = fetchProjectPositions(uuid);
         return positions.size();
     }
 
@@ -128,6 +146,17 @@ public class ProjectService {
         Project project = projectRepository.findByUuid(uuid);
         List<Interview> upcomingManagementInterviews = projectRepository.findUpcomingManagementInterviews(project);
         return upcomingManagementInterviews;
+    }
+
+    public List<User> fetchRecruiters(UUID projectUuid) {
+        List<UserRoles> userRole = userRolesRepository.findByProjectUuid(projectUuid);
+        Optional<Role> roleToSearch = roleRepository.findByRoleName("recruiter");
+        for (UserRoles roles : userRole) {
+            UUID userUuid = roles.getUserUuid();
+            if(roles.getRoles().equals(roleToSearch)){
+                Optional<User> newUser = userRepository.findByUuid(userUuid);
+            }
+        }
     }
 
 }
