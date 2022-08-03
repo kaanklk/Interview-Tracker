@@ -1,6 +1,8 @@
 package tcs.interviewtracker.DTOs;
 
-import java.sql.Date;
+
+
+import java.util.Date;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -16,7 +18,7 @@ public class UserDTO {
     private String middleName;
     private String employeeId;
     private String profilePicture;
-    @JsonFormat(pattern="EEE MMM dd yyyy HH:mm:ss", timezone = "UTC")
+    @JsonFormat(pattern = "EEE MMM dd yyyy HH:mm:ss")
     private Date dateOfBirth;
     private String email;
     private String phone;
