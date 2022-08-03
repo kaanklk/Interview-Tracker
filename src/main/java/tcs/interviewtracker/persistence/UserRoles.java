@@ -1,7 +1,6 @@
 package tcs.interviewtracker.persistence;
 
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,11 +29,9 @@ public class UserRoles {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "uuid")
-    private UUID uuid;
-
-    @Column(name = "user_id")
-    private UUID userUuid;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToMany
     @JoinTable(name = "user_roles_role", joinColumns = {
@@ -41,6 +39,7 @@ public class UserRoles {
                     @JoinColumn(name = "role_id", referencedColumnName = "id") })
     private List<Role> roles;
 
-    @Column(name = "project_id")
-    private UUID projectUuid;
+    @OneToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
 }
