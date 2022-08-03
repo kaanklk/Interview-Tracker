@@ -5,23 +5,23 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
-import tcs.interviewtracker.DTOs.PositionDTO;
 import tcs.interviewtracker.persistence.Candidate;
+import tcs.interviewtracker.persistence.CandidateStatus;
 import tcs.interviewtracker.persistence.Interview;
 import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.persistence.Project;
 import tcs.interviewtracker.persistence.Role;
-import tcs.interviewtracker.persistence.Timeslot;
 import tcs.interviewtracker.persistence.User;
 import tcs.interviewtracker.persistence.UserRoles;
+import tcs.interviewtracker.repository.CandidateRepository;
+import tcs.interviewtracker.repository.InterviewRepository;
+import tcs.interviewtracker.repository.PositionRepository;
 import tcs.interviewtracker.repository.ProjectRepository;
 import tcs.interviewtracker.repository.RoleRepository;
 import tcs.interviewtracker.repository.UserRepository;
@@ -35,6 +35,9 @@ public class ProjectService {
     private UserRolesRepository userRolesRepository;
     private UserRepository userRepository;
     private RoleRepository roleRepository;
+    private PositionRepository positionRepository;
+    private InterviewRepository interviewRepository;
+    private CandidateRepository candidateRepository;
 
     public Project getByUuid(UUID uuid) {
         return projectRepository.findByUuid(uuid);
@@ -47,10 +50,7 @@ public class ProjectService {
     public Project updateProject(Project project, Project projectDetails) {
 
         project.setName(projectDetails.getName());
-        project.setProjectManager(projectDetails.getProjectManager());
         project.setDescription(projectDetails.getDescription());
-        project.setRecruiters(projectDetails.getRecruiters());
-        project.setSourcers(projectDetails.getSourcers());
         project.setDeadline(projectDetails.getDeadline());
 
         return project;
@@ -68,8 +68,9 @@ public class ProjectService {
 
     public Project saveProject(Project project) {
         UUID newUuid = UUID.randomUUID();
-        Project savedProject = Project.builder().uuid(newUuid).recruiters(project.getRecruiters())
-                .sourcers(project.getSourcers()).deadline(project.getDeadline()).name(project.getName()).build();
+        Project savedProject = Project.builder().uuid(newUuid).deadline(project.getDeadline()).name(project.getName())
+                .description(project.getDescription())
+                .build();
         return projectRepository.save(savedProject);
     }
 
@@ -77,86 +78,207 @@ public class ProjectService {
         projectRepository.delete(project);
     }
 
-    public List<PositionDTO> fetchProjectPositions(UUID uuid) {
+    public List<Position> fetchProjectPositions(UUID uuid) {
         Project project = projectRepository.findByUuid(uuid);
-        List<Position> projectPositions = project.getProjectPositions();
-        return projectPositions;
+        List<Position> positions = positionRepository.findAll();
+        List<Position> projectPostions = new ArrayList<Position>();
+        for (Position pos : positions) {
+            if (pos.getProject().equals(project)) {
+                projectPostions.add(pos);
+            }
+        }
+        return projectPostions;
     }
 
     public int fetchProjectPositionsCount(UUID uuid) {
-        List<PositionDTO> positions = fetchProjectPositions(uuid);
-        return positions.size();
+        Project project = projectRepository.findByUuid(uuid);
+        List<Position> positions = positionRepository.findAll();
+        List<Position> projectPostions = new ArrayList<Position>();
+        for (Position pos : positions) {
+            if (pos.getProject().equals(project)) {
+                projectPostions.add(pos);
+            }
+        }
+        return projectPostions.size();
     }
 
     public int fetchProjectAssocicateCount(UUID uuid) {
         Project project = projectRepository.findByUuid(uuid);
-        List<Position> projePositions = project.getProjectPositions();
-        return projePositions.size();
+        List<User> users = userRepository.findAll();
+        int associateCount = 0;
+        for (User usr : users) {
+            if (usr.getProjects().contains(project)) {
+                associateCount++;
+            }
+        }
+        return associateCount;
     }
 
-    public List<Timeslot> fetchCompletedInterviews(UUID uuid) {
+    public List<Interview> fetchCompletedInterviews(UUID uuid) {
         Project project = projectRepository.findByUuid(uuid);
-        List<Timeslot> timeslots = projectRepository.findByIsCompletedTrue(project);
-        return timeslots;
+        List<Interview> interviews = interviewRepository.findAll();
+        List<Interview> completedInterviews = new ArrayList<Interview>();
+        for (Interview inter : interviews) {
+            if (inter.getProjectId() == project.getId()) {
+                if (inter.getIsCompleted() == true) {
+                    completedInterviews.add(inter);
+                }
+            }
+        }
+        return completedInterviews;
     }
 
-    public List<Timeslot> fetchIncompletedInterviews(UUID uuid) {
+    public List<Interview> fetchIncompletedInterviews(UUID uuid) {
         Project project = projectRepository.findByUuid(uuid);
-        List<Timeslot> timeslots = projectRepository.findByIsCompletedFalse(project);
-        return timeslots;
+        List<Interview> interviews = interviewRepository.findAll();
+        List<Interview> completedInterviews = new ArrayList<Interview>();
+        for (Interview inter : interviews) {
+            if (inter.getProjectId() == project.getId()) {
+                if (inter.getIsCompleted() == false) {
+                    completedInterviews.add(inter);
+                }
+            }
+        }
+        return completedInterviews;
     }
 
     public List<Candidate> fetchPendingCandidates(UUID uuid) {
         Project project = projectRepository.findByUuid(uuid);
-        List<Candidate> candidates = projectRepository.findPendingCandidates(project);
-        return candidates;
-    }
+        List<Candidate> candidates = candidateRepository.findAll();
+        List<Candidate> pendingCandidates = new ArrayList<Candidate>();
+        for (Candidate c : candidates) {
+            if (c.getProjectId() == project.getId()) {
+                if (c.getStatus() != CandidateStatus.REJECTED || c.getStatus() != CandidateStatus.OFFER_ACCEPTED) {
+                    pendingCandidates.add(c);
+                }
+            }
 
-    public List<Candidate> fetchRejectedCandidates(UUID uuid) {
-        Project project = projectRepository.findByUuid(uuid);
-        List<Candidate> candidates = projectRepository.findRejectedCandidates(project);
-        return candidates;
+        }
+        return pendingCandidates;
     }
 
     public List<Candidate> fetchAcceptedCandidates(UUID uuid) {
         Project project = projectRepository.findByUuid(uuid);
-        List<Candidate> candidates = projectRepository.findAcceptedCandidates(project);
-        return candidates;
+        List<Candidate> candidates = candidateRepository.findAll();
+        List<Candidate> pendingCandidates = new ArrayList<Candidate>();
+        for (Candidate c : candidates) {
+            if (c.getProjectId() == project.getId()) {
+                if (c.getStatus() == CandidateStatus.OFFER_ACCEPTED) {
+                    pendingCandidates.add(c);
+                }
+            }
+
+        }
+        return pendingCandidates;
+    }
+
+    public List<Candidate> fetchRejectedCandidates(UUID uuid) {
+        Project project = projectRepository.findByUuid(uuid);
+        List<Candidate> candidates = candidateRepository.findAll();
+        List<Candidate> pendingCandidates = new ArrayList<Candidate>();
+        for (Candidate c : candidates) {
+            if (c.getProjectId() == project.getId()) {
+                if (c.getStatus() == CandidateStatus.REJECTED) {
+                    pendingCandidates.add(c);
+                }
+            }
+
+        }
+        return pendingCandidates;
     }
 
     public Integer fetchTecnicalInterviewCount(UUID uuid) {
         Project project = projectRepository.findByUuid(uuid);
-        Integer techInterviewCount = projectRepository.findTechnicalInterviewCount(project);
-        return techInterviewCount;
+        List<Interview> interviews = interviewRepository.findAll();
+        List<Interview> technicalInterviews = new ArrayList<Interview>();
+        for (Interview inter : interviews) {
+            if (inter.getProjectId() == project.getId()) {
+                if (inter.getType() == "technical") {
+                    technicalInterviews.add(inter);
+                }
+            }
+        }
+        return technicalInterviews.size();
     }
 
-    public Integer fetchManagementIntervewCount(UUID uuid) {
+    public Integer fetchManagementInterviewCount(UUID uuid) {
         Project project = projectRepository.findByUuid(uuid);
-        Integer techInterviewCount = projectRepository.findManagementInterviewCount(project);
-        return techInterviewCount;
+        List<Interview> interviews = interviewRepository.findAll();
+        List<Interview> technicalInterviews = new ArrayList<Interview>();
+        for (Interview inter : interviews) {
+            if (inter.getProjectId() == project.getId()) {
+                if (inter.getType() == "management") {
+                    technicalInterviews.add(inter);
+                }
+            }
+        }
+        return technicalInterviews.size();
     }
 
     public List<Interview> fetchUpcomingTecnicalInterviews(UUID uuid) {
         Project project = projectRepository.findByUuid(uuid);
-        List<Interview> upcomingTechInterviews = projectRepository.findUpcomingTechnicalInterviews(project);
-        return upcomingTechInterviews;
+        List<Interview> interviews = interviewRepository.findAll();
+        List<Interview> upcomingTechnicalInterviews = new ArrayList<Interview>();
+        for (Interview inter : interviews) {
+            if (inter.getProjectId() == project.getId() && inter.getIsCompleted() == false) {
+                if (inter.getType() == "teehnical") {
+                    upcomingTechnicalInterviews.add(inter);
+                }
+            }
+        }
+        return upcomingTechnicalInterviews;
     }
 
     public List<Interview> fetchUpcomingManagementInterviews(UUID uuid) {
         Project project = projectRepository.findByUuid(uuid);
-        List<Interview> upcomingManagementInterviews = projectRepository.findUpcomingManagementInterviews(project);
+        List<Interview> interviews = interviewRepository.findAll();
+        List<Interview> upcomingManagementInterviews = new ArrayList<Interview>();
+        for (Interview inter : interviews) {
+            if (inter.getProjectId() == project.getId() && inter.getIsCompleted() == false) {
+                if (inter.getType() == "management") {
+                    upcomingManagementInterviews.add(inter);
+                }
+            }
+        }
         return upcomingManagementInterviews;
     }
 
     public List<User> fetchRecruiters(UUID projectUuid) {
-        List<UserRoles> userRole = userRolesRepository.findByProjectUuid(projectUuid);
-        Optional<Role> roleToSearch = roleRepository.findByRoleName("recruiter");
-        for (UserRoles roles : userRole) {
-            UUID userUuid = roles.getUserUuid();
-            if(roles.getRoles().equals(roleToSearch)){
-                Optional<User> newUser = userRepository.findByUuid(userUuid);
+        Project project = projectRepository.findByUuid(projectUuid);
+        Optional<Role> recruiterRole = roleRepository.findByRoleName("recruiter");
+        List<UserRoles> userRoles = userRolesRepository.findByProject(project);
+        List<User> recruiters = new ArrayList<User>();
+        for (UserRoles uRoles : userRoles) {
+            if (uRoles.getRoles().contains(recruiterRole.get())) {
+                recruiters.add(uRoles.getUser());
             }
         }
+        return recruiters;
     }
 
+    public List<User> fetchSourcers(UUID projectUuid) {
+        Project project = projectRepository.findByUuid(projectUuid);
+        Optional<Role> sourcerRole = roleRepository.findByRoleName("sourcer");
+        List<UserRoles> userRoles = userRolesRepository.findByProject(project);
+        List<User> sourcers = new ArrayList<User>();
+        for (UserRoles uRoles : userRoles) {
+            if (uRoles.getRoles().contains(sourcerRole.get())) {
+                sourcers.add(uRoles.getUser());
+            }
+        }
+        return sourcers;
+    }
+
+    public User fetchProjectManager(UUID projectUuid) {
+        Project project = projectRepository.findByUuid(projectUuid);
+        Optional<Role> projectManagerRole = roleRepository.findByRoleName("project_manager");
+        List<UserRoles> userRoles = userRolesRepository.findByProject(project);
+        User projectManager = null;
+        for (UserRoles uRoles : userRoles) {
+            if (uRoles.getRoles().contains(projectManagerRole.get())) {
+                projectManager = uRoles.getUser();
+            }
+        }
+        return projectManager;
+    }
 }

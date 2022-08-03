@@ -52,33 +52,10 @@ public class Project {
     @Column(name = FLD_NAME, nullable = false)
     private String name;
 
-    @Column(name = FLD_PROJECT_MANAGER)
-    private User projectManager;
-
     @JoinColumn(name = FLD_DESCRIPTION, referencedColumnName = "id", nullable = false)
     private String description;
 
-    // @Column(name = FLD_RECRUITER)
-    // @OneToOne()
-    // private List<UUID> recruiters;
-
-    // @Column(name = FLD_SOURCER)
-    // @ManyToMany
-    // private List<UUID> sourcers;
-
-    // @Column(name = FLD_INTERVIEWERS)
-    // @ManyToMany
-    // private List<User> interviewers;
-
     @Column(name = FLD_DEADLINE, nullable = true)
     private String deadline;
-
-    @Column(name = FLD_PROJECT_POSITIONS)
-    @OneToMany(targetEntity = UserRoles.class, mappedBy = "roles", fetch = FetchType.EAGER)
-    private List<Position> projectPositions;
-
-    @Column(name = FLD_PROJECT_ASSOCIATES)
-    @OneToMany(targetEntity = UserRoles.class, mappedBy = "uuid", fetch = FetchType.EAGER)
-    private List<User> projectAssocicates;
 
 }
