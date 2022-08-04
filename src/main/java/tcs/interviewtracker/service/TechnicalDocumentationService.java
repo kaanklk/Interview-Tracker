@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.Person;
 import tcs.interviewtracker.persistence.Position;
@@ -62,7 +63,11 @@ public class TechnicalDocumentationService {
         return finalTechDoc;
     }
 
-    public void delete(TechnicalDocumentation techD){
+    public void delete(UUID techID) throws ResourceNotFoundException{
+        if(!techDocRepository.findByUuid(techID).isPresent()){
+            throw new ResourceNotFoundException("Technical documentation not found!");
+        }       
+        TechnicalDocumentation techD = techDocRepository.findByUuid(techID).get();
         techDocRepository.delete(techD);
         
     }
