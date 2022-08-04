@@ -1,7 +1,5 @@
 package tcs.interviewtracker.service;
 
-
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -11,15 +9,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import tcs.interviewtracker.DTOs.RoleDTO;
+
 import tcs.interviewtracker.DTOs.UserRolesDTO;
+import tcs.interviewtracker.exceptions.ResourceAlreadyExistsException;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.Project;
 import tcs.interviewtracker.persistence.User;
 import tcs.interviewtracker.persistence.UserRoles;
-import tcs.interviewtracker.repository.ProjectRepository;
-import tcs.interviewtracker.repository.RoleRepository;
-import tcs.interviewtracker.repository.UserRepository;
 import tcs.interviewtracker.repository.UserRolesRepository;
 
 @Service
@@ -28,11 +24,9 @@ public class UserRolesService {
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
-    private RoleRepository roleRepo;
+    private UserService userService;
     @Autowired
-    private UserRepository userRepo;
-    @Autowired
-    private ProjectRepository projectRepo;
+    private ProjectService projectService;
 
 
     private UserRolesRepository userRolesRepo;
@@ -40,52 +34,49 @@ public class UserRolesService {
         this.userRolesRepo = userRolesRepo;
     }
 
-    public List<UserRolesDTO> getAllRoles(UUID userUuid) throws ResourceNotFoundException{
-        List<UserRolesDTO> userRolesDTO = Arrays.asList(modelMapper.map(userRolesRepo.findByUserUuid(userUuid), UserRolesDTO[].class));
-        return userRolesDTO;
+    public List<UserRoles> getAllRoles(UUID userUuid) throws ResourceNotFoundException{
+
+        User user = userService.getUserById(userUuid);
+        List<UserRoles> userRoles = userRolesRepo.findByUser(user);
+        return userRoles;
     }
 
-    public UserRoles getRoleForSpecificProject(UUID userUuid, UUID userRolesUuid) throws ResourceNotFoundException{
-        Optional<UserRoles> userRole = userRolesRepo.findByUuid(userRolesUuid);
+    public UserRoles getRoleForSpecificProject(UUID userUuid, UUID projectUuid) throws ResourceNotFoundException{
+        User user = userService.getUserById(userUuid);
+        Project project = projectService.getByUuid(projectUuid);
+
+        Optional<UserRoles> userRole = userRolesRepo.findByUserAndProject(user, project);
 
         if(!userRole.isPresent()){
-            throw new ResourceNotFoundException();
+            throw new ResourceNotFoundException("Not assigned or wrong id");
         }
 
         return userRole.get();
     }
 
-    public UserRoles saveUserRole(UserRoles userRoles){
-        UUID uuid = UUID.randomUUID();
-        userRoles.setUuid(uuid);
+    public UserRoles saveUserRole(UserRoles userRoles) throws ResourceAlreadyExistsException{
+        Optional<UserRoles> checkExisting = userRolesRepo.findByUserAndProject(userRoles.getUser(), userRoles.getProject());
+
+        if(checkExisting.isPresent()){
+            throw new ResourceAlreadyExistsException("User already assigned for this project, try to modify it");
+        }
 
         return userRolesRepo.save(userRoles);
     }
 
-    public UserRoles setNewRoleforExistingUser(UUID uuid, UserRoles userRole) throws ResourceNotFoundException{
-        Optional<UserRoles> userRoleToUpdate = userRolesRepo.findByUuid(uuid);
-
-        if(!userRoleToUpdate.isPresent()){
-            throw new ResourceNotFoundException();
-        }
-
+    public UserRoles setNewRoleforExistingUser(UserRoles userRole) throws ResourceNotFoundException{
         return userRolesRepo.save(userRole);
     }
 
-    public void deleteUserRole(UUID uuid) throws ResourceNotFoundException{
-        Optional<UserRoles> userRole = userRolesRepo.findByUuid(uuid);
-
-        if(!userRole.isPresent()){
-            throw new ResourceNotFoundException();
-        }
-
-        userRolesRepo.deleteById(userRole.get().getId());
+    public void deleteUserRole(UUID userUuid, UUID projectUuid) throws ResourceNotFoundException{
+        UserRoles userRole = getRoleForSpecificProject(userUuid, projectUuid);
+        userRolesRepo.deleteById(userRole.getId());
     }
 
-
+ /*
     public void updateProject(UserRolesDTO userRolesDTO){
 
-        UUID user_id = userRolesDTO.getUserUuid();
+        UUID user_id = userRolesDTO.getUser().getUuid();
         UUID project_id = userRolesDTO.getProjectUuid();
         User user = userRepo.findByUuid(user_id).get();
 
@@ -101,9 +92,9 @@ public class UserRolesService {
 
         List<RoleDTO> roles = userRolesDTO.getRoles();
 
-        UUID project_manager_id = roleRepo.findByRoleName("Project Manager").get().getUuid();
-        UUID recruiter_id = roleRepo.findByRoleName("Recruiter").get().getUuid();
-        UUID sourcer_id = roleRepo.findByRoleName("Sourcer").get().getUuid();
+     //   UUID project_manager_id = roleRepo.findByRoleName("Project Manager").get().getUuid();
+     //   UUID recruiter_id = roleRepo.findByRoleName("Recruiter").get().getUuid();
+     //   UUID sourcer_id = roleRepo.findByRoleName("Sourcer").get().getUuid();
 
 
         for(RoleDTO role : roles){
@@ -119,7 +110,7 @@ public class UserRolesService {
 
     }
 
-
+*/
 
 
 
