@@ -1,8 +1,10 @@
 package tcs.interviewtracker.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -51,7 +53,6 @@ public class ProjectService {
 
         project.setName(projectDetails.getName());
         project.setDescription(projectDetails.getDescription());
-        project.setDeadline(projectDetails.getDeadline());
 
         return project;
     }
@@ -68,7 +69,7 @@ public class ProjectService {
 
     public Project saveProject(Project project) {
         UUID newUuid = UUID.randomUUID();
-        Project savedProject = Project.builder().uuid(newUuid).deadline(project.getDeadline()).name(project.getName())
+        Project savedProject = Project.builder().uuid(newUuid).name(project.getName())
                 .description(project.getDescription())
                 .build();
         return projectRepository.save(savedProject);
@@ -280,5 +281,18 @@ public class ProjectService {
             }
         }
         return projectManager;
+    }
+
+    public Set<User> fetchInterviewers(UUID projectUuid) {
+        Project project = projectRepository.findByUuid(projectUuid).get();
+        List<Interview> interviewToCheckInterviewers = interviewRepository.findByProjectId(project.getId());
+        Set<User> projectInterviewers = new HashSet<User>();
+        for (Interview inter : interviewToCheckInterviewers) {
+            User interviewerOne = userRepository.getReferenceById(inter.getInterviewerOneId());
+            User interviewerTwo = userRepository.getReferenceById(inter.getInterviewerTwoId());
+            projectInterviewers.add(interviewerOne);
+            projectInterviewers.add(interviewerTwo);
+        }
+        return projectInterviewers;
     }
 }

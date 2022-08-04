@@ -2,6 +2,7 @@ package tcs.interviewtracker.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<Project>> getAllProjects(
             @RequestParam(defaultValue = "0") Integer pageNo,
             @RequestParam(defaultValue = "5") Integer pageSize,
@@ -47,7 +48,7 @@ public class ProjectController {
         return new ResponseEntity<List<Project>>(list, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public Project createNewProject(@Validated @RequestBody Project project) throws ResourceNotFoundException {
         return projectService.saveProject(project);
     }
@@ -112,98 +113,93 @@ public class ProjectController {
     }
 
     @GetMapping(value = "/{id}/positions")
-    public ResponseEntity<List<Position>> getProjectPositions(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId) {
+    public ResponseEntity<List<Position>> getProjectPositions(@PathVariable(value = "id") UUID uuid) {
         List<Position> projectPositions = projectService.fetchProjectPositions(uuid);
         return new ResponseEntity<List<Position>>(projectPositions, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/position-count")
-    public ResponseEntity<Integer> getPositionCount(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    public ResponseEntity<Integer> getPositionCount(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         int positionCount = projectService.fetchProjectPositionsCount(uuid);
         return new ResponseEntity<Integer>(positionCount, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/assosciate-count")
-    public ResponseEntity<Integer> getAssosicateCount(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    public ResponseEntity<Integer> getAssosicateCount(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         int associateCount = projectService.fetchProjectAssocicateCount(uuid);
         return new ResponseEntity<Integer>(associateCount, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/incomplete-interviews")
-    public ResponseEntity<List<Interview>> getInCompleteInterviews(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project", required = true) Long projectId)
+    public ResponseEntity<List<Interview>> getInCompleteInterviews(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         List<Interview> interviews = projectService.fetchIncompletedInterviews(uuid);
         return new ResponseEntity<List<Interview>>(interviews, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/complete-interviews")
-    public ResponseEntity<List<Interview>> getCompletedInterviews(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    public ResponseEntity<List<Interview>> getCompletedInterviews(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         List<Interview> interviews = projectService.fetchCompletedInterviews(uuid);
         return new ResponseEntity<List<Interview>>(interviews, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/pending-candidates")
-    public ResponseEntity<List<Candidate>> getPendingCandidates(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    public ResponseEntity<List<Candidate>> getPendingCandidates(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         List<Candidate> pendingCandidates = projectService.fetchPendingCandidates(uuid);
         return new ResponseEntity<List<Candidate>>(pendingCandidates, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/rejected-candidates")
-    public ResponseEntity<List<Candidate>> getRejectedCandidates(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    public ResponseEntity<List<Candidate>> getRejectedCandidates(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         List<Candidate> rejectedCandidates = projectService.fetchRejectedCandidates(uuid);
         return new ResponseEntity<List<Candidate>>(rejectedCandidates, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/accepted-candidates")
-    public ResponseEntity<List<Candidate>> getAcceptedCandidates(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    public ResponseEntity<List<Candidate>> getAcceptedCandidates(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         List<Candidate> acceptedCandidates = projectService.fetchAcceptedCandidates(uuid);
         return new ResponseEntity<List<Candidate>>(acceptedCandidates, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}/techical-interview-count")
-    public ResponseEntity<Integer> getTechnicalInterviewCount(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    @GetMapping(value = "/{id}/technical-interview-count")
+    public ResponseEntity<Integer> getTechnicalInterviewCount(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         Integer technicalInterviewCount = projectService.fetchTecnicalInterviewCount(uuid);
         return new ResponseEntity<Integer>(technicalInterviewCount, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/management-interview-count")
-    public ResponseEntity<Integer> getManagementInterviewCount(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    public ResponseEntity<Integer> getManagementInterviewCount(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         Integer managemenInterviewCount = projectService.fetchManagementInterviewCount(uuid);
         return new ResponseEntity<Integer>(managemenInterviewCount, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}/upcoming-tecnical-interviews")
-    public ResponseEntity<List<Interview>> getUpcomingTechnicalInterviews(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    @GetMapping(value = "/{id}/upcoming-technical-interviews")
+    public ResponseEntity<List<Interview>> getUpcomingTechnicalInterviews(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         List<Interview> upcomingTechInterviews = projectService.fetchUpcomingTecnicalInterviews(uuid);
         return new ResponseEntity<List<Interview>>(upcomingTechInterviews, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/upcoming-management-interviews")
-    public ResponseEntity<List<Interview>> getUpcomingManagementInterviews(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    public ResponseEntity<List<Interview>> getUpcomingManagementInterviews(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         List<Interview> upcomingManagemeInterviews = projectService.fetchUpcomingManagementInterviews(uuid);
         return new ResponseEntity<List<Interview>>(upcomingManagemeInterviews, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}/interviewers")
+    public ResponseEntity<Set<User>> getInterviewers(@PathVariable(name = "id") UUID uuid)
+            throws ResourceNotFoundException {
+        Set<User> interviewers = projectService.fetchInterviewers(uuid);
+        return new ResponseEntity<Set<User>>(interviewers, new HttpHeaders(), HttpStatus.OK);
     }
 
 }
