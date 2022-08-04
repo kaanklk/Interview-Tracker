@@ -9,7 +9,7 @@ import tcs.interviewtracker.persistence.Role;
 
 public interface RoleRepository extends JpaRepository<Role, Long> {
     Optional<Role> findByRoleName(String roleName);
-    Optional<Role> findByUuid(UUID uuid);
 
+    Optional<Role> findByUuid(UUID uuid);
 
 }

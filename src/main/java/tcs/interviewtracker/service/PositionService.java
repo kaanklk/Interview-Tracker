@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import tcs.interviewtracker.exceptions.ResourceAlreadyExistsException;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.Candidate;
-import tcs.interviewtracker.persistence.CandidateStatus;
 import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.repository.PositionRepository;
 
@@ -81,9 +80,12 @@ public class PositionService {
         var hired = 0;
 
         for (Candidate candidate : candidates) {
-            if (candidate.getPosition().getId() == positionId
-                    && candidate.getStatus() == CandidateStatus.OFFER_ACCEPTED)
-                hired++;
+            /*
+             * if (candidate.getPosition().getId() == positionId
+             * && candidate.getStatus() == CandidateStatus.OFFER_ACCEPTED)
+             * hired++;
+             * 
+             */
         }
 
         return hired;
