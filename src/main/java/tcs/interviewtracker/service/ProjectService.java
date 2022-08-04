@@ -1,9 +1,12 @@
 package tcs.interviewtracker.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
 import tcs.interviewtracker.persistence.Candidate;
@@ -22,24 +25,12 @@ public class ProjectService {
         this.projectRepository = projectRepository;
     }
 
-    public Project getByUuid(UUID uuid) {
-        return projectRepository.findByUuid(uuid);
-    }
-
     public Project getById(Long id) {
         return projectRepository.getReferenceById(id);
     }
 
-    public Project updateProject(Project project, Project projectDetails) {
-
-        project.setName(projectDetails.getName());
-        project.setProjectManager(projectDetails.getProjectManager());
-        project.setDescription(projectDetails.getDescription());
-        project.setRecruiter(projectDetails.getProjectManager());
-        project.setSourcer(projectDetails.getProjectManager());
-        project.setDeadline(projectDetails.getDeadline());
-
-        return project;
+    public Optional<Project> getByUuidOpt(UUID uuid) {
+        return projectRepository.getByUuid(uuid);
     }
 
     public List<Project> getAllProjects() {
@@ -126,6 +117,14 @@ public class ProjectService {
         Project project = projectRepository.findByUuid(uuid);
         List<Interview> upcomingManagementInterviews = projectRepository.findUpcomingManagementInterviews(project);
         return upcomingManagementInterviews;
+    }
+
+    public Project getByUuid(UUID projectUuid) {
+        return this.projectRepository.findByUuid(projectUuid);
+    }
+
+    public Project updateProject(Project project, Project projectDetails) {
+        return null;
     }
 
 }
