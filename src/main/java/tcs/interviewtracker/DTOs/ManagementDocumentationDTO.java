@@ -48,13 +48,13 @@ public class ManagementDocumentationDTO {
 
     private String directSupervisorName;
 
-    private UUID candidateId;
+    private UUID candidateUuid;
 
-    private UUID  projectId;
+    private UUID  projectUuid;
 
-    private UUID interviewer1Id;
+    private UUID interviewer1Uuid;
 
-    private UUID interviewer2Id;
+    private UUID interviewer2Uuid;
 
     public ManagementDocumentationDTO() {
 
