@@ -2,11 +2,7 @@ package tcs.interviewtracker.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-
-import javax.annotation.PostConstruct;
-import javax.websocket.server.PathParam;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,7 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,14 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import tcs.interviewtracker.DTOs.CandidateDTO;
-import tcs.interviewtracker.DTOs.EducationDTO;
-import tcs.interviewtracker.DTOs.LanguageDTO;
 import tcs.interviewtracker.DTOs.StatusChangeDTO;
-import tcs.interviewtracker.DTOs.WorkExperienceDTO;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.mappers.StatusChangeMapper;
 import tcs.interviewtracker.persistence.Candidate;
-import tcs.interviewtracker.persistence.StatusChange;
 import tcs.interviewtracker.service.CandidateService;
 import tcs.interviewtracker.service.PersonService;
 
@@ -63,9 +54,7 @@ public class CandidateController {
                         (orderDirection.equals("ascending"))? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending());
         var candidates = candidateService.findPaginated(request);
         var dtos = new ArrayList<CandidateDTO>();
-        for (var candidate : candidates) {
-            var person = candidate.getPerson();
-            
+        for (var candidate : candidates) {            
             dtos.add(convertToDTO(candidate));
         }
         return new ResponseEntity<List<CandidateDTO>>(dtos, HttpStatus.OK);
