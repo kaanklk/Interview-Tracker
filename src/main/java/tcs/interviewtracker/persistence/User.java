@@ -1,7 +1,8 @@
 package tcs.interviewtracker.persistence;
 
-import java.sql.Date;
+
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -52,7 +53,7 @@ public class User {
     private String profilePicture;
 
     @Column(name = "date_of_birth", nullable = false)
-    @JsonFormat(pattern="EEE MMM dd yyyy HH:mm:ss", timezone = "UTC")
+    @JsonFormat(pattern = "EEE MMM dd yyyy HH:mm:ss")
     private Date dateOfBirth;
 
     @Column(name = "email", nullable = false)
