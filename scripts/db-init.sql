@@ -1,13 +1,13 @@
 -- DB init script --
 
 
-INSERT INTO person(id, date_of_birth, email, fname, lname, mname, phone, profile_picture_url)
+INSERT INTO person(id, email, uuid, fname, lname, mname, phone, date_of_birth, profile_picture_url)
     VALUES
-        (1, '1999-01-01', 'helloman@gmail.com', 'John', 'Doe', 'd', '+36912345678', 'resources/pictures/profil/pp_001.jpg'),
-        (2, '1980-11-04', 'justaname@gmail.com', 'David', 'Keresztes', 'd', '+3698765432', 'resources/pictures/profil/pp_002.jpg'),
-        (3, '1993-08-15', 'marta.1993@gmail.com', 'Marta', 'Szabo', 'd', '+3656231489', 'resources/pictures/profil/pp_003.jpg'),
-        (4, '1982-07-02', 'janos.kovacs@gmail.com', 'Janos', 'Kovacs', 'd', '+36852741933', 'resources/pictures/profil/pp_004.jpg'),
-        (5, '1975-04-03', 'peter.kovacs@gmail.com', 'Peter', 'Kovacs', 'd', '+36953214552', 'resources/pictures/profil/pp_005.jpg');
+        (1,  'helloman@gmail.com', '07f16e6c-10a4-4fbf-9330-8404125b046f', 'John', 'Doe', 'd', '+36912345678', '1993-05-12', 'resources/pictures/profil/pp_001.jpg'),
+        (2,  'justaname@gmail.com', '9bacd258-0995-4295-8c79-8fe3de6da6ab', 'David', 'Keresztes', 'd', '+3698765432', '1995-05-12', 'resources/pictures/profil/pp_002.jpg'),
+        (3,  'marta.1993@gmail.com', 'b2b36375-354c-462a-a3c0-4b71bcf6e127', 'Marta', 'Sabo', 'd', '+3656231489', '1985-05-02', 'resources/pictures/profil/pp_003.jpg'),
+        (4,  'janos.kovacs@gmail.com', '0b3c5a27-7922-416d-baab-46c73ec0b7b0', 'Janos', 'Kovacs', 'd', '+36852741933', '1948-05-10', 'resources/pictures/profil/pp_004.jpg'),
+        (5,  'peter.kovacs@gmail.com', '5b6613f0-9faa-488e-95c2-418af8e6f438', 'Peter', 'Kovacs', 'd', '+36953214552', '1989-05-30', 'resources/pictures/profil/pp_005.jpg');
 
 INSERT INTO users (id, created_at, date_of_birth, email, employee_id, first_name, last_name, middle_name, phone_number, photo)
 VALUES (1, now(), '1997-02-02', 'john.doe1@mail.ru', '1234567', 'John1', 'Doe1', 'Diego1', '+3687238323', 'url1'),
@@ -39,14 +39,14 @@ values
     (5, 'Medor Python Developer', 2, 4, 3, false),
     (6, 'Junior HR Assistant', 3, 10, 4, true);
 
-INSERT INTO candidate (id, cv_path, status, person_id, position_id)
+INSERT INTO candidate (id, uuid, status, cv_path, person_id, position_id)
     VALUES
-        (1, 'resources/cv/cv_000.pdf', 'accepted', 1, 1),
-        (2, 'resources/cv/cv_001.pdf', 'rejected', 1, 2),
-        (3, 'resources/cv/cv_002.pdf', 'accepted', 2, 1),
-        (4, 'resources/cv/cv_003.pdf', 'accepted', 3, 2),
-        (5, 'resources/cv/cv_004.pdf', 'accepted', 4, 2),
-        (6, 'resources/cv/cv_005.pdf', 'accepted', 5, 2);
+        (1, '131f1987-ea30-40b1-bf0b-0791e5063599', 'ACCEPTED', 'resources/cv/cv_000.pdf',  1, 1),
+        (2, '24cc06fe-2ee2-4963-ac55-3263f1917a1c', 'REJECTED', 'resources/cv/cv_001.pdf',  1, 2),
+        (3, 'f0ea1a0a-2527-4b79-9151-e7373f95f51c', 'ACCEPTED', 'resources/cv/cv_002.pdf', 2, 1),
+        (4, '879d3947-2bd8-43bf-a089-f77fe709c25d', 'ACCEPTED', 'resources/cv/cv_003.pdf',  3, 2),
+        (5, 'ec75a941-1bdc-4000-ab09-a6a82c5cb4c4', 'REJECTED', 'resources/cv/cv_004.pdf',  4, 2),
+        (6, '20bab9a9-6058-450e-b1d6-e886dc08d53b', 'ACCEPTED', 'resources/cv/cv_005.pdf', 5, 2);
 
 INSERT INTO language (id, language, LEVEL, candidate_id)
     VALUES 
@@ -81,13 +81,13 @@ VALUES (1, 'Management Interviewer', 'aa8b7a22-4da4-41d9-8e91-023303383f4d'),
 	   (4, 'Sourcer', 'e5b73f8d-d858-468c-9934-4cbe2f083563'),
 	   (5, 'Technical Interviewer', 'ba9766e1-e3b3-4229-8639-53db4676294d');
 
-INSERT INTO user_roles (id, project_id, user_id, uuid)
+INSERT INTO user_roles (id, user_id, project_id)
 	VALUES 	
-			(1, 'd5692d0f-665d-4547-a494-5b6c3011447c', 'd0be0ead-1392-4dc5-a67b-6325d873b255', '8d706a76-e252-4f9c-af2d-c20a3c4d6e2e'),
-			(2, '50bb0218-2537-4fcb-b8c8-83449981b59c', '07bfc7f2-89ad-43d2-af00-61667754c1ce', 'd2866a36-6e15-471a-9b32-163593c4052e'),
-			(3, '0f2b581d-3d08-4d8d-8df0-11944ffa3a54', 'a7a03f20-5214-4d78-8cf5-02c2339b7f7e', 'd8d93f23-bcbb-4d44-9254-49b00253b6ee'),
-			(4, 'be1a8d14-b108-448f-97e3-508566a0b1a0', 'd246a0a7-ce00-48a2-8611-916dd073252c', 'afea27a2-99e1-48d8-9b84-b97876059ad2'),
-			(5, '1bf7c7bb-f4b6-4b9c-8156-56ebf6bdf777', '43174beb-6955-400f-b697-b7df577a6fc1', '6d521dbb-c0bd-492b-a6ff-b3d1f24d28a2');
+        (1, 1, 1),
+        (2, 2, 2),
+        (3, 3, 3),
+        (4, 4, 4),
+        (5, 5, 5);
 
 INSERT INTO users_roles (user_id, roles_role_id)
 	VALUES 	

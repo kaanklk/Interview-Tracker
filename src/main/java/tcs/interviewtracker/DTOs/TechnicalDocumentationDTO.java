@@ -3,6 +3,8 @@ package tcs.interviewtracker.DTOs;
 import java.sql.Date;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -10,8 +12,9 @@ public class TechnicalDocumentationDTO {
  
     private UUID uuid;
 
-    private UUID candidateUUID;
+    private UUID candidateUuid;   
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date date;
 
     private Integer duration;

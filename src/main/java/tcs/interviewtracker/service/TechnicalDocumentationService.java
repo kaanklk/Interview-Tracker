@@ -7,10 +7,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.Person;
 import tcs.interviewtracker.persistence.Position;
@@ -37,13 +41,18 @@ public class TechnicalDocumentationService {
         
         return techDocRepository.findAll();
     }
-    public Page<TechnicalDocumentation> getPaginatedTechDocs(PageRequest pageRequest){
-    
-        return techDocRepository.findAll(pageRequest);
+    public Page<TechnicalDocumentation> getPaginatedTechDocs(Pageable pageRequest){
+        
+    var res = techDocRepository.findAll(pageRequest);    
+    return  res;
 
     }
+
     public TechnicalDocumentation save (TechnicalDocumentation tD){
         tD.setUuid(UUID.randomUUID());
+        return techDocRepository.save(tD);
+    }
+    public TechnicalDocumentation update(TechnicalDocumentation tD){
         return techDocRepository.save(tD);
     }
 
@@ -54,7 +63,11 @@ public class TechnicalDocumentationService {
         return finalTechDoc;
     }
 
-    public void delete(TechnicalDocumentation techD){
+    public void delete(UUID techID) throws ResourceNotFoundException{
+        if(!techDocRepository.findByUuid(techID).isPresent()){
+            throw new ResourceNotFoundException("Technical documentation not found!");
+        }       
+        TechnicalDocumentation techD = techDocRepository.findByUuid(techID).get();
         techDocRepository.delete(techD);
         
     }

@@ -69,9 +69,12 @@ public class PositionService {
         var hired = 0;
 
         for (Candidate candidate : candidates) {
+           /*
             if (candidate.getPosition().getId() == positionId
                     && candidate.getStatus() == CandidateStatus.OFFER_ACCEPTED)
                 hired++;
+           
+           */ 
         }
 
         return hired;
