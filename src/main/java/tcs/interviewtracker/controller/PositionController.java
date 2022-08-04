@@ -48,18 +48,14 @@ public class PositionController {
     @Qualifier("positionMapper")
     private ModelMapper modelMapper;
 
-    Converter<UUID, Project> positionConverter = new AbstractConverter<UUID, Project>() {
-        protected Project convert(UUID uuid) {
-            return projectService.getByUuid(uuid);
-
-        }
-    };
-
-    public PositionController(ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
-        this.modelMapper.addConverter(positionConverter);
-
-    }
+    /*
+     * Converter<UUID, Project> positionConverter = new AbstractConverter<UUID,
+     * Project>() {
+     * protected Project convert(UUID uuid) {
+     * return projectService.getByUuid(uuid);
+     * }
+     * };
+     */
 
     @GetMapping
     ResponseEntity<List<PositionDTO>> all(
