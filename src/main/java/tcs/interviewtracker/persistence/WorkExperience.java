@@ -12,11 +12,14 @@ import javax.persistence.Table;
 import org.springframework.lang.NonNull;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.sql.Date;
 import java.util.UUID;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "work_experience")
 public class WorkExperience {
 

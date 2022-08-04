@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.Education;
+import tcs.interviewtracker.persistence.Language;
 import tcs.interviewtracker.persistence.ManagementDocumentation;
 import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.persistence.StatusChange;
@@ -20,6 +21,7 @@ import tcs.interviewtracker.persistence.User;
 import tcs.interviewtracker.persistence.WorkExperience;
 import tcs.interviewtracker.repository.CandidateRepository;
 import tcs.interviewtracker.repository.EducationRepository;
+import tcs.interviewtracker.repository.LanguageRepository;
 import tcs.interviewtracker.repository.ManagementDocumentationRepository;
 import tcs.interviewtracker.repository.PositionRepository;
 import tcs.interviewtracker.repository.StatusChangeRepository;
@@ -38,6 +40,7 @@ public class CandidateService {
     private TechnicalDocumentationRepository technicalDocumentationRepository;
     private ManagementDocumentationRepository managementDocumentationRepository;
     private PositionRepository positionRepository;
+    private LanguageRepository languageRepository;
 
     public List<Candidate> findAll() {
         return candidateRepository.findAll();
@@ -243,4 +246,59 @@ public class CandidateService {
         return toDelete;
     }
 
+    // Languages:----------------------------------------------------------------
+
+    public List<Language> findLanguages(UUID candidateUuid) throws ResourceNotFoundException {
+        Candidate candidate = candidateRepository.getByUuid(candidateUuid);
+        if (null == candidate) {
+            throw new ResourceNotFoundException();
+        }
+        return languageRepository.getByCandidate(candidate);
+    }
+
+    public Page<Language> findLanguagePaginated(UUID candidateUuid, PageRequest request)
+            throws ResourceNotFoundException {
+        Candidate candidate = candidateRepository.getByUuid(candidateUuid);
+        if (null == candidate) {
+            throw new ResourceNotFoundException();
+        }
+        return languageRepository.getByCandidate(candidate, request);
+    }
+
+    public Language getLanguageByUuid(UUID candidateUuid, UUID languageUuid)
+            throws ResourceNotFoundException {
+        Candidate candidate = candidateRepository.getByUuid(candidateUuid);
+        if (null == candidate) {
+            throw new ResourceNotFoundException();
+        }
+        Language language = languageRepository.getByUuid(languageUuid);
+        if (null == language) {
+            throw new ResourceNotFoundException();
+        }
+        return language;
+    }
+
+    public Language saveLanguage(Language language) {
+        language.setUuid(UUID.randomUUID());
+        return languageRepository.save(language);
+    }
+
+    public Language updateLanguage(UUID languageUuid, Language language) throws ResourceNotFoundException {
+        Language oldLanguage = languageRepository.getByUuid(languageUuid);
+        if (null == oldLanguage) {
+            throw new ResourceNotFoundException();
+        }
+        language.setId(oldLanguage.getId());
+        language.setUuid(languageUuid);
+        return languageRepository.save(language);
+    }
+
+    public Language deleteLanguage(UUID languageUuid) throws ResourceNotFoundException {
+        Language toDelete = languageRepository.getByUuid(languageUuid);
+        if (null == toDelete) {
+            throw new ResourceNotFoundException();
+        }
+        languageRepository.delete(toDelete);
+        return toDelete;
+    }
 }

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -23,12 +21,17 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import tcs.interviewtracker.DTOs.CandidateDTO;
+import tcs.interviewtracker.DTOs.EducationDTO;
+import tcs.interviewtracker.DTOs.LanguageDTO;
 import tcs.interviewtracker.DTOs.StatusChangeDTO;
+import tcs.interviewtracker.DTOs.WorkExperienceDTO;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.mappers.StatusChangeMapper;
 import tcs.interviewtracker.persistence.Candidate;
+import tcs.interviewtracker.persistence.Education;
+import tcs.interviewtracker.persistence.Language;
 import tcs.interviewtracker.persistence.Person;
-import tcs.interviewtracker.repository.ProjectRepository;
+import tcs.interviewtracker.persistence.WorkExperience;
 import tcs.interviewtracker.service.CandidateService;
 import tcs.interviewtracker.service.PersonService;
 import tcs.interviewtracker.service.PositionService;
@@ -165,6 +168,59 @@ public class CandidateController {
             dest.setPhone(person.getPhone());
             dest.setDateOfBirth(src.getPerson().getDateOfBirth().toString());
         }
+
+        List<WorkExperience> workExperiences;
+        try {
+            workExperiences = candidateService.findWorkExperiences(src.getUuid());
+        }
+        catch (ResourceNotFoundException e) {
+            workExperiences = new ArrayList<WorkExperience>();
+        }
+        var workExperienceDTOs = new ArrayList<WorkExperienceDTO>();
+        for (var experience : workExperiences) {
+            var experienceDTO = new WorkExperienceDTO();
+            experienceDTO.setStart(experience.getStartDate().toString());
+            experienceDTO.setEnd(experience.getEndDate().toString());
+            experienceDTO.setInstitution(experience.getInstitution());
+            experienceDTO.setSummary(experience.getSummary());
+            workExperienceDTOs.add(experienceDTO);
+        }
+        dest.setWorkExperiences(workExperienceDTOs);
+
+        List<Education> educations;
+        try {
+            educations = candidateService.findEducation(src.getUuid());
+        }
+        catch (ResourceNotFoundException e) {
+            educations = new ArrayList<Education>();
+        }
+        var educationDTOs = new ArrayList<EducationDTO>();
+        for (var education : educations) {
+            var educationDTO = new EducationDTO();
+            educationDTO.setStart(education.getStartDate().toString());
+            educationDTO.setEnd(education.getEndDate().toString());
+            educationDTO.setInstitution(education.getInstitution());
+            educationDTO.setInformation(education.getInformation());
+            educationDTOs.add(educationDTO);
+        }
+        dest.setEducations(educationDTOs);
+
+        List<Language> languages;
+        try {
+            languages = candidateService.findLanguages(src.getUuid());
+        }
+        catch (ResourceNotFoundException e) {
+            languages = new ArrayList<Language>();
+        }
+        var languageDTOs = new ArrayList<LanguageDTO>();
+        for (var language : languages) {
+            var languageDTO = new LanguageDTO();
+            languageDTO.setLanguage(language.getLanguage());
+            languageDTO.setLevel(language.getLevel());
+            languageDTOs.add(languageDTO);
+        }
+        dest.setLanguages(languageDTOs);
+
         //var dto = candidateMapper.map(entity, CandidateDTO.class);
         //return dto;
         return dest;

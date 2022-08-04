@@ -15,9 +15,11 @@ import javax.persistence.Table;
 import org.springframework.lang.NonNull;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "education")
 public class Education {
 

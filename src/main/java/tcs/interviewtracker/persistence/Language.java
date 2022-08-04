@@ -12,9 +12,11 @@ import javax.persistence.Table;
 import org.springframework.lang.NonNull;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "language")
 public class Language {
 
