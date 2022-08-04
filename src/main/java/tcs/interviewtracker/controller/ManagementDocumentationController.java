@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jmx.export.annotation.ManagedMetric;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ import tcs.interviewtracker.DTOs.ManagementDocumentationDTO;
 import tcs.interviewtracker.exceptions.ResourceAlreadyExistsException;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.ManagementDocumentation;
+import tcs.interviewtracker.persistence.User;
 import tcs.interviewtracker.service.CandidateService;
 import tcs.interviewtracker.service.ManagementDocumentationService;
 import tcs.interviewtracker.service.ProjectService;
@@ -50,21 +52,37 @@ public class ManagementDocumentationController {
     @Autowired
     private UserService userService;
 
+
+    /*
+     Converter<UUID, User> userConverter = new AbstractConverter<UUID, User>() {
+        protected User convert(UUID uuid) {
+            return userService.getUserById(uuid);
+        }
+    }
+
+     */
+
     @GetMapping("/")
     public ResponseEntity<List<ManagementDocumentationDTO>> getManageDocs(
         @RequestParam(required = false, defaultValue = "10") int pageSize,
         @RequestParam(required = false, defaultValue = "0")int offset,
-        @RequestParam(required = false, defaultValue = "id")String sortBy,
+        @RequestParam(required = false, defaultValue = "id")String orderBy,
         @RequestParam(required = false, defaultValue = "ascending") String orderDirection) throws ResourceNotFoundException {
 
-        Sort SortByOrdered = orderDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
-		: Sort.by(sortBy).descending();
+        Pageable manageDocRequest = PageRequest.of(offset, pageSize, Sort.by(orderBy).ascending());
 
-        PageRequest manageDocRequest = PageRequest.of(offset, pageSize, SortByOrdered);
+        if(orderDirection.equals("ascending")) {
+            manageDocRequest = PageRequest.of(offset, pageSize, Sort.by(orderBy).ascending());
+        }
+
+        else if(orderDirection.equals("descending")) {
+            manageDocRequest = PageRequest.of(offset, pageSize, Sort.by(orderBy).descending());
+        }
+
         var manageDocs = manageService.findPaginated(manageDocRequest);
         var DTOs = new ArrayList<ManagementDocumentationDTO>();
         for(var manageDoc : manageDocs) {
-            var manageDTO = MyDtoConverter(manageDoc);
+            var manageDTO = convertingToDTO(manageDoc);
             DTOs.add(manageDTO);
         }
 
@@ -75,7 +93,7 @@ public class ManagementDocumentationController {
     public ResponseEntity<ManagementDocumentationDTO> getManageDocById(@PathVariable(value = "manageDocId") UUID manageDocId)
     throws ResourceNotFoundException {
         ManagementDocumentation manageEntity= manageService.getManageDocByUuid(manageDocId).get();
-        ManagementDocumentationDTO manageDTO = MyDtoConverter(manageEntity);
+        ManagementDocumentationDTO manageDTO = convertingToDTO(manageEntity);
 
         return new ResponseEntity<ManagementDocumentationDTO>(manageDTO, HttpStatus.OK);
     }
@@ -83,8 +101,8 @@ public class ManagementDocumentationController {
     @PostMapping("/")
     public ResponseEntity<ManagementDocumentationDTO>  createNewDoc(@Validated @RequestBody ManagementDocumentationDTO manageDTO)
     throws ResourceAlreadyExistsException, ResourceNotFoundException {
-        var manageEntity = MyEntityConverter(manageDTO);
-        ManagementDocumentationDTO savedDTO = MyDtoConverter(manageEntity);
+        var manageEntity = convertingToEntity(manageDTO);
+        ManagementDocumentationDTO savedDTO = convertingToDTO(manageService.saveManageDoc(manageEntity));
 
         return new ResponseEntity<ManagementDocumentationDTO>(savedDTO, HttpStatus.CREATED);
     }
@@ -93,8 +111,8 @@ public class ManagementDocumentationController {
     public ResponseEntity<ManagementDocumentationDTO>  updateDoc(@PathVariable(value = "manageDocId") UUID manageId,
     @Validated @ RequestBody ManagementDocumentationDTO manageDTO) throws ResourceNotFoundException {
 
-        ManagementDocumentation manageDoc = MyEntityConverter(manageDTO);
-        ManagementDocumentationDTO updatedDocDTO = MyDtoConverter(manageService.updateManageDoc(manageDoc));
+        ManagementDocumentation manageDoc = convertingToEntity(manageDTO);
+        ManagementDocumentationDTO updatedDocDTO = convertingToDTO(manageService.updateManageDoc(manageDoc));
 
         return new ResponseEntity<ManagementDocumentationDTO>(updatedDocDTO, HttpStatus.OK);
     }
@@ -106,13 +124,13 @@ public class ManagementDocumentationController {
         manageService.deleteManageDoc(manageDoc);
     }
 
-    private ManagementDocumentationDTO MyDtoConverter(ManagementDocumentation manageDoc) {
+    private ManagementDocumentationDTO convertingToDTO(ManagementDocumentation manageDoc) {
         ManagementDocumentationDTO manageDTO = modelMapper.map(manageDoc, ManagementDocumentationDTO.class);
         return manageDTO;
     }
 
 
-    private ManagementDocumentation MyEntityConverter(ManagementDocumentationDTO manageDTO) throws ResourceNotFoundException {
+    private ManagementDocumentation convertingToEntity(ManagementDocumentationDTO manageDTO) throws ResourceNotFoundException {
         var manageDoc = new ManagementDocumentation();
 
         if(manageDTO.getUuid() == null){
