@@ -137,13 +137,27 @@ public class CandidateController {
         dest.setStatus(src.getStatus());
         dest.setPosition(positionService.findByUuid(src.getPositionId()).get());
         dest.setProject(projectService.getByUuid(src.getProjectId()));
-        dest.setPerson(new Person());
-        dest.getPerson().setFirstName(src.getFirstName());
-        dest.getPerson().setLastName(src.getLastName());
-        dest.getPerson().setMiddleName(src.getMiddleName());
-        dest.getPerson().setEmail(src.getEmail());
-        dest.getPerson().setPhone(src.getPhone());
-        dest.getPerson().setDateOfBirth(java.sql.Date.valueOf(src.getDateOfBirth()));
+        var person = new Person();
+        person.setFirstName(src.getFirstName());
+        person.setLastName(src.getLastName());
+        person.setMiddleName(src.getMiddleName());
+        person.setEmail(src.getEmail());
+        person.setPhone(src.getPhone());
+        person.setDateOfBirth(java.sql.Date.valueOf(src.getDateOfBirth()));
+        dest.setPerson(person);
+        person = personService.save(person);
+        dest = candidateService.save(dest);
+        var workExperienceDTOs = src.getWorkExperiences();
+        for (var dto : workExperienceDTOs) {
+            var experience = new WorkExperience();
+            experience.setCandidate(dest);
+            experience.setStartDate(java.sql.Date.valueOf(dto.getStart()));
+            experience.setEndDate(java.sql.Date.valueOf(dto.getEnd()));
+            experience.setInstitution(dto.getInstitution());
+            experience.setSummary(dto.getSummary());
+            candidateService.saveWorkExperience(experience);
+        }
+
         return dest;
     }
 
