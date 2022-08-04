@@ -148,8 +148,8 @@ public class ProjectService {
         List<Candidate> candidates = candidateRepository.findAll();
         List<Candidate> pendingCandidates = new ArrayList<Candidate>();
         for (Candidate c : candidates) {
-            if (c.getProjectId() == project.getId()) {
-                if (c.getStatus() != CandidateStatus.REJECTED || c.getStatus() != CandidateStatus.OFFER_ACCEPTED) {
+            if (c.getProject().getId() == project.getId()) {
+                if (c.getStatus() != CandidateStatus.REJECTED.toString() || c.getStatus() != CandidateStatus.OFFER_ACCEPTED.toString()) {
                     pendingCandidates.add(c);
                 }
             }
@@ -163,8 +163,8 @@ public class ProjectService {
         List<Candidate> candidates = candidateRepository.findAll();
         List<Candidate> pendingCandidates = new ArrayList<Candidate>();
         for (Candidate c : candidates) {
-            if (c.getProjectId() == project.getId()) {
-                if (c.getStatus() == CandidateStatus.OFFER_ACCEPTED) {
+            if (c.getProject().getId() == project.getId()) {
+                if (c.getStatus() == CandidateStatus.OFFER_ACCEPTED.toString()) {
                     pendingCandidates.add(c);
                 }
             }
@@ -178,8 +178,8 @@ public class ProjectService {
         List<Candidate> candidates = candidateRepository.findAll();
         List<Candidate> pendingCandidates = new ArrayList<Candidate>();
         for (Candidate c : candidates) {
-            if (c.getProjectId() == project.getId()) {
-                if (c.getStatus() == CandidateStatus.REJECTED) {
+            if (c.getProject().getId() == project.getId()) {
+                if (c.getStatus() == CandidateStatus.REJECTED.toString()) {
                     pendingCandidates.add(c);
                 }
             }
