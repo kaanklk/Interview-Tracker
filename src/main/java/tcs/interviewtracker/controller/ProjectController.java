@@ -113,8 +113,7 @@ public class ProjectController {
 
     @GetMapping(value = "/{id}/positions")
     public ResponseEntity<List<Position>> getProjectPositions(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
-            throws ResourceNotFoundException {
+            @RequestParam(name = "project") Long projectId) {
         List<Position> projectPositions = projectService.fetchProjectPositions(uuid);
         return new ResponseEntity<List<Position>>(projectPositions, new HttpHeaders(), HttpStatus.OK);
     }

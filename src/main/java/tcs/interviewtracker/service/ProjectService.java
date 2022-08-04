@@ -40,7 +40,7 @@ public class ProjectService {
     private CandidateRepository candidateRepository;
 
     public Project getByUuid(UUID uuid) {
-        return projectRepository.findByUuid(uuid);
+        return projectRepository.findByUuid(uuid).get();
     }
 
     public Project getById(Long id) {
@@ -79,7 +79,7 @@ public class ProjectService {
     }
 
     public List<Position> fetchProjectPositions(UUID uuid) {
-        Project project = projectRepository.findByUuid(uuid);
+        Project project = projectRepository.findByUuid(uuid).get();
         List<Position> positions = positionRepository.findAll();
         List<Position> projectPostions = new ArrayList<Position>();
         for (Position pos : positions) {
@@ -91,7 +91,7 @@ public class ProjectService {
     }
 
     public int fetchProjectPositionsCount(UUID uuid) {
-        Project project = projectRepository.findByUuid(uuid);
+        Project project = projectRepository.findByUuid(uuid).get();
         List<Position> positions = positionRepository.findAll();
         List<Position> projectPostions = new ArrayList<Position>();
         for (Position pos : positions) {
@@ -103,7 +103,7 @@ public class ProjectService {
     }
 
     public int fetchProjectAssocicateCount(UUID uuid) {
-        Project project = projectRepository.findByUuid(uuid);
+        Project project = projectRepository.findByUuid(uuid).get();
         List<User> users = userRepository.findAll();
         int associateCount = 0;
         for (User usr : users) {
@@ -115,7 +115,7 @@ public class ProjectService {
     }
 
     public List<Interview> fetchCompletedInterviews(UUID uuid) {
-        Project project = projectRepository.findByUuid(uuid);
+        Project project = projectRepository.findByUuid(uuid).get();
         List<Interview> interviews = interviewRepository.findAll();
         List<Interview> completedInterviews = new ArrayList<Interview>();
         for (Interview inter : interviews) {
@@ -129,7 +129,7 @@ public class ProjectService {
     }
 
     public List<Interview> fetchIncompletedInterviews(UUID uuid) {
-        Project project = projectRepository.findByUuid(uuid);
+        Project project = projectRepository.findByUuid(uuid).get();
         List<Interview> interviews = interviewRepository.findAll();
         List<Interview> completedInterviews = new ArrayList<Interview>();
         for (Interview inter : interviews) {
@@ -143,7 +143,7 @@ public class ProjectService {
     }
 
     public List<Candidate> fetchPendingCandidates(UUID uuid) {
-        Project project = projectRepository.findByUuid(uuid);
+        Project project = projectRepository.findByUuid(uuid).get();
         List<Candidate> candidates = candidateRepository.findAll();
         List<Candidate> pendingCandidates = new ArrayList<Candidate>();
         for (Candidate c : candidates) {
@@ -158,7 +158,7 @@ public class ProjectService {
     }
 
     public List<Candidate> fetchAcceptedCandidates(UUID uuid) {
-        Project project = projectRepository.findByUuid(uuid);
+        Project project = projectRepository.findByUuid(uuid).get();
         List<Candidate> candidates = candidateRepository.findAll();
         List<Candidate> pendingCandidates = new ArrayList<Candidate>();
         for (Candidate c : candidates) {
@@ -173,7 +173,7 @@ public class ProjectService {
     }
 
     public List<Candidate> fetchRejectedCandidates(UUID uuid) {
-        Project project = projectRepository.findByUuid(uuid);
+        Project project = projectRepository.findByUuid(uuid).get();
         List<Candidate> candidates = candidateRepository.findAll();
         List<Candidate> pendingCandidates = new ArrayList<Candidate>();
         for (Candidate c : candidates) {
@@ -188,7 +188,7 @@ public class ProjectService {
     }
 
     public Integer fetchTecnicalInterviewCount(UUID uuid) {
-        Project project = projectRepository.findByUuid(uuid);
+        Project project = projectRepository.findByUuid(uuid).get();
         List<Interview> interviews = interviewRepository.findAll();
         List<Interview> technicalInterviews = new ArrayList<Interview>();
         for (Interview inter : interviews) {
@@ -202,7 +202,7 @@ public class ProjectService {
     }
 
     public Integer fetchManagementInterviewCount(UUID uuid) {
-        Project project = projectRepository.findByUuid(uuid);
+        Project project = projectRepository.findByUuid(uuid).get();
         List<Interview> interviews = interviewRepository.findAll();
         List<Interview> technicalInterviews = new ArrayList<Interview>();
         for (Interview inter : interviews) {
@@ -216,7 +216,7 @@ public class ProjectService {
     }
 
     public List<Interview> fetchUpcomingTecnicalInterviews(UUID uuid) {
-        Project project = projectRepository.findByUuid(uuid);
+        Project project = projectRepository.findByUuid(uuid).get();
         List<Interview> interviews = interviewRepository.findAll();
         List<Interview> upcomingTechnicalInterviews = new ArrayList<Interview>();
         for (Interview inter : interviews) {
@@ -230,7 +230,7 @@ public class ProjectService {
     }
 
     public List<Interview> fetchUpcomingManagementInterviews(UUID uuid) {
-        Project project = projectRepository.findByUuid(uuid);
+        Project project = projectRepository.findByUuid(uuid).get();
         List<Interview> interviews = interviewRepository.findAll();
         List<Interview> upcomingManagementInterviews = new ArrayList<Interview>();
         for (Interview inter : interviews) {
@@ -244,7 +244,7 @@ public class ProjectService {
     }
 
     public List<User> fetchRecruiters(UUID projectUuid) {
-        Project project = projectRepository.findByUuid(projectUuid);
+        Project project = projectRepository.findByUuid(projectUuid).get();
         Optional<Role> recruiterRole = roleRepository.findByRoleName("recruiter");
         List<UserRoles> userRoles = userRolesRepository.findByProject(project);
         List<User> recruiters = new ArrayList<User>();
@@ -257,7 +257,7 @@ public class ProjectService {
     }
 
     public List<User> fetchSourcers(UUID projectUuid) {
-        Project project = projectRepository.findByUuid(projectUuid);
+        Project project = projectRepository.findByUuid(projectUuid).get();
         Optional<Role> sourcerRole = roleRepository.findByRoleName("sourcer");
         List<UserRoles> userRoles = userRolesRepository.findByProject(project);
         List<User> sourcers = new ArrayList<User>();
@@ -270,7 +270,7 @@ public class ProjectService {
     }
 
     public User fetchProjectManager(UUID projectUuid) {
-        Project project = projectRepository.findByUuid(projectUuid);
+        Project project = projectRepository.findByUuid(projectUuid).get();
         Optional<Role> projectManagerRole = roleRepository.findByRoleName("project_manager");
         List<UserRoles> userRoles = userRolesRepository.findByProject(project);
         User projectManager = null;
