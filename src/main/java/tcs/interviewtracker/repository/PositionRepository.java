@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import tcs.interviewtracker.persistence.Position;
-import tcs.interviewtracker.persistence.Project;
 
 @Repository
 public interface PositionRepository extends JpaRepository<Position, Long> {

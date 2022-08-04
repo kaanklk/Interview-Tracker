@@ -1,22 +1,19 @@
 package tcs.interviewtracker.persistence;
 
+import java.sql.Date;
+import java.util.UUID;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.Data;
-
-import javax.persistence.Column;
-import javax.persistence.GenerationType;
-
-import java.sql.Date;
-import java.util.UUID;
 
 @Entity
 @Data
@@ -28,7 +25,7 @@ public class TechnicalDocumentation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name="uuid")
+    @Column(name = "uuid")
     private UUID uuid;
 
     @OneToOne
@@ -56,7 +53,7 @@ public class TechnicalDocumentation {
     @Column(name = "technical_skills2", nullable = true)
     private Integer technicalSkills2;
 
-    @Column(name = "tech_skill_comment2", nullable = true       )
+    @Column(name = "tech_skill_comment2", nullable = true)
     private String techSkillComment2;
 
     @Column(name = "technical_skills3", nullable = true)
@@ -127,7 +124,5 @@ public class TechnicalDocumentation {
         this.designationOne = designationOne;
         this.designationTwo = designationTwo;
     }
-
-
 
 }

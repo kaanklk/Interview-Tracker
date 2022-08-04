@@ -1,21 +1,15 @@
 package tcs.interviewtracker.controller;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-
-import javax.persistence.OrderBy;
-import javax.persistence.criteria.Order;
 
 import org.modelmapper.AbstractConverter;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -39,8 +33,6 @@ import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.TechnicalDocumentation;
 import tcs.interviewtracker.persistence.User;
-import tcs.interviewtracker.service.TechnicalDocumentationService;
-
 //PageRequest -> Page tipust ad vissza
 import tcs.interviewtracker.service.CandidateService;
 import tcs.interviewtracker.service.TechnicalDocumentationService;
@@ -49,10 +41,10 @@ import tcs.interviewtracker.service.UserService;
 @RestController
 @RequestMapping("/technical-documentations")
 public class TechnicalDocumentationController {
-    @Autowired    
+    @Autowired
     private TechnicalDocumentationService techDocService;
 
-    @Autowired 
+    @Autowired
     private CandidateService candidateService;
 
     @Autowired
@@ -61,129 +53,132 @@ public class TechnicalDocumentationController {
 
     @Autowired
     private UserService userService;
-    
-    Converter<UUID, User> userConverter = new AbstractConverter<UUID,User>() {
+
+    Converter<UUID, User> userConverter = new AbstractConverter<UUID, User>() {
         protected User convert(UUID uuid) {
-             try {
+            try {
 
                 return userService.getUserById(uuid);
-            
+
             } catch (ResourceNotFoundException e) {
-            
+
                 return null;
-            
+
             }
-               
-            
+
         }
     };
 
-    Converter<UUID, Candidate> candidateConverter = new AbstractConverter<UUID,Candidate>() {
+    Converter<UUID, Candidate> candidateConverter = new AbstractConverter<UUID, Candidate>() {
         protected Candidate convert(UUID uuid) {
-                return candidateService.getByUuid(uuid);
-            
+            return candidateService.getByUuid(uuid);
+
         }
     };
-    
 
-    public TechnicalDocumentationController(ModelMapper modelMapper){
+    public TechnicalDocumentationController(ModelMapper modelMapper) {
         this.technicalDocumentationMapper = modelMapper;
         this.technicalDocumentationMapper.addConverter(userConverter);
         this.technicalDocumentationMapper.addConverter(candidateConverter);
-        
+
     }
 
+    @GetMapping("/")
+    public ResponseEntity<List<TechnicalDocumentationDTO>> getAllTechDocs(
+            @RequestParam(required = false, defaultValue = "10") Integer page,
+            @RequestParam(required = false, defaultValue = "0") Integer offset,
+            @RequestParam(required = false, defaultValue = "uuid") String orderby,
+            @RequestParam(required = false, defaultValue = "ascending") String orderDirection)
+            throws BadRequestException {
 
-
-
-   @GetMapping("/")
-   public ResponseEntity<List<TechnicalDocumentationDTO>> getAllTechDocs(@RequestParam(required = false, defaultValue = "10") Integer page,
-    @RequestParam(required = false, defaultValue = "0") Integer offset, @RequestParam(required = false, defaultValue = "uuid") String orderby, 
-    @RequestParam(required = false, defaultValue = "ascending") String orderDirection) throws BadRequestException{
-     
-    Pageable pageable;
-    var fieldsOfTechDocDTO = TechnicalDocumentationDTO.class.getDeclaredFields();
-    boolean existingOrderBy = false;
-    for(Field f: fieldsOfTechDocDTO){
-        if(f.getName().equals(orderby)){
-            existingOrderBy = true;
-            break;
+        Pageable pageable;
+        var fieldsOfTechDocDTO = TechnicalDocumentationDTO.class.getDeclaredFields();
+        boolean existingOrderBy = false;
+        for (Field f : fieldsOfTechDocDTO) {
+            if (f.getName().equals(orderby)) {
+                existingOrderBy = true;
+                break;
+            }
         }
-    }
-    if(existingOrderBy == false){
-        throw new BadRequestException("Wrong query parameter value (orderby). No such field in Technical documentations "+orderby);
-    }
+        if (existingOrderBy == false) {
+            throw new BadRequestException(
+                    "Wrong query parameter value (orderby). No such field in Technical documentations " + orderby);
+        }
 
-    if(orderDirection.equals("descending")){
-    pageable = PageRequest.of(offset,page, Sort.by(orderby).descending());
-    }
-    else{
-    pageable = PageRequest.of(offset,page, Sort.by(orderby).ascending());
-        
-    }   
-        var techDocs = techDocService.getPaginatedTechDocs(pageable).stream().map(this::convertToDTO).collect(Collectors.toList());
+        if (orderDirection.equals("descending")) {
+            pageable = PageRequest.of(offset, page, Sort.by(orderby).descending());
+        } else {
+            pageable = PageRequest.of(offset, page, Sort.by(orderby).ascending());
+
+        }
+        var techDocs = techDocService.getPaginatedTechDocs(pageable).stream().map(this::convertToDTO)
+                .collect(Collectors.toList());
 
         return new ResponseEntity<List<TechnicalDocumentationDTO>>(techDocs, HttpStatus.OK);
-      
-}
+
+    }
 
     @PostMapping("/")
-    public ResponseEntity<TechnicalDocumentationDTO> createNewProject(@Validated @RequestBody TechnicalDocumentationDTO techDocDTO) throws ResourceAlreadyExistsException, ResourceNotFoundException{
-        
+    public ResponseEntity<TechnicalDocumentationDTO> createNewProject(
+            @Validated @RequestBody TechnicalDocumentationDTO techDocDTO)
+            throws ResourceAlreadyExistsException, ResourceNotFoundException {
+
         TechnicalDocumentation techDoc = convertToEntity(techDocDTO);
-        TechnicalDocumentationDTO savedTechDocDTO = convertToDTO( techDocService.save(techDoc));
-        
+        TechnicalDocumentationDTO savedTechDocDTO = convertToDTO(techDocService.save(techDoc));
+
         return new ResponseEntity<TechnicalDocumentationDTO>(savedTechDocDTO, HttpStatus.CREATED);
 
     }
 
     @GetMapping("/{technicalId}")
-    public ResponseEntity<TechnicalDocumentationDTO> getProjectById(@PathVariable(value = "technicalId") UUID techDocId) throws ResourceNotFoundException {
-            TechnicalDocumentation technicalDocumentation = techDocService.getById(techDocId).get();
-            TechnicalDocumentationDTO technicalDocumentationDTO = convertToDTO(technicalDocumentation);
-        
-            return new ResponseEntity<TechnicalDocumentationDTO>(technicalDocumentationDTO, HttpStatus.OK);      
-      
+    public ResponseEntity<TechnicalDocumentationDTO> getProjectById(@PathVariable(value = "technicalId") UUID techDocId)
+            throws ResourceNotFoundException {
+        TechnicalDocumentation technicalDocumentation = techDocService.getById(techDocId).get();
+        TechnicalDocumentationDTO technicalDocumentationDTO = convertToDTO(technicalDocumentation);
+
+        return new ResponseEntity<TechnicalDocumentationDTO>(technicalDocumentationDTO, HttpStatus.OK);
+
     }
 
     @PutMapping("/{technicalId}")
-    public ResponseEntity<TechnicalDocumentationDTO> updateTechnicalDocumentation(@PathVariable(value = "technicalId") UUID techId,
-     @Validated @RequestBody TechnicalDocumentationDTO techDocDTO) throws ResourceNotFoundException{
+    public ResponseEntity<TechnicalDocumentationDTO> updateTechnicalDocumentation(
+            @PathVariable(value = "technicalId") UUID techId,
+            @Validated @RequestBody TechnicalDocumentationDTO techDocDTO) throws ResourceNotFoundException {
 
-            TechnicalDocumentation techDoc = convertToEntity(techDocDTO);
-            TechnicalDocumentationDTO technicalDocumentationDTO = convertToDTO(techDocService.update(techDoc));
-            return new ResponseEntity<TechnicalDocumentationDTO>(technicalDocumentationDTO, HttpStatus.OK);
+        TechnicalDocumentation techDoc = convertToEntity(techDocDTO);
+        TechnicalDocumentationDTO technicalDocumentationDTO = convertToDTO(techDocService.update(techDoc));
+        return new ResponseEntity<TechnicalDocumentationDTO>(technicalDocumentationDTO, HttpStatus.OK);
 
     }
 
     @DeleteMapping("/{technicalId}")
-    public void deleteTechnicalDocumentation(@PathVariable(value = "technicalId") UUID techId ) throws Exception {
-        
+    public void deleteTechnicalDocumentation(@PathVariable(value = "technicalId") UUID techId) throws Exception {
+
         techDocService.delete(techId);
     }
 
-    private TechnicalDocumentationDTO convertToDTO(TechnicalDocumentation techDoc){
-        TechnicalDocumentationDTO techDocDTO = technicalDocumentationMapper.map(techDoc, TechnicalDocumentationDTO.class);
+    private TechnicalDocumentationDTO convertToDTO(TechnicalDocumentation techDoc) {
+        TechnicalDocumentationDTO techDocDTO = technicalDocumentationMapper.map(techDoc,
+                TechnicalDocumentationDTO.class);
         return techDocDTO;
     }
 
-    private TechnicalDocumentation convertToEntity(TechnicalDocumentationDTO dto) throws ResourceNotFoundException{
+    private TechnicalDocumentation convertToEntity(TechnicalDocumentationDTO dto) throws ResourceNotFoundException {
         var techDoc = new TechnicalDocumentation();
-        if(dto.getUuid() == null){
-        techDoc.setUuid(UUID.randomUUID());    
-        }
-        else{
-        techDoc.setUuid(dto.getUuid());
-         if(techDocService.getById(dto.getUuid()).get().getId()!= null){
-            techDoc.setId(techDocService.getById(dto.getUuid()).get().getId());
-        }
+        if (dto.getUuid() == null) {
+            techDoc.setUuid(UUID.randomUUID());
+        } else {
+            techDoc.setUuid(dto.getUuid());
+            if (techDocService.getById(dto.getUuid()).get().getId() != null) {
+                techDoc.setId(techDocService.getById(dto.getUuid()).get().getId());
+            }
         }
         techDoc.setCandidate(candidateService.getByUuid(dto.getCandidateUuid()));
         techDoc.setDate(dto.getDate());
         techDoc.setDesignationOne(dto.getDesignationOne());
         techDoc.setDesignationTwo(dto.getDesignationTwo());
         techDoc.setDuration(dto.getDuration());
-       
+
         techDoc.setInterviewerOne(userService.getUserById(dto.getInterviewerOneUUID()));
         techDoc.setInterviewerTwo(userService.getUserById(dto.getInterviewerTwoUUID()));
 
@@ -204,38 +199,39 @@ public class TechnicalDocumentationController {
 
         return techDoc;
     }
-/*
-    private TechnicalDocumentationDTO convertToDto(TechnicalDocumentation techDoc){
-        var dto = new TechnicalDocumentationDTO();
-        dto.setUuid(techDoc.getUuid());
-        dto.setDate(techDoc.getDate());
-        dto.setDesignationOne(techDoc.getDesignationOne());
-        dto.setDesignationTwo(techDoc.getDesignationTwo());
-        dto.setCandidateUuid(techDoc.getCandidate().getUuid());
-        dto.setDuration(techDoc.getDuration());
-
-        dto.setInterviewerOneUUID(techDoc.getInterviewerOne().getUuid());
-        dto.setInterviewerTwoUUID(techDoc.getInterviewerTwo().getUuid());
-        
-        dto.setIsReccomended(techDoc.getIsReccomended());
-        dto.setLastComments(techDoc.getLastComments());
-        dto.setTechSkillComment1(techDoc.getTechSkillComment1());
-        dto.setTechSkillComment2(techDoc.getTechSkillComment2());
-        dto.setTechSkillComment3(techDoc.getTechSkillComment3());
-        dto.setTechSkillComment4(techDoc.getTechSkillComment4());
-        dto.setTechnicalSkills1(techDoc.getTechnicalSkills1());
-        dto.setTechnicalSkills2(techDoc.getTechnicalSkills2());
-        dto.setTechnicalSkills3(techDoc.getTechnicalSkills3());
-        dto.setTechnicalSkills4(techDoc.getTechnicalSkills4());
-        dto.setRoleExperience(techDoc.getRoleExperience());
-        dto.setTotalExperience(techDoc.getTotalExperience());
-        dto.setUnderstandingComment(techDoc.getUnderstandingComment());
-        dto.setUnderstandingOfRole(techDoc.getUnderstandingOfRole());
-        
-
-        return dto;
-            
-    }
-
- */
+    /*
+     * private TechnicalDocumentationDTO convertToDto(TechnicalDocumentation
+     * techDoc){
+     * var dto = new TechnicalDocumentationDTO();
+     * dto.setUuid(techDoc.getUuid());
+     * dto.setDate(techDoc.getDate());
+     * dto.setDesignationOne(techDoc.getDesignationOne());
+     * dto.setDesignationTwo(techDoc.getDesignationTwo());
+     * dto.setCandidateUuid(techDoc.getCandidate().getUuid());
+     * dto.setDuration(techDoc.getDuration());
+     * 
+     * dto.setInterviewerOneUUID(techDoc.getInterviewerOne().getUuid());
+     * dto.setInterviewerTwoUUID(techDoc.getInterviewerTwo().getUuid());
+     * 
+     * dto.setIsReccomended(techDoc.getIsReccomended());
+     * dto.setLastComments(techDoc.getLastComments());
+     * dto.setTechSkillComment1(techDoc.getTechSkillComment1());
+     * dto.setTechSkillComment2(techDoc.getTechSkillComment2());
+     * dto.setTechSkillComment3(techDoc.getTechSkillComment3());
+     * dto.setTechSkillComment4(techDoc.getTechSkillComment4());
+     * dto.setTechnicalSkills1(techDoc.getTechnicalSkills1());
+     * dto.setTechnicalSkills2(techDoc.getTechnicalSkills2());
+     * dto.setTechnicalSkills3(techDoc.getTechnicalSkills3());
+     * dto.setTechnicalSkills4(techDoc.getTechnicalSkills4());
+     * dto.setRoleExperience(techDoc.getRoleExperience());
+     * dto.setTotalExperience(techDoc.getTotalExperience());
+     * dto.setUnderstandingComment(techDoc.getUnderstandingComment());
+     * dto.setUnderstandingOfRole(techDoc.getUnderstandingOfRole());
+     * 
+     * 
+     * return dto;
+     * 
+     * }
+     * 
+     */
 }
