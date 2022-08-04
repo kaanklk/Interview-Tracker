@@ -3,20 +3,14 @@ package tcs.interviewtracker.persistence;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import org.springframework.lang.Nullable;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Data
-@Table(name = "candidate")
 public class Candidate {
 
     @Id
@@ -28,21 +22,27 @@ public class Candidate {
     private UUID uuid;
 
     @ManyToOne
+    @ToString.Exclude
     private Position position;
 
     @ManyToOne
+    @JoinColumn(name="person_id", columnDefinition = "int4")
+    @ToString.Exclude
     private Person person;
 
-    @Column(columnDefinition = "varchar(128)")
-    private CandidateStatus status;
+    //@Enumerated(EnumType.STRING)
+    @Column(name = "status", columnDefinition = "varchar(128)")
+    private String status;
 
-    @Column(name = "projectId")
-    private Long projectId;
+    @ManyToOne
+    @ToString.Exclude
+    private Project project;
 
-    @Column(columnDefinition = "varchar(256)")
+    @Column(columnDefinition = "varchar(255)")
     @Nullable
     private String cvPath;
 
+    /*
     @OneToMany(mappedBy = "candidate")
     private Set<WorkExperience> workExperiences;
 
@@ -51,5 +51,8 @@ public class Candidate {
 
     @OneToMany(mappedBy = "candidate")
     private Set<Language> langugages;
+     */
+
+
 
 }

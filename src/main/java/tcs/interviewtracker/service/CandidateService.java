@@ -130,6 +130,8 @@ public class CandidateService {
         return managementDocumentationRepository.getReferenceByCandidate(candidate);
     }
 
+    //WorkExperience:----------------------------------------------------
+
     public List<WorkExperience> findWorkExperiences(UUID candidateUuid) throws ResourceNotFoundException {
         Candidate candidate = candidateRepository.getByUuid(candidateUuid);
         if (null == candidate) {

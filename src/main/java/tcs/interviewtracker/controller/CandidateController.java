@@ -2,18 +2,14 @@ package tcs.interviewtracker.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
-import javax.websocket.server.PathParam;
-
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,10 +25,8 @@ import lombok.RequiredArgsConstructor;
 import tcs.interviewtracker.DTOs.CandidateDTO;
 import tcs.interviewtracker.DTOs.StatusChangeDTO;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
-import tcs.interviewtracker.mappers.CandidateMapper;
 import tcs.interviewtracker.mappers.StatusChangeMapper;
 import tcs.interviewtracker.persistence.Candidate;
-import tcs.interviewtracker.persistence.StatusChange;
 import tcs.interviewtracker.service.CandidateService;
 import tcs.interviewtracker.service.PersonService;
 
@@ -45,6 +39,10 @@ public class CandidateController {
     @NonNull
     private PersonService personService;
 
+    @NonNull
+    @Qualifier("candidateMapper")
+    private ModelMapper candidateMapper;
+
     @GetMapping
     public ResponseEntity<List<CandidateDTO>> getCandidates(
                 @RequestParam(required = false, defaultValue = "10") Integer pagesize,
@@ -56,8 +54,8 @@ public class CandidateController {
                         (orderDirection.equals("ascending"))? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending());
         var candidates = candidateService.findPaginated(request);
         var dtos = new ArrayList<CandidateDTO>();
-        for (var candidate : candidates) {
-            dtos.add(CandidateMapper.INSTANCE.toDTO(candidate));
+        for (var candidate : candidates) {            
+            dtos.add(convertToDTO(candidate));
         }
         return new ResponseEntity<List<CandidateDTO>>(dtos, HttpStatus.OK);
     }
@@ -67,8 +65,8 @@ public class CandidateController {
         @RequestBody(required = true) CandidateDTO dto
     ) {
 
-        var candidate = CandidateMapper.INSTANCE.toEntity(dto);
-        var responseDTO = CandidateMapper.INSTANCE.toDTO(candidateService.save(candidate));
+        var candidate = convertToEntity(dto);
+        var responseDTO = convertToDTO(candidateService.save(candidate));
         return new ResponseEntity<CandidateDTO>(responseDTO, HttpStatus.CREATED);
     }
 
@@ -78,7 +76,7 @@ public class CandidateController {
     ) {
 
         var candidate = candidateService.getByUuid(candidateUuid);
-        var responseDto = CandidateMapper.INSTANCE.toDTO(candidate);
+        var responseDto = convertToDTO(candidate);
         return new ResponseEntity<CandidateDTO>(responseDto, HttpStatus.OK);
     }
 
@@ -87,9 +85,9 @@ public class CandidateController {
                 @PathVariable(name = "candidateId", required = true) UUID candidateUuid,
                 @RequestBody CandidateDTO candidateDTO
     ) throws ResourceNotFoundException {
-        var candidate = CandidateMapper.INSTANCE.toEntity(candidateDTO);
+        var candidate = convertToEntity(candidateDTO);
         var updatedCandidate = candidateService.update(candidateUuid, candidate);
-        var responseDto = CandidateMapper.INSTANCE.toDTO(updatedCandidate);
+        var responseDto = convertToDTO(updatedCandidate);
         return new ResponseEntity<CandidateDTO>(responseDto, HttpStatus.OK);
     }
 
@@ -98,7 +96,7 @@ public class CandidateController {
                 @PathVariable(name = "candidateId", required = true) UUID candidateUuid
     ) throws ResourceNotFoundException {
         var deletedCandidate = candidateService.delete(candidateUuid);
-        var responseDto = CandidateMapper.INSTANCE.toDTO(deletedCandidate);
+        var responseDto = convertToDTO(deletedCandidate);
         return new ResponseEntity<CandidateDTO>(responseDto, HttpStatus.OK);
     }
 
@@ -124,4 +122,12 @@ public class CandidateController {
         return new ResponseEntity<StatusChangeDTO>(responseDto, HttpStatus.OK);
     }
 
+    private Candidate convertToEntity(CandidateDTO dto) {
+        return candidateMapper.map(dto, Candidate.class);
+    }
+
+    private CandidateDTO convertToDTO(Candidate entity) {
+        var dto = candidateMapper.map(entity, CandidateDTO.class);
+        return dto;
+    }
 }

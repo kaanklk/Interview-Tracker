@@ -1,15 +1,12 @@
 package tcs.interviewtracker.service;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import tcs.interviewtracker.DTOs.UserDTO;
 import tcs.interviewtracker.exceptions.ResourceAlreadyExistsException;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.User;
@@ -18,18 +15,17 @@ import tcs.interviewtracker.repository.UserRepository;
 @Service
 public class UserService {
 
-    @Autowired
-    private ModelMapper modelMapper;
     private UserRepository userRepo;
 
     UserService(UserRepository repo) {
         this.userRepo = repo;
     }
 
-    public List<UserDTO> getAllUsers() {
+    public Page<User> getAllUsers(Pageable page) {
 
-        List<UserDTO> userDTO = Arrays.asList(modelMapper.map(userRepo.findAll(), UserDTO[].class));
-        return userDTO;
+        Page<User> users = userRepo.findAll(page);
+
+        return users;
     }
 
     public User getUserById(UUID uuid) throws ResourceNotFoundException {
@@ -40,25 +36,21 @@ public class UserService {
         return user.get();
     }
 
-    public UserDTO saveUser(UserDTO userDTO) throws ResourceAlreadyExistsException {
-
-
+    public User saveUser(User user) throws ResourceAlreadyExistsException {
 
         UUID uuid = UUID.randomUUID();
-        userDTO.setUuid(uuid);
-
-        User user = dtoToEntity(userDTO);
+        user.setUuid(uuid);
 
         Optional<User> existingUser = userRepo.findByEmail(user.getEmail());
 
-        if(!existingUser.isEmpty()){
+        if (!existingUser.isEmpty()) {
             throw new ResourceAlreadyExistsException("User registered for provided email");
         }
 
-        return entityToDto(userRepo.save(user));
+        return userRepo.save(user);
     }
 
-    public UserDTO updateUser(UUID uuid, UserDTO userDTO) throws ResourceNotFoundException {
+    public User updateUser(UUID uuid, User user) throws ResourceNotFoundException {
 
         Optional<User> userToUpdate = userRepo.findByUuid(uuid);
 
@@ -67,7 +59,6 @@ public class UserService {
         }
 
         User updateUser = userToUpdate.get();
-        User user = dtoToEntity(userDTO);
 
         updateUser.setFirstName(user.getFirstName());
         updateUser.setLastName(user.getLastName());
@@ -79,10 +70,10 @@ public class UserService {
         updateUser.setPhone(user.getPhone());
         updateUser.setAdmin(user.getAdmin());
 
-        return entityToDto(userRepo.save(updateUser));
+        return userRepo.save(updateUser);
     }
 
-    public void deleteUser(UUID id) throws ResourceNotFoundException{
+    public void deleteUser(UUID id) throws ResourceNotFoundException {
         Optional<User> user = userRepo.findByUuid(id);
         if (!user.isPresent()) {
             throw new ResourceNotFoundException("User not found for provided Id");
@@ -90,13 +81,6 @@ public class UserService {
         userRepo.delete(user.get());
     }
 
-    public User dtoToEntity(UserDTO userDTO){
-         return modelMapper.map(userDTO, User.class);
-    }
-
-    public UserDTO entityToDto(User user){
-        return modelMapper.map(user, UserDTO.class);
-    }
 
     // public User getUserWithSpesificRole(Long projectId, String roleName) {
     // User foundedUser = null;

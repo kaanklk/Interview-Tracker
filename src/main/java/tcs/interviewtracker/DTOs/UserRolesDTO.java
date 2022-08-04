@@ -1,7 +1,6 @@
 package tcs.interviewtracker.DTOs;
 
 import java.util.List;
-import java.util.UUID;
 
 import lombok.Data;
 
@@ -9,8 +8,7 @@ import lombok.Data;
 @Data
 public class UserRolesDTO {
 
-    private UUID uuid;
-    private UUID userUuid;
+    private UserDTO user;
     private List<RoleDTO> roles;
-    private UUID projectUuid;
+    private ProjectDTO project;
 }

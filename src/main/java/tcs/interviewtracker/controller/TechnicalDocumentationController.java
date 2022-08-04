@@ -135,7 +135,7 @@ public class TechnicalDocumentationController {
         TechnicalDocumentationDTO savedTechDocDTO = convertToDTO( techDocService.save(techDoc));
         
         return new ResponseEntity<TechnicalDocumentationDTO>(savedTechDocDTO, HttpStatus.CREATED);
-        
+
     }
 
     @GetMapping("/{technicalId}")
@@ -151,12 +151,10 @@ public class TechnicalDocumentationController {
     public ResponseEntity<TechnicalDocumentationDTO> updateTechnicalDocumentation(@PathVariable(value = "technicalId") UUID techId,
      @Validated @RequestBody TechnicalDocumentationDTO techDocDTO) throws ResourceNotFoundException{
 
-
             TechnicalDocumentation techDoc = convertToEntity(techDocDTO);
             TechnicalDocumentationDTO technicalDocumentationDTO = convertToDTO(techDocService.update(techDoc));
-
             return new ResponseEntity<TechnicalDocumentationDTO>(technicalDocumentationDTO, HttpStatus.OK);
-    
+
     }
 
     @DeleteMapping("/{technicalId}")
@@ -207,7 +205,7 @@ public class TechnicalDocumentationController {
 
         return techDoc;
     }
-
+/*
     private TechnicalDocumentationDTO convertToDto(TechnicalDocumentation techDoc){
         var dto = new TechnicalDocumentationDTO();
         dto.setUuid(techDoc.getUuid());
@@ -240,5 +238,5 @@ public class TechnicalDocumentationController {
             
     }
 
-
+ */
 }

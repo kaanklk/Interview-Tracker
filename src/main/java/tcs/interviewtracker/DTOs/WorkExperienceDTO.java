@@ -7,4 +7,12 @@ import lombok.Setter;
 @Setter
 public class WorkExperienceDTO {
     
+    private String start;
+
+    private String end;
+
+    private String institution;
+
+    private String summary;
+
 }

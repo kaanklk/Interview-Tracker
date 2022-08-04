@@ -9,5 +9,5 @@ public enum CandidateStatus {
     WAITING_FOR_MANAGEMENT_APPROVAL,
     OFFER_SENT,
     OFFER_ACCEPTED,
-    OFFER_DECLINED
+    OFFER_DECLINED;
 }
