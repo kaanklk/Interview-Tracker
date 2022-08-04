@@ -42,7 +42,7 @@ public class Candidate {
     @Nullable
     private String cvPath;
 
-    /*
+    
     @OneToMany(mappedBy = "candidate")
     private Set<WorkExperience> workExperiences;
 
@@ -51,7 +51,6 @@ public class Candidate {
 
     @OneToMany(mappedBy = "candidate")
     private Set<Language> langugages;
-     */
 
 
 

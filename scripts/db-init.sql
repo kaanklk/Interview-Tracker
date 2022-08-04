@@ -22,31 +22,31 @@ VALUES (1, now(), '1997-02-02', 'john.doe1@mail.ru', '1234567', 'John1', 'Doe1',
 	   (10, now(), '1993-02-02', 'john.doe0@mail.ru', '8754567', 'John10', 'Doe10', 'Diego10', '+3687238323', 'url10');
 
        
-INSERT INTO project(id, name, project_manager_id, description, recruiter_id, sourcer_id, deadline)
+INSERT INTO project(id, uuid, name, project_manager_id, description, recruiter_id, sourcer_id, deadline)
     VALUES
-        (1, 'alpha', 1, 'This is a project to build a new developer team', 4, 1, '2022-06-20'),
-        (2, 'beta', 2, 'This is a project to build a new hr team', 5, 4, '2022-01-23'),
-        (3, 'gamma', 3, 'This is a project to build a new data engineer team', 2, 3, '2021-03-03'),
-        (4, 'epsilon', 4, 'This is a project to build a new frontend team', 2, 3, '2022-02-02'),
-        (5, 'omega', 5, 'This is a project to build a new backend team', 4, 5, '2019-07-03');
+        (1, '8c151dc5-5a98-47e1-bf20-b76976fc8a79', 'alpha', 1, 'This is a project to build a new developer team', 4, 1, '2022-06-20'),
+        (2, 'e6d9c6f9-c15a-4a21-8ee9-be88d189fbf9', 'beta', 2, 'This is a project to build a new hr team', 5, 4, '2022-01-23'),
+        (3, '3bfc784c-ac10-4345-805f-3e6ca5bc1769', 'gamma', 3, 'This is a project to build a new data engineer team', 2, 3, '2021-03-03'),
+        (4, '6b6bd050-9cf4-4e34-b9d6-15c6685b74e3', 'epsilon', 4, 'This is a project to build a new frontend team', 2, 3, '2022-02-02'),
+        (5, '229fcffc-679a-4bb9-ad65-e68d15246b04', 'omega', 5, 'This is a project to build a new backend team', 4, 5, '2019-07-03');
 
-INSERT INTO position(id, position_name, project_id, total_count, hired_count, open)
+INSERT INTO position(id, uuid, position_name, project_id, total_count, hired_count, open)
 values
-    (1, 'Junior Java Developer', 1, 7, 3, true),
-    (2, 'Junior C# Developer', 2, 10, 5, true),
-    (3, 'Senior Java Developer', 2, 11, 9, false),
-    (4, 'Junior Data Engineer', 1, 5, 3, true),
-    (5, 'Medor Python Developer', 2, 4, 3, false),
-    (6, 'Junior HR Assistant', 3, 10, 4, true);
+    (1, '802ae667-d94f-41a2-8a0c-b52006ba4347', 'Junior Java Developer', 1, 7, 3, true),
+    (2, '34938b82-6166-4221-baeb-21544521033e', 'Junior C# Developer', 2, 10, 5, true),
+    (3, 'd86e3c3e-55c8-46ec-b33e-f99cac3aecc4', 'Senior Java Developer', 2, 11, 9, false),
+    (4, '0b51c1b1-f75a-48c6-bd50-48af7a7af653', 'Junior Data Engineer', 1, 5, 3, true),
+    (5, '32c8c2ae-a4bf-457c-b17c-b1f8d61b2f7d', 'Medor Python Developer', 2, 4, 3, false),
+    (6, '323bbfdf-218d-4112-95ed-30952cf268df', 'Junior HR Assistant', 3, 10, 4, true);
 
-INSERT INTO candidate (id, uuid, status, cv_path, person_id, position_id)
+INSERT INTO candidate (id, uuid, status, cv_path, person_id, position_id, project_id)
     VALUES
-        (1, '131f1987-ea30-40b1-bf0b-0791e5063599', 'ACCEPTED', 'resources/cv/cv_000.pdf',  1, 1),
-        (2, '24cc06fe-2ee2-4963-ac55-3263f1917a1c', 'REJECTED', 'resources/cv/cv_001.pdf',  1, 2),
-        (3, 'f0ea1a0a-2527-4b79-9151-e7373f95f51c', 'ACCEPTED', 'resources/cv/cv_002.pdf', 2, 1),
-        (4, '879d3947-2bd8-43bf-a089-f77fe709c25d', 'ACCEPTED', 'resources/cv/cv_003.pdf',  3, 2),
-        (5, 'ec75a941-1bdc-4000-ab09-a6a82c5cb4c4', 'REJECTED', 'resources/cv/cv_004.pdf',  4, 2),
-        (6, '20bab9a9-6058-450e-b1d6-e886dc08d53b', 'ACCEPTED', 'resources/cv/cv_005.pdf', 5, 2);
+        (1, '131f1987-ea30-40b1-bf0b-0791e5063599', 'ACCEPTED', 'resources/cv/cv_000.pdf',  1, 1, 1),
+        (2, '24cc06fe-2ee2-4963-ac55-3263f1917a1c', 'REJECTED', 'resources/cv/cv_001.pdf',  1, 2, 1),
+        (3, 'f0ea1a0a-2527-4b79-9151-e7373f95f51c', 'ACCEPTED', 'resources/cv/cv_002.pdf', 2, 1, 2),
+        (4, '879d3947-2bd8-43bf-a089-f77fe709c25d', 'ACCEPTED', 'resources/cv/cv_003.pdf',  3, 2, 4),
+        (5, 'ec75a941-1bdc-4000-ab09-a6a82c5cb4c4', 'REJECTED', 'resources/cv/cv_004.pdf',  4, 2, 3),
+        (6, '20bab9a9-6058-450e-b1d6-e886dc08d53b', 'ACCEPTED', 'resources/cv/cv_005.pdf', 5, 2, 5);
 
 INSERT INTO language (id, language, LEVEL, candidate_id)
     VALUES 

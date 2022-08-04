@@ -1,5 +1,6 @@
 package tcs.interviewtracker.DTOs;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,6 +14,10 @@ public class CandidateDTO {
     private UUID uuid;
 
     private UUID positionId;
+
+    private UUID projectId;
+
+    private String dateOfBirth;
 
     private String firstName;
 

@@ -27,8 +27,12 @@ import tcs.interviewtracker.DTOs.StatusChangeDTO;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.mappers.StatusChangeMapper;
 import tcs.interviewtracker.persistence.Candidate;
+import tcs.interviewtracker.persistence.Person;
+import tcs.interviewtracker.repository.ProjectRepository;
 import tcs.interviewtracker.service.CandidateService;
 import tcs.interviewtracker.service.PersonService;
+import tcs.interviewtracker.service.PositionService;
+import tcs.interviewtracker.service.ProjectService;
 
 @RestController
 @RequestMapping("/candidates")
@@ -38,10 +42,11 @@ public class CandidateController {
     private CandidateService candidateService;
     @NonNull
     private PersonService personService;
-
     @NonNull
-    @Qualifier("candidateMapper")
-    private ModelMapper candidateMapper;
+    private PositionService positionService;
+    @NonNull
+    private ProjectService projectService;
+
 
     @GetMapping
     public ResponseEntity<List<CandidateDTO>> getCandidates(
@@ -122,12 +127,46 @@ public class CandidateController {
         return new ResponseEntity<StatusChangeDTO>(responseDto, HttpStatus.OK);
     }
 
-    private Candidate convertToEntity(CandidateDTO dto) {
-        return candidateMapper.map(dto, Candidate.class);
+    private Candidate convertToEntity(CandidateDTO src) {
+        Candidate dest = new Candidate();
+
+        dest.setUuid(src.getUuid());
+        dest.setStatus(src.getStatus());
+        dest.setPosition(positionService.findByUuid(src.getPositionId()).get());
+        dest.setProject(projectService.getByUuid(src.getProjectId()));
+        dest.setPerson(new Person());
+        dest.getPerson().setFirstName(src.getFirstName());
+        dest.getPerson().setLastName(src.getLastName());
+        dest.getPerson().setMiddleName(src.getMiddleName());
+        dest.getPerson().setEmail(src.getEmail());
+        dest.getPerson().setPhone(src.getPhone());
+        dest.getPerson().setDateOfBirth(java.sql.Date.valueOf(src.getDateOfBirth()));
+        return dest;
     }
 
-    private CandidateDTO convertToDTO(Candidate entity) {
-        var dto = candidateMapper.map(entity, CandidateDTO.class);
-        return dto;
+    private CandidateDTO convertToDTO(Candidate src) {
+        CandidateDTO dest = new CandidateDTO();
+        dest.setUuid(src.getUuid());
+        dest.setStatus(src.getStatus());
+        var position = src.getPosition();
+        if (null != position) {
+            dest.setPositionId(position.getUuid());
+        }
+        var project = src.getProject();
+        if (null != project) {
+            dest.setProjectId(project.getUuid());
+        }
+        Person person = src.getPerson();
+        if (null != person) {
+            dest.setFirstName(person.getFirstName());
+            dest.setLastName(person.getLastName());
+            dest.setMiddleName(person.getMiddleName());
+            dest.setEmail(person.getEmail());
+            dest.setPhone(person.getPhone());
+            dest.setDateOfBirth(src.getPerson().getDateOfBirth().toString());
+        }
+        //var dto = candidateMapper.map(entity, CandidateDTO.class);
+        //return dto;
+        return dest;
     }
 }
