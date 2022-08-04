@@ -36,7 +36,6 @@ import tcs.interviewtracker.DTOs.TechnicalDocumentationDTO;
 import tcs.interviewtracker.exceptions.BadRequestException;
 import tcs.interviewtracker.exceptions.ResourceAlreadyExistsException;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
-import tcs.interviewtracker.mappers.TechnicalDocumentationMapper;
 import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.TechnicalDocumentation;
 import tcs.interviewtracker.persistence.User;
