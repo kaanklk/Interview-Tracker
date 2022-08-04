@@ -18,7 +18,3 @@ INSERT INTO user_roles (user_id, project_id)
 INSERT INTO user_roles_role (user_roles_id, role_id)
     VALUES (1, 2), (1, 3), (2, 5), (3, 1), (4, 4);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/positionEndpoint

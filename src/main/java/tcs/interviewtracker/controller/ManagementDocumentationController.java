@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -53,16 +52,6 @@ public class ManagementDocumentationController {
     @Autowired
     private UserService userService;
 
-
-    /*
-     Converter<UUID, User> userConverter = new AbstractConverter<UUID, User>() {
-        protected User convert(UUID uuid) {
-            return userService.getUserById(uuid);
-        }
-    }
-
-     */
-
     @GetMapping("/")
     public ResponseEntity<List<ManagementDocumentationDTO>> getManageDocs(
         @RequestParam(required = false, defaultValue = "10") int pageSize,
@@ -87,16 +76,25 @@ public class ManagementDocumentationController {
             DTOs.add(manageDTO);
         }
 
-        return new ResponseEntity<List<ManagementDocumentationDTO>>(HttpStatus.OK);
+        return new ResponseEntity<List<ManagementDocumentationDTO>>(DTOs, HttpStatus.OK);
     }
 
     @GetMapping("/{manageDocId}")
     public ResponseEntity<ManagementDocumentationDTO> getManageDocById(@PathVariable(value = "manageDocId") UUID manageDocId)
     throws ResourceNotFoundException {
+        var manageEntityOptional = manageService.getManageDocByUuid(manageDocId);
         ManagementDocumentation manageEntity= manageService.getManageDocByUuid(manageDocId).get();
         ManagementDocumentationDTO manageDTO = convertingToDTO(manageEntity);
 
-        return new ResponseEntity<ManagementDocumentationDTO>(manageDTO, HttpStatus.OK);
+
+          if(manageEntityOptional.isPresent()) {
+            return new ResponseEntity<ManagementDocumentationDTO>(manageDTO, HttpStatus.OK);
+        }
+
+        else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @PostMapping("/")
@@ -119,10 +117,19 @@ public class ManagementDocumentationController {
     }
 
     @DeleteMapping("/{manageDocId}")
-    public void deleteManageDoc(@PathVariable(value = "manageDocId") UUID manageId )  throws ResourceNotFoundException {
+    public  ResponseEntity<ManagementDocumentationDTO> deleteManageDoc(@PathVariable(value = "manageDocId") UUID manageId )  throws ResourceNotFoundException {
+        var manageDocOptional = manageService.getManageDocByUuid(manageId);
         ManagementDocumentation manageDoc = manageService.getManageDocByUuid(manageId).get();
 
-        manageService.deleteManageDoc(manageDoc);
+           if(manageDocOptional.isPresent()) {
+            manageService.deleteManageDoc(manageDoc);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
     private ManagementDocumentationDTO convertingToDTO(ManagementDocumentation manageDoc) {
