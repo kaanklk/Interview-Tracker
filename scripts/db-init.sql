@@ -21,31 +21,31 @@ VALUES (101, now(), '1997-02-02', 'john.doe1@mail.ru', '1234567', 'John1', 'Doe1
 	   (110, now(), '1993-02-02', 'john.doe0@mail.ru', '8754567', 'John10', 'Doe10', 'Diego10', '+3687238323', 'url10');
 
        
-INSERT INTO project(id, name, description)
+INSERT INTO project(id, uuid, name, description)
     VALUES
-        (101, 'alpha', 'This is a project to build a new developer team'),
-        (102, 'beta', 'This is a project to build a new hr team'),
-        (103, 'gamma', 'This is a project to build a new data engineer team'),
-        (104, 'epsilon', 'This is a project to build a new frontend team'),
-        (105, 'omega', 'This is a project to build a new backend team');
+        (101, 'ede22832-77e9-4374-8b3b-142e80829d74', 'alpha', 'This is a project to build a new developer team'),
+        (102, '34f10181-465b-4573-87b1-12e5bd70d58a', 'beta', 'This is a project to build a new hr team'),
+        (103, '29562c07-b0ca-4af0-8d74-531857aa6fb3', 'gamma', 'This is a project to build a new data engineer team'),
+        (104, '0e288a1e-b9a4-42cd-909a-812929b0e7a9', 'epsilon', 'This is a project to build a new frontend team'),
+        (105, 'd894a591-5b2f-4bcb-8353-4fcca82a6ed5', 'omega', 'This is a project to build a new backend team');
 
 INSERT INTO position(id, uuid, position_name, project_id, total_count, hired_count, open)
 values
-    (101, 'Junior Java Developer', 101, 7, 3, true),
-    (102, 'Junior C# Developer', 102, 10, 5, true),
-    (103, 'Senior Java Developer', 102, 11, 9, false),
-    (104, 'Junior Data Engineer', 101, 5, 3, true),
-    (105, 'Medor Python Developer', 102, 4, 3, false),
-    (106, 'Junior HR Assistant', 103, 10, 4, true);
+    (101, '3ff269d3-e1e8-417a-a2f8-2a629eef5d9b', 'Junior Java Developer', 101, 7, 3, true),
+    (102, 'b309fa51-cb5f-4e7a-9eaf-f6dbd2e9ee10', 'Junior C# Developer', 102, 10, 5, true),
+    (103, '48ed010a-5eee-4c02-96aa-bae833cc2447', 'Senior Java Developer', 102, 11, 9, false),
+    (104, 'b99ceb50-31f6-4a90-a5a2-f708ea4eac4c', 'Junior Data Engineer', 101, 5, 3, true),
+    (105, 'e05fd854-4685-402c-a270-1a4eb1ed5099', 'Medor Python Developer', 102, 4, 3, false),
+    (106, '8721be71-a153-4944-8ce8-da09ca22922f', 'Junior HR Assistant', 103, 10, 4, true);
 
 INSERT INTO candidate (id, uuid, status, cv_path, person_id, position_id, project_id)
     VALUES
-        (101, '131f1987-ea30-40b1-bf0b-0791e5063599', 'ACCEPTED', 'resources/cv/cv_000.pdf',  101, 101),
-        (102, '24cc06fe-2ee2-4963-ac55-3263f1917a1c', 'REJECTED', 'resources/cv/cv_001.pdf',  101, 102),
-        (103, 'f0ea1a0a-2527-4b79-9151-e7373f95f51c', 'ACCEPTED', 'resources/cv/cv_002.pdf', 102, 101),
-        (104, '879d3947-2bd8-43bf-a089-f77fe709c25d', 'ACCEPTED', 'resources/cv/cv_003.pdf',  103, 102),
-        (105, 'ec75a941-1bdc-4000-ab09-a6a82c5cb4c4', 'REJECTED', 'resources/cv/cv_004.pdf',  104, 102),
-        (106, '20bab9a9-6058-450e-b1d6-e886dc08d53b', 'ACCEPTED', 'resources/cv/cv_005.pdf', 105, 102);
+        (101, '131f1987-ea30-40b1-bf0b-0791e5063599', 'ACCEPTED', 'resources/cv/cv_000.pdf',  101, 101, 101),
+        (102, '24cc06fe-2ee2-4963-ac55-3263f1917a1c', 'REJECTED', 'resources/cv/cv_001.pdf',  101, 102, 101),
+        (103, 'f0ea1a0a-2527-4b79-9151-e7373f95f51c', 'ACCEPTED', 'resources/cv/cv_002.pdf', 102, 101, 101),
+        (104, '879d3947-2bd8-43bf-a089-f77fe709c25d', 'ACCEPTED', 'resources/cv/cv_003.pdf',  103, 102, 101),
+        (105, 'ec75a941-1bdc-4000-ab09-a6a82c5cb4c4', 'REJECTED', 'resources/cv/cv_004.pdf',  104, 102, 101),
+        (106, '20bab9a9-6058-450e-b1d6-e886dc08d53b', 'ACCEPTED', 'resources/cv/cv_005.pdf', 105, 102, 101);
 
 INSERT INTO language (id, language, LEVEL, candidate_id)
     VALUES 
