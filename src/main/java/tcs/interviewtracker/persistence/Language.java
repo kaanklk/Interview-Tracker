@@ -27,9 +27,6 @@ public class Language {
     @Column(columnDefinition = "serial")
     private Long id;
 
-    @Column(name = "uuid")
-    private UUID uuid;
-
     @ManyToOne
     @JoinColumn(name="candidate_id", referencedColumnName = "id")
     private Candidate candidate;

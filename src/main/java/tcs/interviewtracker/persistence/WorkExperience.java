@@ -28,9 +28,6 @@ public class WorkExperience {
     @Column(columnDefinition = "serial")
     private Long id;
 
-    @Column(name="uuid")
-    private UUID uuid;
-
     @ManyToOne
     @JoinColumn(name = "candidate_id", referencedColumnName = "id", nullable = false)
     @NonNull

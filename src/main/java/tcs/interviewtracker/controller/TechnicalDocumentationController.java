@@ -71,8 +71,12 @@ public class TechnicalDocumentationController {
 
     Converter<UUID, Candidate> candidateConverter = new AbstractConverter<UUID, Candidate>() {
         protected Candidate convert(UUID uuid) {
-            return candidateService.getByUuid(uuid);
-
+            try {
+                return candidateService.getByUuid(uuid);
+            }
+            catch (ResourceNotFoundException e) {
+                return null;
+            }
         }
     };
 

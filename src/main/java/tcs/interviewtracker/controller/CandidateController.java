@@ -74,14 +74,16 @@ public class CandidateController {
     ) {
 
         var candidate = convertToEntity(dto);
-        var responseDTO = convertToDTO(candidateService.save(candidate));
+        candidate = candidateService.save(candidate);
+        saveRelatedRecords(dto, candidate);
+        var responseDTO = convertToDTO(candidate);
         return new ResponseEntity<CandidateDTO>(responseDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/{candidateId}")
     public ResponseEntity<CandidateDTO> getCandidates(
                 @PathVariable(name = "candidateId", required = true) UUID candidateUuid
-    ) {
+    ) throws ResourceNotFoundException {
 
         var candidate = candidateService.getByUuid(candidateUuid);
         var responseDto = convertToDTO(candidate);
@@ -94,8 +96,9 @@ public class CandidateController {
                 @RequestBody CandidateDTO candidateDTO
     ) throws ResourceNotFoundException {
         var candidate = convertToEntity(candidateDTO);
-        var updatedCandidate = candidateService.update(candidateUuid, candidate);
-        var responseDto = convertToDTO(updatedCandidate);
+        candidate = candidateService.update(candidateUuid, candidate);
+        saveRelatedRecords(candidateDTO, candidate);
+        var responseDto = convertToDTO(candidate);
         return new ResponseEntity<CandidateDTO>(responseDto, HttpStatus.OK);
     }
 
@@ -130,6 +133,37 @@ public class CandidateController {
         return new ResponseEntity<StatusChangeDTO>(responseDto, HttpStatus.OK);
     }
 
+    private void saveRelatedRecords(CandidateDTO src, Candidate dest) {
+        var workExperienceDTOs = src.getWorkExperiences();
+        for (var dto : workExperienceDTOs) {
+            var experience = new WorkExperience();
+            experience.setCandidate(dest);
+            experience.setStartDate(java.sql.Date.valueOf(dto.getStart()));
+            experience.setEndDate(java.sql.Date.valueOf(dto.getEnd()));
+            experience.setInstitution(dto.getInstitution());
+            experience.setSummary(dto.getSummary());
+            candidateService.saveWorkExperience(experience);
+        }
+        var educationDTOs = src.getEducations();
+        for (var dto : educationDTOs) {
+            var education = new Education();
+            education.setCandidate(dest);
+            education.setStartDate(java.sql.Date.valueOf(dto.getStart()));
+            education.setEndDate(java.sql.Date.valueOf(dto.getEnd()));
+            education.setInstitution(dto.getInstitution());
+            education.setInformation(dto.getInformation());
+            candidateService.saveEducation(education);
+        }
+        var languageDTOs = src.getLanguages();
+        for (var dto : languageDTOs) {
+            var language = new Language();
+            language.setCandidate(dest);
+            language.setLanguage(dto.getLanguage());
+            language.setLevel(dto.getLevel());
+            candidateService.saveLanguage(language);
+        }
+    }
+
     private Candidate convertToEntity(CandidateDTO src) {
         Candidate dest = new Candidate();
 
@@ -146,25 +180,6 @@ public class CandidateController {
         person.setDateOfBirth(java.sql.Date.valueOf(src.getDateOfBirth()));
         person = personService.save(person);
         dest.setPerson(person);
-        dest = candidateService.save(dest);
-        var workExperienceDTOs = src.getWorkExperiences();
-        for (var dto : workExperienceDTOs) {
-            var experience = new WorkExperience();
-            experience.setCandidate(dest);
-            experience.setStartDate(java.sql.Date.valueOf(dto.getStart()));
-            experience.setEndDate(java.sql.Date.valueOf(dto.getEnd()));
-            experience.setInstitution(dto.getInstitution());
-            experience.setSummary(dto.getSummary());
-            candidateService.saveWorkExperience(experience);
-        }
-        var languageDTOs = src.getLanguages();
-        for (var dto : languageDTOs) {
-            var language = new Language();
-            language.setCandidate(dest);
-            language.setLanguage(dto.getLanguage());
-            language.setLevel(dto.getLevel());
-            candidateService.saveLanguage(language);
-        }
         return dest;
     }
 
