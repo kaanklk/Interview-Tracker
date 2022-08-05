@@ -150,9 +150,9 @@ public class ProjectService {
         for (Candidate c : candidates) {
             if (c.getProject().getId().equals(project.getId()) ) {
                 if (
-                    !c.getStatus().equals(CandidateStatus.REJECTED.toString()) 
-                    && !c.getStatus().equals(CandidateStatus.OFFER_ACCEPTED.toString())
-                    && !c.getStatus().equals(CandidateStatus.OFFER_DECLINED.toString())
+                    !c.getStatus().toUpperCase().equals(CandidateStatus.REJECTED.toString()) 
+                    && !c.getStatus().toUpperCase().equals(CandidateStatus.OFFER_ACCEPTED.toString())
+                    && !c.getStatus().toUpperCase().equals(CandidateStatus.OFFER_DECLINED.toString())
                     ) {
                     pendingCandidates.add(c);
                 }
@@ -164,31 +164,31 @@ public class ProjectService {
     public List<Candidate> fetchAcceptedCandidates(UUID uuid) {
         Project project = projectRepository.findByUuid(uuid).get();
         List<Candidate> candidates = candidateRepository.findAll();
-        List<Candidate> pendingCandidates = new ArrayList<Candidate>();
+        List<Candidate> acceptedCandidates = new ArrayList<Candidate>();
         for (Candidate c : candidates) {
             if (c.getProject().getId().equals(project.getId())) {
-                if (c.getStatus().equals(CandidateStatus.OFFER_ACCEPTED.toString())) {
-                    pendingCandidates.add(c);
+                if (c.getStatus().toUpperCase().equals(CandidateStatus.OFFER_ACCEPTED.toString())) {
+                    acceptedCandidates.add(c);
                 }
             }
 
         }
-        return pendingCandidates;
+        return acceptedCandidates;
     }
 
     public List<Candidate> fetchRejectedCandidates(UUID uuid) {
         Project project = projectRepository.findByUuid(uuid).get();
         List<Candidate> candidates = candidateRepository.findAll();
-        List<Candidate> pendingCandidates = new ArrayList<Candidate>();
+        List<Candidate> rejectedCandidates = new ArrayList<Candidate>();
         for (Candidate c : candidates) {
             if (c.getProject().getId().equals(project.getId())) {
-                if (c.getStatus().equals(CandidateStatus.REJECTED.toString())) {
-                    pendingCandidates.add(c);
+                if (c.getStatus().toUpperCase().equals(CandidateStatus.REJECTED.toString())) {
+                    rejectedCandidates.add(c);
                 }
             }
 
         }
-        return pendingCandidates;
+        return rejectedCandidates;
     }
 
     public Integer fetchTecnicalInterviewCount(UUID uuid) {
@@ -197,7 +197,7 @@ public class ProjectService {
         List<Interview> technicalInterviews = new ArrayList<Interview>();
         for (Interview inter : interviews) {
             if (inter.getProjectId().equals(project.getId())) {
-                if (inter.getType().equals("technical")) {
+                if (inter.getType().toLowerCase().equals("technical")) {
                     technicalInterviews.add(inter);
                 }
             }
@@ -211,7 +211,7 @@ public class ProjectService {
         List<Interview> technicalInterviews = new ArrayList<Interview>();
         for (Interview inter : interviews) {
             if (inter.getProjectId().equals(project.getId())) {
-                if (inter.getType().equals("management") ) {
+                if (inter.getType().toLowerCase().equals("management") ) {
                     technicalInterviews.add(inter);
                 }
             }
@@ -225,7 +225,7 @@ public class ProjectService {
         List<Interview> upcomingTechnicalInterviews = new ArrayList<Interview>();
         for (Interview inter : interviews) {
             if (inter.getProjectId().equals(project.getId()) && !inter.getIsCompleted()) {
-                if (inter.getType().equals("teehnical")) {
+                if (inter.getType().toLowerCase().equals("technical")) {
                     upcomingTechnicalInterviews.add(inter);
                 }
             }
@@ -239,7 +239,7 @@ public class ProjectService {
         List<Interview> upcomingManagementInterviews = new ArrayList<Interview>();
         for (Interview inter : interviews) {
             if (inter.getProjectId().equals(project.getId()) && !inter.getIsCompleted()) {
-                if (inter.getType().equals("management")) {
+                if (inter.getType().toLowerCase().equals("management")) {
                     upcomingManagementInterviews.add(inter);
                 }
             }
