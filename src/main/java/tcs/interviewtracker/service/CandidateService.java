@@ -109,7 +109,7 @@ public class CandidateService {
         return technicalDocumentationRepository.findByUuid(documentationUuid).get();
     }
 
-    public ManagementDocumentation getManagementDocumentation(UUID documentationUuid) {
+    public Optional<ManagementDocumentation> getManagementDocumentation(UUID documentationUuid) {
         return managementDocumentationRepository.getReferenceByUuid(documentationUuid);
     }
 

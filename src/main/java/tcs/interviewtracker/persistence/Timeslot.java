@@ -22,9 +22,8 @@ import lombok.NoArgsConstructor;
 public class Timeslot {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long timeslotId;
+    private long id;
 
     @Column(name = "uuid")
     private UUID uuid;

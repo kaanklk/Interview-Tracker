@@ -83,4 +83,9 @@ public class RestResponseEntityHandler {
 
         return new ResponseEntity<ErrorObject>(errorObj, HttpStatus.BAD_REQUEST);
     }
+    @ResponseBody
+    @ExceptionHandler(value = BadRequestException.class)
+    protected ResponseEntity<Object> handleBadRequestException(BadRequestException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

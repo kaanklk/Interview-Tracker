@@ -20,15 +20,19 @@ public class Interview {
 
     private static final String FLD_PROJECTID = "projectId";
     private static final String FLD_TIMESLOTID = "timeslotId";
-    private static final String FLD_TYPEID = "typeId";
+    private static final String FLD_TYPE = "type";
     private static final String FLD_INTERVIEWERONEID = "interviewerOneId";
     private static final String FLD_INTERVIEWERTWOID = "interviewerTwoId";
     private static final String FLD_DOCUMENTID = "documentId";
     private static final String FLD_ISCOMPLETED = "isCompleted";
+    private static final String FLD_INTERVIEW_UUID = "uuid";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = FLD_INTERVIEW_UUID)
+    private Long uuid;
 
     @Column(name = FLD_PROJECTID)
     private Long projectId;
@@ -36,8 +40,8 @@ public class Interview {
     @Column(name = FLD_TIMESLOTID)
     private Long timeslotId;
 
-    @Column(name = FLD_TYPEID)
-    private Long typeId;
+    @Column(name = FLD_TYPE)
+    private String type;
 
     @Column(name = FLD_INTERVIEWERONEID)
     private Long interviewerOneId;
@@ -50,4 +54,5 @@ public class Interview {
 
     @Column(name = FLD_ISCOMPLETED)
     private Boolean isCompleted;
+
 }
