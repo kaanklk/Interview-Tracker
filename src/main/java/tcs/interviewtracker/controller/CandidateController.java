@@ -76,7 +76,7 @@ public class CandidateController {
     @PostMapping
     public ResponseEntity<CandidateDTO> postCandidate(
         @RequestBody(required = true) CandidateDTO dto
-    ) {
+    ) throws ResourceNotFoundException {
 
         var candidate = convertToEntity(dto);
         candidate = candidateService.save(candidate);
@@ -169,7 +169,7 @@ public class CandidateController {
         }
     }
 
-    private Candidate convertToEntity(CandidateDTO src) {
+    private Candidate convertToEntity(CandidateDTO src) throws ResourceNotFoundException {
         Candidate dest = new Candidate();
 
         dest.setUuid(src.getUuid());
@@ -185,7 +185,7 @@ public class CandidateController {
         person.setDateOfBirth(java.sql.Date.valueOf(src.getDateOfBirth()));
         person = personService.save(person);
         dest.setPerson(person);
-        
+
         return dest;
     }
 

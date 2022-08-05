@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
+import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.CandidateStatus;
 import tcs.interviewtracker.persistence.Interview;
@@ -41,8 +42,13 @@ public class ProjectService {
     private InterviewRepository interviewRepository;
     private CandidateRepository candidateRepository;
 
-    public Project getByUuid(UUID uuid) {
-        return projectRepository.findByUuid(uuid).get();
+    public Project getByUuid(UUID uuid) throws ResourceNotFoundException {
+        Optional<Project> project = projectRepository.findByUuid(uuid);
+        if(!project.isPresent()){
+            throw new ResourceNotFoundException("Project not found");
+
+        }
+        return project.get();
     }
 
     public Project getById(Long id) {

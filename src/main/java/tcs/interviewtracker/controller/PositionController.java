@@ -88,7 +88,7 @@ public class PositionController {
     }
 
     @PostMapping
-    ResponseEntity<PositionDTO> newPost(@RequestBody PositionDTO position) {
+    ResponseEntity<PositionDTO> newPost(@RequestBody PositionDTO position) throws ResourceNotFoundException {
         var returnPosition = this.convertToDto(positionService.save(convertToEntity(position)));
         return new ResponseEntity<PositionDTO>(returnPosition, HttpStatus.CREATED);
 
@@ -117,7 +117,7 @@ public class PositionController {
         return positionDTO;
     }
 
-    private Position convertToEntity(PositionDTO positionDTO) {
+    private Position convertToEntity(PositionDTO positionDTO) throws ResourceNotFoundException {
 
         // modelMapper.addMappings(mapper -> mapper.skip(Position::setProject));
         // var position = PositionMapper.INSTANCE.toEntity(positionDTO);

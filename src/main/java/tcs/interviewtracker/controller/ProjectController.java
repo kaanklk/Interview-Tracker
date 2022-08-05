@@ -72,7 +72,7 @@ public class ProjectController {
     @PutMapping("/{id}")
     public ResponseEntity<ProjectDTO> updateExistingProject(@PathVariable(value = "id") UUID uuid,
             @Validated @RequestBody Project projectDetails)
-            throws ResourceAlreadyExistsException {
+            throws ResourceAlreadyExistsException, ResourceNotFoundException {
 
         Project project = projectService.getByUuid(uuid);
 
