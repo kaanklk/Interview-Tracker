@@ -1,15 +1,15 @@
 package tcs.interviewtracker.DTOs;
 
-
-
 import java.util.Date;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 @Data
+@SuperBuilder
 public class UserDTO {
 
     private UUID uuid;

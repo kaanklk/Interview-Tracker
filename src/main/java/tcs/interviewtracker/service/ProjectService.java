@@ -149,7 +149,8 @@ public class ProjectService {
         List<Candidate> pendingCandidates = new ArrayList<Candidate>();
         for (Candidate c : candidates) {
             if (c.getProject().getId() == project.getId()) {
-                if (c.getStatus() != CandidateStatus.REJECTED.toString() || c.getStatus() != CandidateStatus.OFFER_ACCEPTED.toString()) {
+                if (c.getStatus() != CandidateStatus.REJECTED.toString()
+                        || c.getStatus() != CandidateStatus.OFFER_ACCEPTED.toString()) {
                     pendingCandidates.add(c);
                 }
             }
@@ -274,7 +275,7 @@ public class ProjectService {
         Project project = projectRepository.findByUuid(projectUuid).get();
         Optional<Role> projectManagerRole = roleRepository.findByRoleName("project_manager");
         List<UserRoles> userRoles = userRolesRepository.findByProject(project);
-        User projectManager = null;
+        User projectManager = new User();
         for (UserRoles uRoles : userRoles) {
             if (uRoles.getRoles().contains(projectManagerRole.get())) {
                 projectManager = uRoles.getUser();
