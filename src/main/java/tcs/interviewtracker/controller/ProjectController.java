@@ -298,7 +298,7 @@ public class ProjectController {
                     .positionId(cand.getPosition().getUuid()).firstName(cand.getPerson().getFirstName())
                     .middleName(cand.getPerson().getMiddleName()).lastName(cand.getPerson().getLastName())
                     .email(cand.getPerson().getEmail()).phone(cand.getPerson().getPhone()).languages(null)
-                    .workExperiences(null).educations(null).status(cand.getStatus()).cvId(cand.getUuid())
+                    .workExperiences(null).educations(null).status(cand.getStatus()).cvPath(cand.getCvPath())
                     .technicalInterviewerId(null).technicalInterviewerId2(null)
                     .managementInterviewerId(null).managementInterviewerId2(null).technicalDocumentationId(null)
                     .managementDocumentationId(null).possibleTimeslots(null).build();
