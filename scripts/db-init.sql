@@ -88,15 +88,6 @@ INSERT INTO user_roles (id, user_id, project_id)
         (104, 104, 104),
         (105, 105, 105);
 
-INSERT INTO users_roles (user_id, roles_role_id)
-	VALUES 	
-			(101, 101),
-			(101, 102),
-			(102, 103),
-			(103, 104),
-			(104, 105);
-			
-
 INSERT INTO user_roles_role (user_roles_id, role_id)
 VALUES
 		(101, 102),
