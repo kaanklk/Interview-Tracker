@@ -33,9 +33,11 @@ import tcs.interviewtracker.persistence.Language;
 import tcs.interviewtracker.persistence.Person;
 import tcs.interviewtracker.persistence.WorkExperience;
 import tcs.interviewtracker.service.CandidateService;
+import tcs.interviewtracker.service.ManagementDocumentationService;
 import tcs.interviewtracker.service.PersonService;
 import tcs.interviewtracker.service.PositionService;
 import tcs.interviewtracker.service.ProjectService;
+import tcs.interviewtracker.service.TechnicalDocumentationService;
 
 @RestController
 @RequestMapping("/candidates")
@@ -49,7 +51,10 @@ public class CandidateController {
     private PositionService positionService;
     @NonNull
     private ProjectService projectService;
-
+    @NonNull
+    private ManagementDocumentationService managementDocumentationService;
+    @NonNull
+    private TechnicalDocumentationService technicalDocumentationService;
 
     @GetMapping
     public ResponseEntity<List<CandidateDTO>> getCandidates(
@@ -180,6 +185,7 @@ public class CandidateController {
         person.setDateOfBirth(java.sql.Date.valueOf(src.getDateOfBirth()));
         person = personService.save(person);
         dest.setPerson(person);
+        
         return dest;
     }
 
@@ -256,6 +262,30 @@ public class CandidateController {
             languageDTOs.add(languageDTO);
         }
         dest.setLanguages(languageDTOs);
+
+        var managementDoc = managementDocumentationService.getManageDocByCandidate(src);
+        if (managementDoc.isPresent()) {
+            dest.setManagementDocumentationId(managementDoc.get().getUuid());
+            var interviewer1 = managementDoc.get().getInterviewer1();
+            if (null != interviewer1) {
+                dest.setManagementInterviewerId(interviewer1.getUuid());
+            }
+            var interviewer2 = managementDoc.get().getInterviewer2();
+            if (null != interviewer2) {
+                dest.setManagementInterviewerId2(interviewer2.getUuid());
+            }
+        }
+
+        var techDoc = technicalDocumentationService.getTechnicalDocByCandidate(src);
+        if (techDoc.isPresent()) {
+            dest.setTechnicalDocumentationId(techDoc.get().getUuid());
+            if (null != techDoc.get().getInterviewerOne()) {
+                dest.setTechnicalInterviewerId(techDoc.get().getInterviewerOne().getUuid());
+            }
+            if (null != techDoc.get().getInterviewerTwo()) {
+                dest.setTechnicalInterviewerId2(techDoc.get().getInterviewerTwo().getUuid());
+            }
+        }
 
         //var dto = candidateMapper.map(entity, CandidateDTO.class);
         //return dto;

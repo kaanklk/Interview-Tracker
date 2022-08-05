@@ -8,17 +8,17 @@ INSERT INTO person(id, email, uuid, fname, lname, mname, phone, date_of_birth, p
         (104, 'janos.kovacs@gmail.com', '0b3c5a27-7922-416d-baab-46c73ec0b7b0', 'Janos', 'Kovacs', 'd', '+36852741933', '1948-05-10', 'resources/pictures/profil/pp_004.jpg'),
         (105, 'peter.kovacs@gmail.com', '5b6613f0-9faa-488e-95c2-418af8e6f438', 'Peter', 'Kovacs', 'd', '+36953214552', '1989-05-30', 'resources/pictures/profil/pp_005.jpg');
 
-INSERT INTO users (id, created_at, date_of_birth, email, employee_id, first_name, last_name, middle_name, phone_number, photo)
-VALUES (101, now(), '1997-02-02', 'john.doe1@mail.ru', '1234567', 'John1', 'Doe1', 'Diego1', '+3687238323', 'url1'),
-       (102, now(), '1998-02-02', 'john.doe2@mail.ru', '4234567', 'John2', 'Doe2', 'Diego2', '+3687238323', 'url2'),
-	   (103, now(), '1999-02-02', 'john.doe3@mail.ru', '1236567', 'John3', 'Doe3', 'Diego3', '+3687238323', 'url3'),
-	   (104, now(), '1992-02-02', 'john.doe4@mail.ru', '1234727', 'John4', 'Doe4', 'Diego4', '+3687238323', 'url4'),
-	   (105, now(), '1993-02-02', 'john.doe5@mail.ru', '6734567', 'John5', 'Doe5', 'Diego5', '+3687238323', 'url5'),
-	   (106, now(), '1991-02-02', 'john.doe6@mail.ru', '1454567', 'John6', 'Doe6', 'Diego6', '+3687238323', 'url6'),
-	   (107, now(), '1996-02-02', 'john.doe7@mail.ru', '1234567', 'John7', 'Doe7', 'Diego7', '+3687238323', 'url7'),
-	   (108, now(), '1994-02-02', 'john.doe8@mail.ru', '3454567', 'John8', 'Doe8', 'Diego8', '+3687238323', 'url8'),
-	   (109, now(), '1995-02-02', 'john.doe9@mail.ru', '4344567', 'John9', 'Doe9', 'Diego9', '+3687238323', 'url9'),
-	   (110, now(), '1993-02-02', 'john.doe0@mail.ru', '8754567', 'John10', 'Doe10', 'Diego10', '+3687238323', 'url10');
+INSERT INTO users (id, uuid, created_at, date_of_birth, email, employee_id, first_name, last_name, middle_name, phone_number, photo)
+VALUES (101, 'fc0e88ec-cb24-42e2-9e55-f85512c584eb', now(), '1997-02-02', 'john.doe1@mail.ru', '1234567', 'John1', 'Doe1', 'Diego1', '+3687238323', 'url1'),
+       (102, '11b6cab6-4a8f-40d0-be64-50a7b338523c', now(), '1998-02-02', 'john.doe2@mail.ru', '4234567', 'John2', 'Doe2', 'Diego2', '+3687238323', 'url2'),
+	   (103, '5d7e1836-36f2-4cf1-bacc-26006bf25153', now(), '1999-02-02', 'john.doe3@mail.ru', '1236567', 'John3', 'Doe3', 'Diego3', '+3687238323', 'url3'),
+	   (104, '4cba21f6-13bd-49db-b1a5-3eb0bb5d9f1c', now(), '1992-02-02', 'john.doe4@mail.ru', '1234727', 'John4', 'Doe4', 'Diego4', '+3687238323', 'url4'),
+	   (105, '6f06dead-fa00-4f66-9a35-8813437a8906', now(), '1993-02-02', 'john.doe5@mail.ru', '6734567', 'John5', 'Doe5', 'Diego5', '+3687238323', 'url5'),
+	   (106, '62f393bd-7b05-4479-8e06-034a3a125581', now(), '1991-02-02', 'john.doe6@mail.ru', '1454567', 'John6', 'Doe6', 'Diego6', '+3687238323', 'url6'),
+	   (107, '1ba75c20-676e-42bf-ac9b-a5f22833a470', now(), '1996-02-02', 'john.doe7@mail.ru', '1234567', 'John7', 'Doe7', 'Diego7', '+3687238323', 'url7'),
+	   (108, '1a5e6859-7a7b-495f-b064-5c66a7a85510', now(), '1994-02-02', 'john.doe8@mail.ru', '3454567', 'John8', 'Doe8', 'Diego8', '+3687238323', 'url8'),
+	   (109, '44097d7e-d916-4276-bbae-47385f92b236', now(), '1995-02-02', 'john.doe9@mail.ru', '4344567', 'John9', 'Doe9', 'Diego9', '+3687238323', 'url9'),
+	   (110, '3c9dead7-638f-4745-9545-615f269f65d6', now(), '1993-02-02', 'john.doe0@mail.ru', '8754567', 'John10', 'Doe10', 'Diego10', '+3687238323', 'url10');
 
        
 INSERT INTO project(id, uuid, name, description)
@@ -95,4 +95,21 @@ VALUES
        	(102, 105),
 	   	(103, 101),
 	   	(104, 104);
+	   
+INSERT INTO technical_documentation (id, uuid, candidate_id, interviewer_one, interviewer_two)
+	VALUES
+		(101, 'a470cde2-a6e0-49aa-9db1-bfb4f61a2319', 101, 102, 103),
+		(102, 'f0006722-91f6-4702-a8a1-3f66176f0da4', 102, 101, 102),
+		(103, 'c43dfece-596a-47c1-860b-06e98383bf04', 103, 103, 104),
+		(104, '7747e757-8cf9-4709-b7f4-2e41c80e4dda', 104, 101, 103),
+		(105, 'ef4a38dc-f83f-45f2-b80a-bd9a3868ee30', 105, 102, 101);
+		
+INSERT INTO management_documentation (id, uuid, candidate_id, project_id, interviewer_id1 , interviewer_id2)
+	VALUES
+		(101, '9d158f42-615f-4657-a99d-902820c8adab', 101, 101, 102, 103),
+		(102, '0e0ccfe0-a25f-42e2-801d-c53a082408d8', 102, 101, 101, 102),
+		(103, '3ca1e412-760f-4276-9805-abdb5900db6c', 103, 101, 103, 104),
+		(104, 'cb5057b3-9b3c-4523-85cb-9eca3771a111', 104, 101, 101, 103),
+		(105, '6290e09d-c5d9-4018-9137-1511ccb11fd3', 105, 101, 102, 101);
 
+	
