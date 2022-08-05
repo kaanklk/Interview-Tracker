@@ -9,9 +9,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
+import tcs.interviewtracker.DTOs.WorkExperienceDTO;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.Education;
+import tcs.interviewtracker.persistence.Language;
 import tcs.interviewtracker.persistence.ManagementDocumentation;
 import tcs.interviewtracker.persistence.Position;
 import tcs.interviewtracker.persistence.StatusChange;
@@ -20,6 +22,7 @@ import tcs.interviewtracker.persistence.User;
 import tcs.interviewtracker.persistence.WorkExperience;
 import tcs.interviewtracker.repository.CandidateRepository;
 import tcs.interviewtracker.repository.EducationRepository;
+import tcs.interviewtracker.repository.LanguageRepository;
 import tcs.interviewtracker.repository.ManagementDocumentationRepository;
 import tcs.interviewtracker.repository.PositionRepository;
 import tcs.interviewtracker.repository.StatusChangeRepository;
@@ -38,6 +41,7 @@ public class CandidateService {
     private TechnicalDocumentationRepository technicalDocumentationRepository;
     private ManagementDocumentationRepository managementDocumentationRepository;
     private PositionRepository positionRepository;
+    private LanguageRepository languageRepository;
 
     public List<Candidate> findAll() {
         return candidateRepository.findAll();
@@ -47,8 +51,12 @@ public class CandidateService {
         return candidateRepository.findAll(request);
     }
 
-    public Candidate getByUuid(UUID uuid) {
-        return candidateRepository.getByUuid(uuid);
+    public Candidate getByUuid(UUID uuid) throws ResourceNotFoundException {
+        var candidate = candidateRepository.getByUuid(uuid);
+        if (null == candidate) {
+            throw new ResourceNotFoundException();
+        }
+        return candidate;
     }
 
     public Candidate save(Candidate candidate) {
@@ -61,6 +69,12 @@ public class CandidateService {
         if (null == oldCandidate) {
             throw new ResourceNotFoundException();
         }
+
+        //Delete old attached records:
+        deleteWorkExperience(oldCandidate);
+        deleteLanguage(oldCandidate);
+        deleteEducations(oldCandidate);
+
         candidate.setId(oldCandidate.getId());
         candidate.setUuid(uuid);
         return candidateRepository.save(candidate);
@@ -106,7 +120,7 @@ public class CandidateService {
         return technicalDocumentationRepository.findByUuid(documentationUuid).get();
     }
 
-    public ManagementDocumentation getManagementDocumentation(UUID documentationUuid) {
+    public Optional<ManagementDocumentation> getManagementDocumentation(UUID documentationUuid) {
         return managementDocumentationRepository.getReferenceByUuid(documentationUuid);
     }
 
@@ -149,42 +163,15 @@ public class CandidateService {
         return workExperienceRepository.getByCandidate(candidate, request);
     }
 
-    public WorkExperience getWorkExperienceByUuid(UUID candidateId, UUID experienceUuid)
-            throws ResourceNotFoundException {
-        Candidate candidate = candidateRepository.getByUuid(candidateId);
-        if (null == candidate) {
-            throw new ResourceNotFoundException();
-        }
-        WorkExperience workExperience = workExperienceRepository.getByUuid(experienceUuid);
-        if (null == workExperience) {
-            throw new ResourceNotFoundException();
-        }
-        return workExperience;
-    }
-
     public WorkExperience saveWorkExperience(WorkExperience workExperience) {
-        workExperience.setUuid(UUID.randomUUID());
         return workExperienceRepository.save(workExperience);
     }
 
-    public WorkExperience updateWorkExperience(UUID workExperienceUuid, WorkExperience workExperience)
-            throws ResourceNotFoundException {
-        WorkExperience oldWorkExperience = workExperienceRepository.getByUuid(workExperienceUuid);
-        if (null == oldWorkExperience) {
-            throw new ResourceNotFoundException();
+    public void deleteWorkExperience(Candidate candidate) throws ResourceNotFoundException {
+        List<WorkExperience> toDelete = workExperienceRepository.getByCandidate(candidate);
+        for (var d : toDelete) {
+            workExperienceRepository.delete(d);    
         }
-        workExperience.setId(oldWorkExperience.getId());
-        workExperience.setUuid(workExperienceUuid);
-        return workExperienceRepository.save(workExperience);
-    }
-
-    public WorkExperience deleteWorkExperience(UUID workExperienceUuid) throws ResourceNotFoundException {
-        WorkExperience toDelete = workExperienceRepository.getByUuid(workExperienceUuid);
-        if (null == toDelete) {
-            throw new ResourceNotFoundException();
-        }
-        workExperienceRepository.delete(toDelete);
-        return toDelete;
     }
 
     // Education:----------------------------------------------------------------
@@ -206,41 +193,44 @@ public class CandidateService {
         return educationRepository.getByCandidate(candidate, request);
     }
 
-    public Education getEducationByUuid(UUID candidateUuid, UUID educationUuid)
+    public Education saveEducation(Education education) {
+        return educationRepository.save(education);
+    }
+
+    public void deleteEducations(Candidate candidate) throws ResourceNotFoundException {
+        List<Education> toDelete = educationRepository.getByCandidate(candidate);
+        for (var d : toDelete) {
+            educationRepository.delete(d);    
+        }
+    }
+
+    // Languages:----------------------------------------------------------------
+
+    public List<Language> findLanguages(UUID candidateUuid) throws ResourceNotFoundException {
+        Candidate candidate = candidateRepository.getByUuid(candidateUuid);
+        if (null == candidate) {
+            throw new ResourceNotFoundException();
+        }
+        return languageRepository.getByCandidate(candidate);
+    }
+
+    public Page<Language> findLanguagePaginated(UUID candidateUuid, PageRequest request)
             throws ResourceNotFoundException {
         Candidate candidate = candidateRepository.getByUuid(candidateUuid);
         if (null == candidate) {
             throw new ResourceNotFoundException();
         }
-        Education education = educationRepository.getByUuid(educationUuid);
-        if (null == education) {
-            throw new ResourceNotFoundException();
+        return languageRepository.getByCandidate(candidate, request);
+    }
+
+    public Language saveLanguage(Language language) {
+        return languageRepository.save(language);
+    }
+
+    public void deleteLanguage(Candidate candidate) throws ResourceNotFoundException {
+        List<Language> toDelete = languageRepository.getByCandidate(candidate);
+        for (var d : toDelete) {
+            languageRepository.delete(d);    
         }
-        return education;
     }
-
-    public Education saveEducation(Education education) {
-        education.setUuid(UUID.randomUUID());
-        return educationRepository.save(education);
-    }
-
-    public Education updateEducation(UUID educationUuid, Education education) throws ResourceNotFoundException {
-        Education oldEducation = educationRepository.getByUuid(educationUuid);
-        if (null == oldEducation) {
-            throw new ResourceNotFoundException();
-        }
-        education.setId(oldEducation.getId());
-        education.setUuid(educationUuid);
-        return educationRepository.save(education);
-    }
-
-    public Education deleteEducation(UUID educationUuid) throws ResourceNotFoundException {
-        Education toDelete = educationRepository.getByUuid(educationUuid);
-        if (null == toDelete) {
-            throw new ResourceNotFoundException();
-        }
-        educationRepository.delete(toDelete);
-        return toDelete;
-    }
-
 }

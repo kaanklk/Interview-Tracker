@@ -22,7 +22,7 @@ import lombok.Data;
 public class Position {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "uuid")
@@ -35,13 +35,12 @@ public class Position {
     @JoinColumn(name = "project_id", referencedColumnName = "id")
     private Project project;
 
-    @OneToMany(mappedBy = "position")
-    private Set<Candidate> candidates;
-
     @Column(name = "total_count")
     private Integer totalCount;
+
     @Column
     private Integer hiredCount;
+
     @Column
     private Boolean open;
 

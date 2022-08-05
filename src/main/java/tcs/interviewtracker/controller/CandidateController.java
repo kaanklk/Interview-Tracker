@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -23,12 +21,21 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import tcs.interviewtracker.DTOs.CandidateDTO;
+import tcs.interviewtracker.DTOs.EducationDTO;
+import tcs.interviewtracker.DTOs.LanguageDTO;
 import tcs.interviewtracker.DTOs.StatusChangeDTO;
+import tcs.interviewtracker.DTOs.WorkExperienceDTO;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.mappers.StatusChangeMapper;
 import tcs.interviewtracker.persistence.Candidate;
+import tcs.interviewtracker.persistence.Education;
+import tcs.interviewtracker.persistence.Language;
+import tcs.interviewtracker.persistence.Person;
+import tcs.interviewtracker.persistence.WorkExperience;
 import tcs.interviewtracker.service.CandidateService;
 import tcs.interviewtracker.service.PersonService;
+import tcs.interviewtracker.service.PositionService;
+import tcs.interviewtracker.service.ProjectService;
 
 @RestController
 @RequestMapping("/candidates")
@@ -38,23 +45,24 @@ public class CandidateController {
     private CandidateService candidateService;
     @NonNull
     private PersonService personService;
-
     @NonNull
-    @Qualifier("candidateMapper")
-    private ModelMapper candidateMapper;
+    private PositionService positionService;
+    @NonNull
+    private ProjectService projectService;
+
 
     @GetMapping
     public ResponseEntity<List<CandidateDTO>> getCandidates(
                 @RequestParam(required = false, defaultValue = "10") Integer pagesize,
                 @RequestParam(required = false, defaultValue = "0") Integer offset,
                 @RequestParam(required = false, defaultValue = "id") String orderBy,
-                @RequestParam(required = false, defaultValue = "ascending") String orderDirection) 
+                @RequestParam(required = false, defaultValue = "ascending") String orderDirection)
     {
-        PageRequest request = PageRequest.of(offset, pagesize, 
+        PageRequest request = PageRequest.of(offset, pagesize,
                         (orderDirection.equals("ascending"))? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending());
         var candidates = candidateService.findPaginated(request);
         var dtos = new ArrayList<CandidateDTO>();
-        for (var candidate : candidates) {            
+        for (var candidate : candidates) {
             dtos.add(convertToDTO(candidate));
         }
         return new ResponseEntity<List<CandidateDTO>>(dtos, HttpStatus.OK);
@@ -66,14 +74,16 @@ public class CandidateController {
     ) {
 
         var candidate = convertToEntity(dto);
-        var responseDTO = convertToDTO(candidateService.save(candidate));
+        candidate = candidateService.save(candidate);
+        saveRelatedRecords(dto, candidate);
+        var responseDTO = convertToDTO(candidate);
         return new ResponseEntity<CandidateDTO>(responseDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/{candidateId}")
     public ResponseEntity<CandidateDTO> getCandidates(
                 @PathVariable(name = "candidateId", required = true) UUID candidateUuid
-    ) {
+    ) throws ResourceNotFoundException {
 
         var candidate = candidateService.getByUuid(candidateUuid);
         var responseDto = convertToDTO(candidate);
@@ -86,8 +96,9 @@ public class CandidateController {
                 @RequestBody CandidateDTO candidateDTO
     ) throws ResourceNotFoundException {
         var candidate = convertToEntity(candidateDTO);
-        var updatedCandidate = candidateService.update(candidateUuid, candidate);
-        var responseDto = convertToDTO(updatedCandidate);
+        candidate = candidateService.update(candidateUuid, candidate);
+        saveRelatedRecords(candidateDTO, candidate);
+        var responseDto = convertToDTO(candidate);
         return new ResponseEntity<CandidateDTO>(responseDto, HttpStatus.OK);
     }
 
@@ -122,12 +133,132 @@ public class CandidateController {
         return new ResponseEntity<StatusChangeDTO>(responseDto, HttpStatus.OK);
     }
 
-    private Candidate convertToEntity(CandidateDTO dto) {
-        return candidateMapper.map(dto, Candidate.class);
+    private void saveRelatedRecords(CandidateDTO src, Candidate dest) {
+        var workExperienceDTOs = src.getWorkExperiences();
+        for (var dto : workExperienceDTOs) {
+            var experience = new WorkExperience();
+            experience.setCandidate(dest);
+            experience.setStartDate(java.sql.Date.valueOf(dto.getStart()));
+            experience.setEndDate(java.sql.Date.valueOf(dto.getEnd()));
+            experience.setInstitution(dto.getInstitution());
+            experience.setSummary(dto.getSummary());
+            candidateService.saveWorkExperience(experience);
+        }
+        var educationDTOs = src.getEducations();
+        for (var dto : educationDTOs) {
+            var education = new Education();
+            education.setCandidate(dest);
+            education.setStartDate(java.sql.Date.valueOf(dto.getStart()));
+            education.setEndDate(java.sql.Date.valueOf(dto.getEnd()));
+            education.setInstitution(dto.getInstitution());
+            education.setInformation(dto.getInformation());
+            candidateService.saveEducation(education);
+        }
+        var languageDTOs = src.getLanguages();
+        for (var dto : languageDTOs) {
+            var language = new Language();
+            language.setCandidate(dest);
+            language.setLanguage(dto.getLanguage());
+            language.setLevel(dto.getLevel());
+            candidateService.saveLanguage(language);
+        }
     }
 
-    private CandidateDTO convertToDTO(Candidate entity) {
-        var dto = candidateMapper.map(entity, CandidateDTO.class);
-        return dto;
+    private Candidate convertToEntity(CandidateDTO src) {
+        Candidate dest = new Candidate();
+
+        dest.setUuid(src.getUuid());
+        dest.setStatus(src.getStatus());
+        dest.setPosition(positionService.findByUuid(src.getPositionId()).get());
+        dest.setProject(projectService.getByUuid(src.getProjectId()));
+        var person = new Person();
+        person.setFirstName(src.getFirstName());
+        person.setLastName(src.getLastName());
+        person.setMiddleName(src.getMiddleName());
+        person.setEmail(src.getEmail());
+        person.setPhone(src.getPhone());
+        person.setDateOfBirth(java.sql.Date.valueOf(src.getDateOfBirth()));
+        person = personService.save(person);
+        dest.setPerson(person);
+        return dest;
+    }
+
+    private CandidateDTO convertToDTO(Candidate src) {
+        CandidateDTO dest = new CandidateDTO();
+        dest.setUuid(src.getUuid());
+        dest.setStatus(src.getStatus());
+        var position = src.getPosition();
+        if (null != position) {
+            dest.setPositionId(position.getUuid());
+        }
+        var project = src.getProject();
+        if (null != project) {
+            dest.setProjectId(project.getUuid());
+        }
+        Person person = src.getPerson();
+        if (null != person) {
+            dest.setFirstName(person.getFirstName());
+            dest.setLastName(person.getLastName());
+            dest.setMiddleName(person.getMiddleName());
+            dest.setEmail(person.getEmail());
+            dest.setPhone(person.getPhone());
+            dest.setDateOfBirth(src.getPerson().getDateOfBirth().toString());
+        }
+
+        List<WorkExperience> workExperiences;
+        try {
+            workExperiences = candidateService.findWorkExperiences(src.getUuid());
+        }
+        catch (ResourceNotFoundException e) {
+            workExperiences = new ArrayList<WorkExperience>();
+        }
+        var workExperienceDTOs = new ArrayList<WorkExperienceDTO>();
+        for (var experience : workExperiences) {
+            var experienceDTO = new WorkExperienceDTO();
+            experienceDTO.setStart(experience.getStartDate().toString());
+            experienceDTO.setEnd(experience.getEndDate().toString());
+            experienceDTO.setInstitution(experience.getInstitution());
+            experienceDTO.setSummary(experience.getSummary());
+            workExperienceDTOs.add(experienceDTO);
+        }
+        dest.setWorkExperiences(workExperienceDTOs);
+
+        List<Education> educations;
+        try {
+            educations = candidateService.findEducation(src.getUuid());
+        }
+        catch (ResourceNotFoundException e) {
+            educations = new ArrayList<Education>();
+        }
+        var educationDTOs = new ArrayList<EducationDTO>();
+        for (var education : educations) {
+            var educationDTO = new EducationDTO();
+            educationDTO.setStart(education.getStartDate().toString());
+            educationDTO.setEnd(education.getEndDate().toString());
+            educationDTO.setInstitution(education.getInstitution());
+            educationDTO.setInformation(education.getInformation());
+            educationDTOs.add(educationDTO);
+        }
+        dest.setEducations(educationDTOs);
+
+        List<Language> languages;
+        try {
+            languages = candidateService.findLanguages(src.getUuid());
+        }
+        catch (ResourceNotFoundException e) {
+            languages = new ArrayList<Language>();
+        }
+        var languageDTOs = new ArrayList<LanguageDTO>();
+        for (var language : languages) {
+            var languageDTO = new LanguageDTO();
+            languageDTO.setLanguage(language.getLanguage());
+            languageDTO.setLevel(language.getLevel());
+            languageDTOs.add(languageDTO);
+        }
+        dest.setLanguages(languageDTOs);
+
+        //var dto = candidateMapper.map(entity, CandidateDTO.class);
+        //return dto;
+        return dest;
     }
 }

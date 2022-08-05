@@ -17,4 +17,57 @@ INSERT INTO user_roles (user_id, project_id)
 
 INSERT INTO user_roles_role (user_roles_id, role_id)
     VALUES (1, 2), (1, 3), (2, 5), (3, 1), (4, 4);
+INSERT INTO person (id,date_of_birth, email, fname, lname, mname, phone )
+    VALUES
+        (1,'1999-01-01', 'helloman@gmail.com', 'John', 'Doe', '', '+36912345678' ),
+        (2,'1980-11-04', 'justaname@gmail.com', 'David', 'Keresztes', '', '+3698765432'),
+        (3,'1993-08-15', 'marta.1993@gmail.com', 'Marta', 'Szabo', '', '+3656231489'),
+        (4,'1982-07-02', 'janos.kovacs@gmail.com', 'Janos', 'Kovacs', '', '+36852741933'),
+        (5,'1975-04-03', 'peter.kovacs@gmail.com', 'Peter', 'Kovacs', '', '+36953214552');
+
+INSERT INTO candidate (id,cv_path, status, person_id, position_id,uuid)
+    VALUES
+        (1,'resources/cv/cv_000.pdf', 0, 1, 10,'801a188c-11ed-11ed-861d-0242ac120002'),
+        (2,'resources/cv/cv_001.pdf', 2, 1, 12,'8f428c22-11ed-11ed-861d-0242ac120002'),
+        (3,'resources/cv/cv_002.pdf', 3, 2, 13,'962d2b46-11ed-11ed-861d-0242ac120002'),
+        (4,'resources/cv/cv_003.pdf', 2, 3, 14,'c0be68e4-e86d-4389-a8af-65277b27345e'),
+        (5,'resources/cv/cv_004.pdf', 1, 4, 16,'b7f68596-6777-49d1-aeb7-8c1a522a8bf3'),
+        (6,'resources/cv/cv_005.pdf', 5, 5, 12,'c8760776-d0aa-4040-88a3-4f2e13a39145');
+
+
+INSERT INTO management_documentation VALUES(
+1,'RGSID_1', 'Frontend developer', '2022-01-13', 'John Doe', 'he fits into the team as a frontend candidate', FALSE,
+TRUE, 'learning the usage of react', 'he has a lot of motivation for the position', 'high', 'none', 'excellent knowlegde in HTML and Javascript',
+'lack of knowlege when it comes to react', 'none', 'very proactive', TRUE, 1, 'he fits well enough', 2, '2006cb02-118e-11ed-861d-0242ac120002',
+1, 4, 6, 2
+);
+
+INSERT INTO management_documentation VALUES(
+2,'RGSID_2', 'backend developer', '2022-01-15', 'Csaba Hegedus', 'she fits', TRUE,
+TRUE, 'to study spring boot', 'none', 'high', 'none', 'avarege java knowlegde',
+'avarege java knowlegde', 'none', 'not proactive at all', FALSE, 1, 'she does not fit', 1, '2006cb02-118e-11ed-861d-0242ac120004',
+2, 5, 8, 2
+);
+
+INSERT INTO management_documentation VALUES(
+3,'RGSID_3', 'Backend developer', '2022-01-12', 'William Howard', 'she fits', FALSE,
+TRUE, 'learning the usage of react', 'none', 'low', 'none', 'excellent knowlegde in HTML, Javascript, Angular and React',
+'cant speak english', 'none', 'somewhat proactive and interested', TRUE, 2, 'she fits into the team', 4, '65f00650-c2c1-4253-992f-bedee28197dc',
+3, 1, 4, 3
+);
+
+INSERT INTO management_documentation VALUES(
+4,'RGSID_4', 'Frontend developer', '2022-04-25', 'Csaba Hegedus', 'he fits', TRUE,
+TRUE, 'he want sto work in a multicultural enviroment', 'he has a lot of experience', 'high', 'none', 'his experience gives him an edge when it comes to frontend development',
+'cant speak english', 'none', 'very proactive', TRUE, 3, 'he fits into the team as a frontend candidate', 4, '364a8600-118f-11ed-861d-0242ac120002',
+5, 4, 7, 4
+);
+
+
+INSERT INTO management_documentation VALUES(
+5,'RGSID_5', 'Fullstack programmer', '2022-04-28', 'Csaba Hegedus', 'he fits', TRUE,
+TRUE, 'he is open for improving both his frontend and backend knowledge', 'he has a lot of experience', 'high', 'none', 'very skilled with spring boot ang react as well',
+'lack of experience with agile', 'none', 'very proactive', TRUE, 3, 'he fits into the team', 3, '44245670-118f-11ed-861d-0242ac120002',
+6, 2, 3, 1
+);
 

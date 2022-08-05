@@ -14,7 +14,6 @@ import tcs.interviewtracker.persistence.WorkExperience;
 
 @Repository
 public interface WorkExperienceRepository extends JpaRepository<WorkExperience, Long> {
-    public WorkExperience getByUuid(UUID uuid);
     public List<WorkExperience> getByCandidate(Candidate candidate);
     public Page<WorkExperience> getByCandidate(Candidate candidate, PageRequest request);
 }
