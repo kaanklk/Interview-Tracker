@@ -11,7 +11,7 @@ public class ProjectDTO {
     private String name;
     private UUID projectManagerId;
     private String description;
-    private List<UUID> recruiterId;
-    private List<UUID> sourcerId;
-    private List<UUID> interviewerId;
+    private List<UUID> recruiters;
+    private List<UUID> sourcers;
+    private List<UUID> interviewers;
 }

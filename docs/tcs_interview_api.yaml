@@ -2321,7 +2321,7 @@ components:
     Project:
       type: object
       properties:
-        id:
+        uuid:
           type: string
           example: 5924d57d-ae08-49ff-8a0a-c77489e3c895
           description: UUID
@@ -2350,10 +2350,6 @@ components:
           items:
             example: df37a1f1-0d0d-489e-b737-b3d28665924e
             description: UUID
-        deadline:
-          type: string
-          example: 2022-08-12 00:00:00
-          description: UTC temployeeIdimestamp like YYYY-MM-DD hh:mm:ss
     ProjectNoId:
       type: object
       properties:
@@ -2367,18 +2363,21 @@ components:
         description:
           type: string
           example: This is an example project.
-        recruiterId:
-          type: string
-          example: 2a46f3b1-0bff-4767-90d4-13e26d78dbb5
-          description: UUID
-        sourcerId:
-          type: string
-          example: df37a1f1-0d0d-489e-b737-b3d28665924e
-          description: UUID
-        deadline:
-          type: string
-          example: 2022-08-12 00:00:00
-          description: UTC timestamp like YYYY-MM-DD hh:mm:ss
+        recruiters:
+          type: array
+          items:
+            example: 2a46f3b1-0bff-4767-90d4-13e26d78dbb5
+            description: UUID
+        sourcers:
+          type: array
+          items:
+            example: df37a1f1-0d0d-489e-b737-b3d28665924e
+            description: UUID
+        interviewers:
+          type: array
+          items:
+            example: df37a1f1-0d0d-489e-b737-b3d28665924e
+            description: UUID
     Position:
       type: object
       properties:
@@ -2386,65 +2385,51 @@ components:
           type: string
           example: 234b821c-941d-439c-9558-1bf952838b43
           description: UUID
-        name:
+        positionName:
           type: string
           example: data engineer
-        projectId:
+        projectUuid:
           type: string
           example: 12d78cb7-f563-40d9-aa92-a8b56e29fe70
           description: UUID
-        totalCount:
-          type: string
-          example: 10
-          description: The total head count to be hired for this position. (Including the already occupied.)
+        open:
+          type: boolean
+          example: true
+          description: is the position open for new candidates?
         hiredCount:
           type: string
           example: 3
           description: The count of people already hired for this positions.
-        interviewerPool:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-                example: d867dc22-51ec-4de6-935e-2769ffc43afd
-                description: UUID of a user who has interviewer role
-              type:
-                type: string
-                example: technical
-                description: technical or management
-    PositionNoId:
-      type: object
-      properties:
-        name:
-          type: string
-          example: data engineer
-        projectId:
-          type: string
-          example: 12d78cb7-f563-40d9-aa92-a8b56e29fe70
-          description: UUID
         totalCount:
           type: string
           example: 10
-          description: The total head count to be hired for this position.
-        interviewerPool:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-                example: d867dc22-51ec-4de6-935e-2769ffc43afd
-                description: UUID of a user who has interviewer role
-              type:
-                type: string
-                example: technical
-                description: technical or management
+          description: The total head count to be hired for this position. (Including the already occupied.)
+    PositionNoId:
+      type: object
+      properties:
+        positionName:
+          type: string
+          example: data engineer
+        projectUuid:
+          type: string
+          example: 12d78cb7-f563-40d9-aa92-a8b56e29fe70
+          description: UUID
+        open:
+          type: boolean
+          example: true
+          description: is the position open for new candidates?
+        hiredCount:
+          type: string
+          example: 3
+          description: The count of people already hired for this positions.
+        totalCount:
+          type: string
+          example: 10
+          description: The total head count to be hired for this position. (Including the already occupied.)
     Candidate:
       type: object
       properties:
-        id:
+        uuid:
           type: string
           example: 52c2fc2d-04c1-4d17-bdef-72aca038749e
           description: UUID
@@ -2452,6 +2437,14 @@ components:
           type: string
           example: c989480a-4b8d-4c75-bf3b-db9bafe05a8e
           description: UUID
+        projectId:
+          type: string
+          example: c989480a-4b8d-4c75-bf3b-db9bafe05a8e
+          description: UUID
+        dateOfBirth:
+          type: string
+          example: 1999-08-04
+          description: Date like YYYY-MM-DD
         firstName:
           type: string
           example: John
@@ -2482,18 +2475,18 @@ components:
                 type: string
                 example: beginner
                 description: The maturity level in a language
-        workExperience:
+        workExperiences:
           type: array
           items:
             type: object
             properties:
               start:
                 type: string
-                example: 2020-04-01 00:00:00
+                example: 2020-04-01
                 description: Timestamp like YYYY-MM-DD hh:mm:ss (The time part is not used)
               end:
                 type: string
-                example: 2021-09-20 00:00:00
+                example: 2021-09-20
                 description: Timestamp like YYYY-MM-DD hh:mm:ss (The time part is not used)
               institution:
                 type: string
@@ -2503,18 +2496,18 @@ components:
                 type: string
                 example: The candidate was workig as a data engineer.
                 description: Summary of the job and the experience.
-        education:
+        educations:
           type: array
           items:
             type: object
             properties:
               start:
                 type: string
-                example: 2019-09-01 00:00:00
+                example: 2019-09-01
                 description: Timestamp like YYYY-MM-DD hh:mm:ss (The time part is not used)
               end:
                 type: string
-                example: 2023-01-10 00:00:00
+                example: 2023-01-10
                 description: Timestamp like YYYY-MM-DD hh:mm:ss (The time part is not used)
               institution:
                 type: string
@@ -2526,7 +2519,7 @@ components:
                 description: Some information regarding the degree and the nature of the education
         status:
           type: string
-          example: accepted
+          example: ACCEPTED
           description: Shows the current state of the candidate
         cvId:
           type: string
