@@ -1,5 +1,6 @@
 package tcs.interviewtracker.persistence;
 
+import java.sql.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,6 +15,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.springframework.lang.Nullable;
+
 import lombok.Data;
 
 @Entity
@@ -39,11 +43,20 @@ public class Position {
     private Set<Candidate> candidates;
 
     @Column(name = "total_count")
+    @Nullable
     private Integer totalCount;
+
     @Column
+    @Nullable
     private Integer hiredCount;
+
     @Column
+    @Nullable
     private Boolean open;
+
+    @Column(name = "deadline")
+    @Nullable
+    private Date dateOfBirth;
 
     @ManyToMany
     @JoinTable(name = "position_has_interviewers", joinColumns = @JoinColumn(name = "position_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
