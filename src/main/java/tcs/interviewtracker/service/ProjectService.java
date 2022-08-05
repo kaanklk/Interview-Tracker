@@ -148,8 +148,8 @@ public class ProjectService {
         List<Candidate> candidates = candidateRepository.findAll();
         List<Candidate> pendingCandidates = new ArrayList<Candidate>();
         for (Candidate c : candidates) {
-            if (c.getProject().getId() == project.getId()) {
-                if (c.getStatus() != CandidateStatus.REJECTED.toString() || c.getStatus() != CandidateStatus.OFFER_ACCEPTED.toString()) {
+            if (c.getProject().getId().equals(project.getId()) ) {
+                if (!c.getStatus().equals(CandidateStatus.REJECTED.toString()) && !c.getStatus().equals(CandidateStatus.OFFER_ACCEPTED.toString())) {
                     pendingCandidates.add(c);
                 }
             }
