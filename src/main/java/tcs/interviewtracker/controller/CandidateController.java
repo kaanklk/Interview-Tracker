@@ -24,6 +24,7 @@ import tcs.interviewtracker.DTOs.CandidateDTO;
 import tcs.interviewtracker.DTOs.EducationDTO;
 import tcs.interviewtracker.DTOs.LanguageDTO;
 import tcs.interviewtracker.DTOs.StatusChangeDTO;
+import tcs.interviewtracker.DTOs.TimeslotDTO;
 import tcs.interviewtracker.DTOs.WorkExperienceDTO;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.mappers.StatusChangeMapper;
@@ -31,6 +32,7 @@ import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.Education;
 import tcs.interviewtracker.persistence.Language;
 import tcs.interviewtracker.persistence.Person;
+import tcs.interviewtracker.persistence.Timeslot;
 import tcs.interviewtracker.persistence.WorkExperience;
 import tcs.interviewtracker.service.CandidateService;
 import tcs.interviewtracker.service.ManagementDocumentationService;
@@ -186,6 +188,8 @@ public class CandidateController {
         person = personService.save(person);
         dest.setPerson(person);
         
+        dest.setCvPath(src.getCvPath());
+
         return dest;
     }
 
@@ -286,6 +290,12 @@ public class CandidateController {
                 dest.setTechnicalInterviewerId2(techDoc.get().getInterviewerTwo().getUuid());
             }
         }
+
+        var timeslots = new ArrayList<TimeslotDTO>();
+        //TODO
+        dest.setPossibleTimeslots(timeslots);
+
+        dest.setCvPath(src.getCvPath());
 
         //var dto = candidateMapper.map(entity, CandidateDTO.class);
         //return dto;

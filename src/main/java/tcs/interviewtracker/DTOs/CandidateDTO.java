@@ -41,7 +41,7 @@ public class CandidateDTO {
 
     private String status;
 
-    private UUID cvId;
+    private String cvPath;
 
     private UUID technicalInterviewerId;
 
