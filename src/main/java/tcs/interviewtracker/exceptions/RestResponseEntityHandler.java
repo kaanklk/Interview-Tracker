@@ -13,7 +13,7 @@ import org.springframework.web.client.HttpClientErrorException.MethodNotAllowed;
 import org.springframework.web.client.HttpClientErrorException.Unauthorized;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-//@ControllerAdvice
+@ControllerAdvice
 public class RestResponseEntityHandler {
 
     @ResponseBody

@@ -38,6 +38,9 @@ public class UserRolesService {
 
         User user = userService.getUserById(userUuid);
         List<UserRoles> userRoles = userRolesRepo.findByUser(user);
+        if(userRoles.isEmpty()){
+            throw new ResourceNotFoundException("Not assigned or wrong id");
+        }
         return userRoles;
     }
 

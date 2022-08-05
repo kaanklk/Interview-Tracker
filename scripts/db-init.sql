@@ -20,7 +20,6 @@ VALUES (101, 'fc0e88ec-cb24-42e2-9e55-f85512c584eb', now(), '1997-02-02', 'john.
 	   (109, '44097d7e-d916-4276-bbae-47385f92b236', now(), '1995-02-02', 'john.doe9@mail.ru', '4344567', 'John9', 'Doe9', 'Diego9', '+3687238323', 'url9'),
 	   (110, '3c9dead7-638f-4745-9545-615f269f65d6', now(), '1993-02-02', 'john.doe0@mail.ru', '8754567', 'John10', 'Doe10', 'Diego10', '+3687238323', 'url10');
 
-       
 INSERT INTO project(id, uuid, name, description)
     VALUES
         (101, 'ede22832-77e9-4374-8b3b-142e80829d74', 'alpha', 'This is a project to build a new developer team'),
@@ -48,7 +47,7 @@ INSERT INTO candidate (id, uuid, status, cv_path, person_id, position_id, projec
         (106, '20bab9a9-6058-450e-b1d6-e886dc08d53b', 'OFFER_ACCEPTED', 'resources/cv/cv_005.pdf', 105, 102, 101);
 
 INSERT INTO language (id, language, LEVEL, candidate_id)
-    VALUES 
+    VALUES
 	    (101, 'english', 'beginner', 101),
         (102, 'english', 'beginner', 102),
         (103, 'english', 'beginner', 103),
@@ -74,14 +73,14 @@ INSERT INTO education (id, start_date, end_date, information, institution, candi
         (105, '2019-10-01', '2020-01-11', 'OKJ', 'ELTE', 105);
 
 INSERT INTO roles (id, role_name, uuid)
-VALUES (101, 'Management Interviewer', 'aa8b7a22-4da4-41d9-8e91-023303383f4d'),
+VALUES (101, 'Management Interviewer', '07f16e6c-10a4-4fbf-9330-8404125b046f'),
        (102, 'Project Manager', 'aa8b7a22-4da4-41d9-8e91-023303383f4d'),
        (103, 'Recruiter', '10b526ae-f78c-4615-8cb1-e7f21239a4fe'),
 	   (104, 'Sourcer', 'e5b73f8d-d858-468c-9934-4cbe2f083563'),
 	   (105, 'Technical Interviewer', 'ba9766e1-e3b3-4229-8639-53db4676294d');
 
 INSERT INTO user_roles (id, user_id, project_id)
-	VALUES 	
+	VALUES
         (101, 101, 101),
         (102, 102, 102),
         (103, 103, 103),
@@ -95,7 +94,7 @@ VALUES
        	(102, 105),
 	   	(103, 101),
 	   	(104, 104);
-	   
+
 INSERT INTO technical_documentation (id, uuid, candidate_id, interviewer_one, interviewer_two)
 	VALUES
 		(101, 'a470cde2-a6e0-49aa-9db1-bfb4f61a2319', 101, 102, 103),
@@ -103,7 +102,7 @@ INSERT INTO technical_documentation (id, uuid, candidate_id, interviewer_one, in
 		(103, 'c43dfece-596a-47c1-860b-06e98383bf04', 103, 103, 104),
 		(104, '7747e757-8cf9-4709-b7f4-2e41c80e4dda', 104, 101, 103),
 		(105, 'ef4a38dc-f83f-45f2-b80a-bd9a3868ee30', 105, 102, 101);
-		
+
 INSERT INTO management_documentation (id, uuid, candidate_id, project_id, interviewer_id1 , interviewer_id2)
 	VALUES
 		(101, '9d158f42-615f-4657-a99d-902820c8adab', 101, 101, 102, 103),
@@ -112,4 +111,4 @@ INSERT INTO management_documentation (id, uuid, candidate_id, project_id, interv
 		(104, 'cb5057b3-9b3c-4523-85cb-9eca3771a111', 104, 101, 101, 103),
 		(105, '6290e09d-c5d9-4018-9137-1511ccb11fd3', 105, 101, 102, 101);
 
-	
+
