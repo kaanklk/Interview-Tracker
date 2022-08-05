@@ -8,17 +8,17 @@ INSERT INTO person(id, email, uuid, fname, lname, mname, phone, date_of_birth, p
         (104, 'janos.kovacs@gmail.com', '0b3c5a27-7922-416d-baab-46c73ec0b7b0', 'Janos', 'Kovacs', 'd', '+36852741933', '1948-05-10', 'resources/pictures/profil/pp_004.jpg'),
         (105, 'peter.kovacs@gmail.com', '5b6613f0-9faa-488e-95c2-418af8e6f438', 'Peter', 'Kovacs', 'd', '+36953214552', '1989-05-30', 'resources/pictures/profil/pp_005.jpg');
 
-INSERT INTO users (id, uuid, created_at, date_of_birth, email, employee_id, first_name, last_name, middle_name, phone_number, photo)
-VALUES (101, 'fc0e88ec-cb24-42e2-9e55-f85512c584eb', now(), '1997-02-02', 'john.doe1@mail.ru', '1234567', 'John1', 'Doe1', 'Diego1', '+3687238323', 'url1'),
-       (102, '11b6cab6-4a8f-40d0-be64-50a7b338523c', now(), '1998-02-02', 'john.doe2@mail.ru', '4234567', 'John2', 'Doe2', 'Diego2', '+3687238323', 'url2'),
-	   (103, '5d7e1836-36f2-4cf1-bacc-26006bf25153', now(), '1999-02-02', 'john.doe3@mail.ru', '1236567', 'John3', 'Doe3', 'Diego3', '+3687238323', 'url3'),
-	   (104, '4cba21f6-13bd-49db-b1a5-3eb0bb5d9f1c', now(), '1992-02-02', 'john.doe4@mail.ru', '1234727', 'John4', 'Doe4', 'Diego4', '+3687238323', 'url4'),
-	   (105, '6f06dead-fa00-4f66-9a35-8813437a8906', now(), '1993-02-02', 'john.doe5@mail.ru', '6734567', 'John5', 'Doe5', 'Diego5', '+3687238323', 'url5'),
-	   (106, '62f393bd-7b05-4479-8e06-034a3a125581', now(), '1991-02-02', 'john.doe6@mail.ru', '1454567', 'John6', 'Doe6', 'Diego6', '+3687238323', 'url6'),
-	   (107, '1ba75c20-676e-42bf-ac9b-a5f22833a470', now(), '1996-02-02', 'john.doe7@mail.ru', '1234567', 'John7', 'Doe7', 'Diego7', '+3687238323', 'url7'),
-	   (108, '1a5e6859-7a7b-495f-b064-5c66a7a85510', now(), '1994-02-02', 'john.doe8@mail.ru', '3454567', 'John8', 'Doe8', 'Diego8', '+3687238323', 'url8'),
-	   (109, '44097d7e-d916-4276-bbae-47385f92b236', now(), '1995-02-02', 'john.doe9@mail.ru', '4344567', 'John9', 'Doe9', 'Diego9', '+3687238323', 'url9'),
-	   (110, '3c9dead7-638f-4745-9545-615f269f65d6', now(), '1993-02-02', 'john.doe0@mail.ru', '8754567', 'John10', 'Doe10', 'Diego10', '+3687238323', 'url10');
+INSERT INTO users (id, uuid, created_at, date_of_birth, email, employee_id, first_name, last_name, middle_name, phone_number, photo, admin)
+VALUES (101, 'fc0e88ec-cb24-42e2-9e55-f85512c584eb', now(), '1997-02-02', 'john.doe1@mail.ru', '1234567', 'John1', 'Doe1', 'Diego1', '+3687238323', 'url1', true),
+       (102, '11b6cab6-4a8f-40d0-be64-50a7b338523c', now(), '1998-02-02', 'john.doe2@mail.ru', '4234567', 'John2', 'Doe2', 'Diego2', '+3687238323', 'url2', false),
+	   (103, '5d7e1836-36f2-4cf1-bacc-26006bf25153', now(), '1999-02-02', 'john.doe3@mail.ru', '1236567', 'John3', 'Doe3', 'Diego3', '+3687238323', 'url3', true),
+	   (104, '4cba21f6-13bd-49db-b1a5-3eb0bb5d9f1c', now(), '1992-02-02', 'john.doe4@mail.ru', '1234727', 'John4', 'Doe4', 'Diego4', '+3687238323', 'url4', true),
+	   (105, '6f06dead-fa00-4f66-9a35-8813437a8906', now(), '1993-02-02', 'john.doe5@mail.ru', '6734567', 'John5', 'Doe5', 'Diego5', '+3687238323', 'url5', false),
+	   (106, '62f393bd-7b05-4479-8e06-034a3a125581', now(), '1991-02-02', 'john.doe6@mail.ru', '1454567', 'John6', 'Doe6', 'Diego6', '+3687238323', 'url6', true),
+	   (107, '1ba75c20-676e-42bf-ac9b-a5f22833a470', now(), '1996-02-02', 'john.doe7@mail.ru', '1234567', 'John7', 'Doe7', 'Diego7', '+3687238323', 'url7', false),
+	   (108, '1a5e6859-7a7b-495f-b064-5c66a7a85510', now(), '1994-02-02', 'john.doe8@mail.ru', '3454567', 'John8', 'Doe8', 'Diego8', '+3687238323', 'url8', true),
+	   (109, '44097d7e-d916-4276-bbae-47385f92b236', now(), '1995-02-02', 'john.doe9@mail.ru', '4344567', 'John9', 'Doe9', 'Diego9', '+3687238323', 'url9', false),
+	   (110, '3c9dead7-638f-4745-9545-615f269f65d6', now(), '1993-02-02', 'john.doe0@mail.ru', '8754567', 'John0', 'Doe0', 'Diego0', '+3687238323', 'url10', false);
 
 INSERT INTO project(id, uuid, name, description)
     VALUES
