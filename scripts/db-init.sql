@@ -40,12 +40,12 @@ values
 
 INSERT INTO candidate (id, uuid, status, cv_path, person_id, position_id, project_id)
     VALUES
-        (101, '131f1987-ea30-40b1-bf0b-0791e5063599', 'ACCEPTED', 'resources/cv/cv_000.pdf',  101, 101, 101),
+        (101, '131f1987-ea30-40b1-bf0b-0791e5063599', 'OFFER_ACCEPTED', 'resources/cv/cv_000.pdf',  101, 101, 101),
         (102, '24cc06fe-2ee2-4963-ac55-3263f1917a1c', 'REJECTED', 'resources/cv/cv_001.pdf',  101, 102, 101),
-        (103, 'f0ea1a0a-2527-4b79-9151-e7373f95f51c', 'ACCEPTED', 'resources/cv/cv_002.pdf', 102, 101, 101),
-        (104, '879d3947-2bd8-43bf-a089-f77fe709c25d', 'ACCEPTED', 'resources/cv/cv_003.pdf',  103, 102, 101),
+        (103, 'f0ea1a0a-2527-4b79-9151-e7373f95f51c', 'OFFER_SENT', 'resources/cv/cv_002.pdf', 102, 101, 101),
+        (104, '879d3947-2bd8-43bf-a089-f77fe709c25d', 'OFFER_ACCEPTED', 'resources/cv/cv_003.pdf',  103, 102, 101),
         (105, 'ec75a941-1bdc-4000-ab09-a6a82c5cb4c4', 'REJECTED', 'resources/cv/cv_004.pdf',  104, 102, 101),
-        (106, '20bab9a9-6058-450e-b1d6-e886dc08d53b', 'ACCEPTED', 'resources/cv/cv_005.pdf', 105, 102, 101);
+        (106, '20bab9a9-6058-450e-b1d6-e886dc08d53b', 'OFFER_ACCEPTED', 'resources/cv/cv_005.pdf', 105, 102, 101);
 
 INSERT INTO language (id, language, LEVEL, candidate_id)
     VALUES 

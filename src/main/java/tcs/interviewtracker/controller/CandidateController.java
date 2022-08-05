@@ -144,8 +144,8 @@ public class CandidateController {
         person.setEmail(src.getEmail());
         person.setPhone(src.getPhone());
         person.setDateOfBirth(java.sql.Date.valueOf(src.getDateOfBirth()));
-        dest.setPerson(person);
         person = personService.save(person);
+        dest.setPerson(person);
         dest = candidateService.save(dest);
         var workExperienceDTOs = src.getWorkExperiences();
         for (var dto : workExperienceDTOs) {
@@ -157,7 +157,14 @@ public class CandidateController {
             experience.setSummary(dto.getSummary());
             candidateService.saveWorkExperience(experience);
         }
-
+        var languageDTOs = src.getLanguages();
+        for (var dto : languageDTOs) {
+            var language = new Language();
+            language.setCandidate(dest);
+            language.setLanguage(dto.getLanguage());
+            language.setLevel(dto.getLevel());
+            candidateService.saveLanguage(language);
+        }
         return dest;
     }
 

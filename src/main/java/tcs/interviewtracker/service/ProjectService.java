@@ -149,11 +149,14 @@ public class ProjectService {
         List<Candidate> pendingCandidates = new ArrayList<Candidate>();
         for (Candidate c : candidates) {
             if (c.getProject().getId().equals(project.getId()) ) {
-                if (!c.getStatus().equals(CandidateStatus.REJECTED.toString()) && !c.getStatus().equals(CandidateStatus.OFFER_ACCEPTED.toString())) {
+                if (
+                    !c.getStatus().equals(CandidateStatus.REJECTED.toString()) 
+                    && !c.getStatus().equals(CandidateStatus.OFFER_ACCEPTED.toString())
+                    && !c.getStatus().equals(CandidateStatus.OFFER_DECLINED.toString())
+                    ) {
                     pendingCandidates.add(c);
                 }
             }
-
         }
         return pendingCandidates;
     }
