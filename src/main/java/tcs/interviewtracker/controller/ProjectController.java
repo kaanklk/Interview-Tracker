@@ -73,7 +73,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Project> deleteProject(@PathVariable(value = "id") UUID uuid)
+    public ResponseEntity <Project> deleteProject(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         Project project = projectService.getByUuid(uuid);
 
