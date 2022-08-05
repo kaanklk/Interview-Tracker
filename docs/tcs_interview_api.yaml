@@ -2382,7 +2382,7 @@ components:
     Position:
       type: object
       properties:
-        id:
+        uuid:
           type: string
           example: 234b821c-941d-439c-9558-1bf952838b43
           description: UUID
