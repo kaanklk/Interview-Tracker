@@ -68,16 +68,16 @@ paths:
           $ref: '#/components/responses/409AlreadyExists'
         500:
           $ref: '#/components/responses/500APIError'
-  /users/{userId}:
+  /users/{userUuid}:
     get:
       security:
         - authcodeWithPKCE: [admin]
-      
+
       tags:
         - users
       description: Retrieve a specific object
       parameters:
-        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserUuid'
       responses:
         200:
           description: The object is returned in content
@@ -100,7 +100,7 @@ paths:
         - authcodeWithPKCE: [admin]
       description: Update the properties of the object with the provided ID
       parameters:
-        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserUuid'
       requestBody:
         content:
           application/json:
@@ -123,7 +123,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
     delete:
       tags:
         - users
@@ -131,7 +131,7 @@ paths:
         - authcodeWithPKCE: [admin]
       description: Delete an object with the provided ID
       parameters:
-        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/UserUuid'
       responses:
         200:
           description: Object deleted successfully. The deleted object is returned in content.
@@ -147,8 +147,159 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
+  /users/{userUuid}/roles:
+    get:
+      security:
+        - authcodeWithPKCE: [admin]
+      tags:
+        - users
+      description: Retrieve a specific object
+      parameters:
+        - $ref: '#/components/parameters/UserUuid'
+      responses:
+        200:
+          description: The object is returned in content
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserRoles'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+    post:
+      tags:
+        - users
+      security:
+        - authcodeWithPKCE: [admin]
+      description: Create the properties of the object
+      parameters:
+        - $ref: '#/components/parameters/UserUuid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRolesNoId'
+      responses:
+        200:
+          description: The created verion is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The newly updated object
+                $ref: '#/components/schemas/UserRoles'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
 
+  /users/{userUuid}/roles/{projectUuid}:
+    get:
+      security:
+        - authcodeWithPKCE: [admin]
+      tags:
+        - users
+      description: Retrieve a specific object
+      parameters:
+        - $ref: '#/components/parameters/UserUuid'
+        - in: path
+          name: projectUuid
+          required: true
+          schema:
+            type: integer
+          description: retrieves role for specific project
+      responses:
+        200:
+          description: The object is returned in content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRoles'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+    put:
+      tags:
+        - users
+      security:
+        - authcodeWithPKCE: [admin]
+      description: Update the properties of the object with the provided ID
+      parameters:
+        - in: path
+          name: projectUuid
+          required: true
+          schema:
+            type: integer
+        - $ref: '#/components/parameters/UserUuid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRolesNoId'
+      responses:
+        200:
+          description: Object was updated successfully. The updated verion is returned in content.
+          content:
+            application/json:
+              schema:
+                description: The newly updated object
+                $ref: '#/components/schemas/UserRoles'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
+    delete:
+      tags:
+        - users
+      security:
+        - authcodeWithPKCE: [admin]
+      description: Delete an object with the provided ID
+      parameters:
+        - in: path
+          name: projectUuid
+          required: true
+          schema:
+            type: integer
+          description: id
+        - $ref: '#/components/parameters/UserUuid'
+      responses:
+        200:
+          description: Object deleted successfully. The deleted object is returned in content.
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        404:
+          $ref: '#/components/responses/404ObjectNotFound'
+        500:
+          $ref: '#/components/responses/500APIError'
 
 #-----------------------------------------------------------------------
 # <Accessing roles>
@@ -176,7 +327,7 @@ paths:
                   roles:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Role'  
+                      $ref: '#/components/schemas/Role'
         401:
           $ref: '#/components/responses/401Unauthorized'
         403:
@@ -194,7 +345,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/RoleNoId'
-            
+
       responses:
         201:
           description: User created successfully
@@ -211,12 +362,12 @@ paths:
         409:
           $ref: '#/components/responses/409AlreadyExists'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
   /roles/{roleId}:
     get:
       security:
         - authcodeWithPKCE: [admin]
-      
+
       tags:
         - roles
       description: Retrieve a specific object
@@ -236,7 +387,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
     put:
       tags:
         - roles
@@ -267,7 +418,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
     delete:
       tags:
         - roles
@@ -291,7 +442,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
 
 #-----------------------------------------------------------------------
 # <Accessing projects>
@@ -319,7 +470,7 @@ paths:
                   projects:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Project'  
+                      $ref: '#/components/schemas/Project'
         401:
           $ref: '#/components/responses/401Unauthorized'
         403:
@@ -353,7 +504,7 @@ paths:
         409:
           $ref: '#/components/responses/409AlreadyExists'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
   /projects/{projectId}:
     get:
       security:
@@ -377,7 +528,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
     put:
       tags:
         - projects
@@ -408,7 +559,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
     delete:
       tags:
         - projects
@@ -432,7 +583,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
   /projects/{projectId}/positions:
     get:
       security:
@@ -852,7 +1003,7 @@ paths:
                   positions:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Position'  
+                      $ref: '#/components/schemas/Position'
         401:
           $ref: '#/components/responses/401Unauthorized'
         403:
@@ -869,7 +1020,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PositionNoId'  
+              $ref: '#/components/schemas/PositionNoId'
       responses:
         201:
           description: User created successfully
@@ -910,7 +1061,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
     put:
       tags:
         - positions
@@ -941,7 +1092,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
     delete:
       tags:
         - positions
@@ -965,7 +1116,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
   /positions/{positionId}/candidate-count:
     get:
       security:
@@ -994,7 +1145,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
 
 
 #---------------------------------------------------------------------------------
@@ -1021,7 +1172,7 @@ paths:
                   candidates:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Candidate'  
+                      $ref: '#/components/schemas/Candidate'
         401:
           $ref: '#/components/responses/401Unauthorized'
         403:
@@ -1039,7 +1190,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CandidateNoId'
-            
+
       responses:
         201:
           description: User created successfully
@@ -1056,7 +1207,7 @@ paths:
         409:
           $ref: '#/components/responses/409AlreadyExists'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
   /candidates/{candidateId}:
     get:
       security:
@@ -1080,7 +1231,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
     put:
       tags:
         - candidates
@@ -1112,7 +1263,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
     delete:
       tags:
         - candidates
@@ -1136,7 +1287,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
 
 
 #---------------------------------------------------------------------------------
@@ -1165,7 +1316,7 @@ paths:
                   technicalDocumentations:
                     type: array
                     items:
-                      $ref: '#/components/schemas/TechnicalDocumentation'  
+                      $ref: '#/components/schemas/TechnicalDocumentation'
         401:
           $ref: '#/components/responses/401Unauthorized'
         403:
@@ -1183,7 +1334,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TechnicalDocumentationNoId'
-            
+
       responses:
         201:
           description: User created successfully
@@ -1200,7 +1351,7 @@ paths:
         409:
           $ref: '#/components/responses/409AlreadyExists'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
   /technical-documentations/{technicalId}:
     get:
       security:
@@ -1224,7 +1375,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
     put:
       tags:
         - technical interview
@@ -1255,7 +1406,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
     delete:
       tags:
         - technical interview
@@ -1308,7 +1459,7 @@ paths:
                   managementDocumentations:
                     type: array
                     items:
-                      $ref: '#/components/schemas/ManagementDocumentation'  
+                      $ref: '#/components/schemas/ManagementDocumentation'
         401:
           $ref: '#/components/responses/401Unauthorized'
         403:
@@ -1326,7 +1477,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ManagementDocumentationNoId'
-            
+
       responses:
         201:
           description: User created successfully
@@ -1343,7 +1494,7 @@ paths:
         409:
           $ref: '#/components/responses/409AlreadyExists'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
   /management-documentations/{managementId}:
     get:
       security:
@@ -1367,7 +1518,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
     put:
       tags:
         - management interview
@@ -1398,7 +1549,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
     delete:
       tags:
         - management interview
@@ -1450,7 +1601,7 @@ paths:
                   cvs:
                     type: array
                     items:
-                      $ref: '#/components/schemas/CandidateCV'  
+                      $ref: '#/components/schemas/CandidateCV'
         500:
           $ref: '#/components/responses/500APIError'
     post:
@@ -1535,7 +1686,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
     delete:
       tags:
         - CV
@@ -1587,7 +1738,7 @@ paths:
                   scheduledInterviews:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Interview'  
+                      $ref: '#/components/schemas/Interview'
         401:
           $ref: '#/components/responses/401Unauthorized'
         403:
@@ -1676,7 +1827,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
     delete:
       tags:
         - interviews
@@ -1725,7 +1876,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
   /inteviews/{interviewId}/management-interviewer2/{managementInterviewerId}:
     put:
       security:
@@ -1750,7 +1901,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
   /inteviews/{interviewId}/technical-interviewer1/{technicalInterviewerId}:
     put:
       security:
@@ -1775,7 +1926,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
   /inteviews/{interviewId}/technical-interviewer2/{technicalInterviewerId}:
     put:
       security:
@@ -1800,7 +1951,7 @@ paths:
         404:
           $ref: '#/components/responses/404ObjectNotFound'
         500:
-          $ref: '#/components/responses/500APIError'      
+          $ref: '#/components/responses/500APIError'
 
 
 #------------------------------------------------------------------
@@ -1830,7 +1981,7 @@ paths:
                   statusChanges:
                     type: array
                     items:
-                      $ref: '#/components/schemas/StatusChange'  
+                      $ref: '#/components/schemas/StatusChange'
         401:
           $ref: '#/components/responses/401Unauthorized'
         403:
@@ -1873,7 +2024,16 @@ components:
     UserId:
       in: path
       name: userId
-      description: UUID of a user 
+      description: UUID of a user
+      required: true
+      schema:
+        type: string
+        example: 0ea9267e-dcc7-4ee6-9381-306e220a3588
+        description: UUID
+    UserUuid:
+      in: path
+      name: userUuid
+      description: UUID of a user
       required: true
       schema:
         type: string
@@ -2240,13 +2400,13 @@ components:
         hiredCount:
           type: string
           example: 3
-          description: The count of people already hired for this positions. 
+          description: The count of people already hired for this positions.
         interviewerPool:
           type: array
           items:
             type: object
             properties:
-              id:       
+              id:
                 type: string
                 example: d867dc22-51ec-4de6-935e-2769ffc43afd
                 description: UUID of a user who has interviewer role
@@ -2273,7 +2433,7 @@ components:
           items:
             type: object
             properties:
-              id:       
+              id:
                 type: string
                 example: d867dc22-51ec-4de6-935e-2769ffc43afd
                 description: UUID of a user who has interviewer role
@@ -2292,13 +2452,13 @@ components:
           type: string
           example: c989480a-4b8d-4c75-bf3b-db9bafe05a8e
           description: UUID
-        firstName: 
+        firstName:
           type: string
           example: John
-        middleName: 
+        middleName:
           type: string
           example: D.
-        lastName: 
+        lastName:
           type: string
           example: Doe
         email:
@@ -2395,11 +2555,11 @@ components:
           items:
             type: object
             properties:
-              start: 
+              start:
                 type: string
                 example: 2022-08-10 12:30:00
                 description: UTC Timestamp YYYY-MM-DD hh:mm:ss
-              end: 
+              end:
                 type: string
                 example: 2022-08-10 13:00:00
                 description: UTC Timestamp YYYY-MM-DD hh:mm:ss
@@ -2411,13 +2571,13 @@ components:
           type: string
           example: c989480a-4b8d-4c75-bf3b-db9bafe05a8e
           description: UUID
-        firstName: 
+        firstName:
           type: string
           example: John
-        middleName: 
+        middleName:
           type: string
           example: D.
-        lastName: 
+        lastName:
           type: string
           example: Doe
         email:
@@ -2514,11 +2674,11 @@ components:
           items:
             type: object
             properties:
-              start: 
+              start:
                 type: string
                 example: 2022-08-10 12:30:00
                 description: UTC Timestamp YYYY-MM-DD hh:mm:ss
-              end: 
+              end:
                 type: string
                 example: 2022-08-10 13:00:00
                 description: UTC Timestamp YYYY-MM-DD hh:mm:ss
@@ -2608,7 +2768,7 @@ components:
           description: UUID
         score:
           type: string
-          example: 80 
+          example: 80
     TechnicalDocumentationNoId:
       type: object
       properties:
@@ -2659,6 +2819,49 @@ components:
         score:
           type: string
           example: 80
+    UserRoles:
+      type: object
+      properties:
+        userRoleId:
+          type: string
+          example: a9756c50-febb-4dd7-8145-c85da5863dda
+        userId:
+          type: string
+          example: ddqwdwq
+        roles:
+          type: array
+          items:
+            type: object
+            properties:
+              roleId:
+                type: string
+                example: qwfdwe
+              roleName:
+                type: string
+                example: ProjectManager
+        projectId:
+          type: string
+          example: wdwedwqd
+    UserRolesNoId:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: rcrttyhgbyu
+        roles:
+          type: array
+          items:
+            type: object
+            properties:
+              roleId:
+                type: string
+                example: qwfdwe
+              roleName:
+                type: string
+                example: ProjectManager
+        projectId:
+          type: string
+          example: rfrgffgt
     ErrorDetails:
       type: object
       properties:
@@ -2724,7 +2927,7 @@ components:
         errorMessage:
           type: string
           example: Something went wrong on the server.
-          description: A more specific, business-related description of the error. 
+          description: A more specific, business-related description of the error.
     CandidateCV:
       type: object
       properties:
@@ -2762,7 +2965,7 @@ components:
           type: string
           example: 2022-08-07 16:12:35
           description: YYYY-MM-DD hh:mm:ss
-              
+
 
 
 #--------------------------------------------------------------
