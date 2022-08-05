@@ -3,8 +3,8 @@ SET session_replication_role = 'replica';
 INSERT INTO position(id, position_name, project_id, total_count, hired_count, OPEN, uuid)
     VALUES (10, 'Junior Java Developer', 1, 7, 3, TRUE, 'b9dc902a-11a9-11ed-861d-0242ac120002'), (12, 'Junior C# Developer', 2, 10, 5, TRUE, '6d19e030-118e-11ed-861d-0242ac120002'), (13, 'Senior Java Developer', 3, 11, 9, FALSE, '6f19e030118e-11ed-861d-0242ac120002'), (14, 'Junior Data Engineer', 4, 5, 3, TRUE, '6f19e030-118e-11ed-861d-0242aa120002'), (15, 'Medor Python Developer', 5, 4, 3, FALSE, '6f19e030-a18e-11ed-861d-0242ac120002'), (16, 'Junior HR Assistant', 3, 10, 3, TRUE, '6f19e030-118e-1aed-861d-0242ac120002');
 
-INSERT INTO project (id, name, description, deadline , uuid)
-    VALUES (1, 'alpha','This is a project to build a new developer team', 2022 - 06 - 20, '79a7f7a0-1196-11ed-861d-0242ac120002'), (2, 'beta','This is a project to build a new hr team', 2022 - 01 - 23, '80903b22-1196-11ed-861d-0242ac120002'), (3, 'gamma','This is a project to build a new data engineer team', 2022 - 01 - 23, 'b2eeb4e0-1196-11ed-861d-0242ac120002'), (4, 'epsilon', 'This is a project to build a new frontend team', 2022 - 01 - 23, 'b7c1b364-1196-11ed-861d-0242ac120002'), (5, 'omega','This is a project to build a new backend team', 2022 - 01 - 23, 'bb65fade-1196-11ed-861d-0242ac120002');
+INSERT INTO project (id, description, name, uuid)
+    VALUES (1, 'This is a project to build a new developer team', 'alpha', '79a7f7a0-1196-11ed-861d-0242ac120002'), (2, 'This is a project to build a new hr team', 'beta', '80903b22-1196-11ed-861d-0242ac120002'), (3, 'This is a project to build a new data engineer team', 'gamma', 'b2eeb4e0-1196-11ed-861d-0242ac120002'), (4, 'This is a project to build a new frontend team', 'epsilon', 'b7c1b364-1196-11ed-861d-0242ac120002'), (5, 'This is a project to build a new backend team', 'omega', 'bb65fade-1196-11ed-861d-0242ac120002');
 
 INSERT INTO users (id, admin, created_at, date_of_birth, email, employee_id, first_name, last_name, middle_name, phone_number, photo, uuid)
     VALUES (1, TRUE, now(), '1997-02-02', 'john.doe1@mail.ru', '1234567', 'John1', 'Doe1', 'Diego1', '+3687238323', 'url1', 'dfb79789-98ff-4709-b2a2-f9aad760f1e1'), (2, TRUE, now(), '1998-02-02', 'john.doe2@mail.ru', '4234567', 'John2', 'Doe2', 'Diego2', '+3687238323', 'url2', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e1'), (3, FALSE, now(), '1999-02-02', 'john.doe3@mail.ru', '1236567', 'John3', 'Doe3', 'Diego3', '+3687238323', 'url3', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e2'), (4, TRUE, now(), '1992-02-02', 'john.doe4@mail.ru', '1234727', 'John4', 'Doe4', 'Diego4', '+3687238323', 'url4', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e3'), (5, TRUE, now(), '1993-02-02', 'john.doe5@mail.ru', '6734567', 'John5', 'Doe5', 'Diego5', '+3687238323', 'url5', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e4'), (6, FALSE, now(), '1991-02-02', 'john.doe6@mail.ru', '1454567', 'John6', 'Doe6', 'Diego6', '+3687238323', 'url6', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e5'), (7, TRUE, now(), '1996-02-02', 'john.doe7@mail.ru', '1234567', 'John7', 'Doe7', 'Diego7', '+3687238323', 'url7', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e6'), (8, FALSE, now(), '1994-02-02', 'john.doe8@mail.ru', '3454567', 'John8', 'Doe8', 'Diego8', '+3687238323', 'url8', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e7'), (9, TRUE, now(), '1995-02-02', 'john.doe9@mail.ru', '4344567', 'John9', 'Doe9', 'Diego9', '+3687238323', 'url9', 'dfb79789-98ff-4709-b2a2-f9a6d760f1e8'), (10, FALSE, now(), '1993-02-02', 'john.doe0@mail.ru', '8754567', 'John10', 'Doe10', 'Diego10', '+3687238323', 'url10', 'dfb79789-98ff-4709-b2a2-f9a6da60f1e8');
@@ -29,12 +29,12 @@ INSERT INTO person (id,date_of_birth, email, fname, lname, mname, phone )
 
 INSERT INTO candidate (id,cv_path, status, person_id, position_id,uuid)
     VALUES
-        (1,'resources/cv/cv_000.pdf', 0, 1, 1,'801a188c-11ed-11ed-861d-0242ac120002'),
-        (2,'resources/cv/cv_001.pdf', 2, 1, 2,'8f428c22-11ed-11ed-861d-0242ac120002'),
-        (3,'resources/cv/cv_002.pdf', 3, 2, 1,'962d2b46-11ed-11ed-861d-0242ac120002'),
-        (4,'resources/cv/cv_003.pdf', 2, 3, 2,'c0be68e4-e86d-4389-a8af-65277b27345e'),
-        (5,'resources/cv/cv_004.pdf', 1, 4, 2,'b7f68596-6777-49d1-aeb7-8c1a522a8bf3'),
-        (6,'resources/cv/cv_005.pdf', 5, 5, 2,'c8760776-d0aa-4040-88a3-4f2e13a39145');
+        (1,'resources/cv/cv_000.pdf', 0, 1, 10,'801a188c-11ed-11ed-861d-0242ac120002'),
+        (2,'resources/cv/cv_001.pdf', 2, 1, 12,'8f428c22-11ed-11ed-861d-0242ac120002'),
+        (3,'resources/cv/cv_002.pdf', 3, 2, 13,'962d2b46-11ed-11ed-861d-0242ac120002'),
+        (4,'resources/cv/cv_003.pdf', 2, 3, 14,'c0be68e4-e86d-4389-a8af-65277b27345e'),
+        (5,'resources/cv/cv_004.pdf', 1, 4, 16,'b7f68596-6777-49d1-aeb7-8c1a522a8bf3'),
+        (6,'resources/cv/cv_005.pdf', 5, 5, 12,'c8760776-d0aa-4040-88a3-4f2e13a39145');
 
 
 INSERT INTO management_documentation VALUES(
@@ -72,4 +72,3 @@ TRUE, 'he is open for improving both his frontend and backend knowledge', 'he ha
 'lack of experience with agile', 'none', 'very proactive', TRUE, 3, 'he fits into the team', 3, '44245670-118f-11ed-861d-0242ac120002',
 6, 2, 3, 1
 );
-
