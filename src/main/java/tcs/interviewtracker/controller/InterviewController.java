@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.domain.Sort;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import tcs.interviewtracker.DTOs.InterviewDTO;
 import tcs.interviewtracker.persistence.Interview;
 import tcs.interviewtracker.service.InterviewService;
@@ -21,7 +21,7 @@ import tcs.interviewtracker.service.TechnicalDocumentationService;
 
 @RestController
 @RequestMapping("/interviews")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class InterviewController {
     private InterviewService interviewService; 
     private TechnicalDocumentationService technicalDocumentationService;
