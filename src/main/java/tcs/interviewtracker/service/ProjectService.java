@@ -51,6 +51,10 @@ public class ProjectService {
         return project.get();
     }
 
+    public Project getReferenceByUuid(UUID uuid) {
+        return projectRepository.getReferenceByUuid(uuid).get();
+    }
+
     public Project getById(Long id) {
         return projectRepository.getReferenceById(id);
     }

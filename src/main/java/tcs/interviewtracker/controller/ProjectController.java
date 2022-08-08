@@ -84,7 +84,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity <Project> deleteProject(@PathVariable(value = "id") UUID uuid)
+    public ResponseEntity<Project> deleteProject(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         Project project = projectService.getByUuid(uuid);
 
@@ -93,34 +93,44 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}/recruiters")
-    public ResponseEntity<List<UUID>> getAllRecruiters(@PathVariable(value = "id") UUID uuid) {
+    public ResponseEntity<List<UserDTO>> getAllRecruiters(@PathVariable(value = "id") UUID uuid) {
         List<User> recruiters = projectService.fetchRecruiters(uuid);
-        List<UUID> uuids = new ArrayList<UUID>();
-        for (User user : recruiters) {
-            uuids.add(user.getUuid());
+        List<UserDTO> userDtos = new ArrayList<UserDTO>();
+        for (User usr : recruiters) {
+            UserDTO userDto = UserDTO.builder().uuid(usr.getUuid()).firstName(usr.getFirstName())
+                    .lastName(usr.getLastName()).middleName(usr.getMiddleName()).employeeId(usr.getEmployeeId())
+                    .profilePicture(usr.getProfilePicture()).dateOfBirth(usr.getDateOfBirth()).email(usr.getEmail())
+                    .phone(usr.getPhone()).admin(usr.getAdmin()).build();
+            userDtos.add(userDto);
         }
-        return new ResponseEntity<List<UUID>>(uuids, new HttpHeaders(), HttpStatus.OK);
+        return new ResponseEntity<List<UserDTO>>(userDtos, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/sourcers")
-    public ResponseEntity<List<UUID>> getAllSourcers(@PathVariable(value = "id") UUID uuid) {
+    public ResponseEntity<List<UserDTO>> getAllSourcers(@PathVariable(value = "id") UUID uuid) {
         List<User> sourcers = projectService.fetchSourcers(uuid);
-        List<UUID> uuids = new ArrayList<UUID>();
-        for (User user : sourcers) {
-            uuids.add(user.getUuid());
+        List<UserDTO> userDtos = new ArrayList<UserDTO>();
+        for (User usr : sourcers) {
+            UserDTO userDto = UserDTO.builder().uuid(usr.getUuid()).firstName(usr.getFirstName())
+                    .lastName(usr.getLastName()).middleName(usr.getMiddleName()).employeeId(usr.getEmployeeId())
+                    .profilePicture(usr.getProfilePicture()).dateOfBirth(usr.getDateOfBirth()).email(usr.getEmail())
+                    .phone(usr.getPhone()).admin(usr.getAdmin()).build();
+            userDtos.add(userDto);
         }
-        return new ResponseEntity<List<UUID>>(uuids, new HttpHeaders(), HttpStatus.OK);
+        return new ResponseEntity<List<UserDTO>>(userDtos, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/projectmanager")
-    public ResponseEntity<UUID> getProjectManager(@PathVariable(value = "id") UUID uuid) {
+    public ResponseEntity<UserDTO> getProjectManager(@PathVariable(value = "id") UUID uuid) {
         User projectManager = projectService.fetchProjectManager(uuid);
-        UUID uuidPm = projectManager.getUuid();
-        if (uuid.toString().isEmpty()) {
-            return new ResponseEntity<UUID>(null, new HttpHeaders(), HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<UUID>(uuidPm, new HttpHeaders(), HttpStatus.OK);
-        }
+        UserDTO userDto = UserDTO.builder().uuid(projectManager.getUuid()).firstName(projectManager.getFirstName())
+                .lastName(projectManager.getLastName()).middleName(projectManager.getMiddleName())
+                .employeeId(projectManager.getEmployeeId())
+                .profilePicture(projectManager.getProfilePicture()).dateOfBirth(projectManager.getDateOfBirth())
+                .email(projectManager.getEmail())
+                .phone(projectManager.getPhone()).admin(projectManager.getAdmin()).build();
+        return new ResponseEntity<UserDTO>(userDto, new HttpHeaders(), HttpStatus.OK);
+
     }
 
     @GetMapping(value = "/{id}/positions")

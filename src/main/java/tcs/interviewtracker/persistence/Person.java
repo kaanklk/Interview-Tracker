@@ -22,13 +22,12 @@ import java.util.UUID;
 @Table(name = "person")
 public class Person {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "serial")
     private Long id;
 
-    @Column(name="uuid")
+    @Column(name = "uuid")
     @Nullable
     private UUID uuid;
 

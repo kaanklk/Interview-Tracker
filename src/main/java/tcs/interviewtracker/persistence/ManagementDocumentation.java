@@ -1,7 +1,6 @@
 package tcs.interviewtracker.persistence;
 
-import java.sql.Timestamp;
-import java.util.Optional;
+import java.sql.Date;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -27,7 +26,7 @@ public class ManagementDocumentation {
 
     private UUID uuid;
 
-    private Timestamp dateOfInterview;
+    private Date dateOfInterview;
     private Boolean mobileToWork;
     private Boolean floorVisit;
     private String motivation;
