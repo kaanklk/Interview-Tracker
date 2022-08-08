@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,13 +88,7 @@ public class UserRolesController {
         userRoles.setRoles(roles);
 
         UserRoles created = service.saveUserRole(userRoles);
-
-     //   List<RoleDTO> roleCreated = Arrays.asList(modelMapper.map(created.getRoles(), RoleDTO[].class));
-
         UserRolesDTO createdDTO = entityToDto(created);
-        // createdDTO.setUser(entityToDto(created.getUser()));
-        // createdDTO.setProject(entityToDto(created.getProject()));
-        // createdDTO.setRoles(roleCreated);
 
         return createdDTO;
     }
