@@ -2678,7 +2678,7 @@ components:
     Interview:
       type: object
       properties:
-        id:
+        uuid:
           type: string
           example: 421e669f-9b7b-49ea-8f93-11e13bf74e02
           description: UUID
@@ -2690,26 +2690,30 @@ components:
           type: string
           example: 6991c701-ef1d-4a5a-9fd9-01bab6cc0247
           description: UUID
-        interviewerId:
+        timeslotId:
           type: string
-          example: 14726796-5b08-4b16-86e4-5e097599911c
-          description: UUID
-        interviewerId2:
-          type: string
-          example: 14726796-5b08-4b16-86e4-5e097599911c
-          description: UUID
-        finalTimeslot:
-          type: string
-          example: 14726796-5b08-4b16-86e4-5e097599911c
-          nullable: true
+          example: 6d024895-ac4e-4f12-9ca9-897c9b97cbcf
           description: UUID
         type:
           type: string
           example: management
+          description: Type can be management or technical
+        interviewerOneId:
+          type: string
+          example: 14726796-5b08-4b16-86e4-5e097599911c
+          description: UUID        
+        interviewerTwoId:
+          type: string
+          example: 14726796-5b08-4b16-86e4-5e097599911c
+          description: UUID
         documentationId:
           type: string
-          example: e7e29720-57d0-4ef1-a1e4-4ae3ea1ae00f
+          example: 72a085c5-cd79-485c-bf5e-8f966a544edf
           description: UUID
+        isCompleted:
+          type: boolean
+          example: true
+          description: true or false
     InterviewNoId:
       type: object
       properties:

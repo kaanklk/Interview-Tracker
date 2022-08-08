@@ -13,14 +13,12 @@ import tcs.interviewtracker.persistence.Interview;
 import tcs.interviewtracker.persistence.InterviewType;
 import tcs.interviewtracker.repository.InterviewRepository;
 import tcs.interviewtracker.repository.InterviewTypeRepository;
-import tcs.interviewtracker.repository.TimeslotRepository;
 
 @Service
 @AllArgsConstructor
 public class InterviewService {
-    InterviewRepository interviewRepository;
-    InterviewTypeRepository interviewTypeRepository;
-    TimeslotRepository timeslotRepository;
+    private InterviewRepository interviewRepository;
+    private InterviewTypeRepository interviewTypeRepository;
 
     public List<Interview> findAllInterviews() {
         return interviewRepository.findAll();

@@ -12,17 +12,15 @@ import org.springframework.stereotype.Service;
 import lombok.AllArgsConstructor;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.Candidate;
-import tcs.interviewtracker.persistence.Interview;
 import tcs.interviewtracker.persistence.Timeslot;
 import tcs.interviewtracker.repository.PersonHasTimeslotRepository;
-import tcs.interviewtracker.repository.PersonRepository;
 import tcs.interviewtracker.repository.TimeslotRepository;
 
 @Service
 @AllArgsConstructor
 public class TimeslotService {
-    PersonHasTimeslotRepository personHasTimeslotRepository;
-    TimeslotRepository timeslotRepository;
+    private PersonHasTimeslotRepository personHasTimeslotRepository;
+    private TimeslotRepository timeslotRepository;
 
     public List<Timeslot> findAllTimeslots() {
         return timeslotRepository.findAll();

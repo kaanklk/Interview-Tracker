@@ -32,7 +32,6 @@ import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.Education;
 import tcs.interviewtracker.persistence.Language;
 import tcs.interviewtracker.persistence.Person;
-import tcs.interviewtracker.persistence.Timeslot;
 import tcs.interviewtracker.persistence.WorkExperience;
 import tcs.interviewtracker.service.CandidateService;
 import tcs.interviewtracker.service.ManagementDocumentationService;
@@ -66,7 +65,7 @@ public class CandidateController {
                 @RequestParam(required = false, defaultValue = "ascending") String orderDirection)
     {
         PageRequest request = PageRequest.of(offset, pagesize,
-                        (orderDirection.equals("ascending"))? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending());
+                        (orderDirection.toLowerCase().equals("ascending"))? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending());
         var candidates = candidateService.findPaginated(request);
         var dtos = new ArrayList<CandidateDTO>();
         for (var candidate : candidates) {
