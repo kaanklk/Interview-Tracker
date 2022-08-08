@@ -1,5 +1,7 @@
 package tcs.interviewtracker.DTOs;
 
+import java.util.UUID;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +9,8 @@ import lombok.Setter;
 @Setter
 public class TimeslotDTO {
     
+    private UUID uuid;
+
     private String start;
 
     private String end;
