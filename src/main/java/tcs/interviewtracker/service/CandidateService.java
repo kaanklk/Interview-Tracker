@@ -22,6 +22,7 @@ import tcs.interviewtracker.persistence.User;
 import tcs.interviewtracker.persistence.WorkExperience;
 import tcs.interviewtracker.repository.CandidateRepository;
 import tcs.interviewtracker.repository.EducationRepository;
+import tcs.interviewtracker.repository.InterviewRepository;
 import tcs.interviewtracker.repository.LanguageRepository;
 import tcs.interviewtracker.repository.ManagementDocumentationRepository;
 import tcs.interviewtracker.repository.PositionRepository;
@@ -42,6 +43,7 @@ public class CandidateService {
     private ManagementDocumentationRepository managementDocumentationRepository;
     private PositionRepository positionRepository;
     private LanguageRepository languageRepository;
+    private InterviewRepository interviewRepository;
 
     public List<Candidate> findAll() {
         return candidateRepository.findAll();
@@ -82,6 +84,21 @@ public class CandidateService {
 
     public Candidate delete(UUID uuid) throws ResourceNotFoundException {
         Candidate toDelete = candidateRepository.getByUuid(uuid);
+        var interview = interviewRepository.getByCandidate(toDelete);
+        if (interview.isPresent()) {
+            interviewRepository.delete(interview.get());
+        }
+        var techDoc = technicalDocumentationRepository.getReferenceByCandidate(toDelete);
+        if (techDoc.isPresent()) {
+            technicalDocumentationRepository.delete(techDoc.get());
+        }
+        var manDoc = managementDocumentationRepository.getByCandidate(toDelete);
+        if (manDoc.isPresent()) {
+            managementDocumentationRepository.delete(manDoc.get());
+        }
+        deleteWorkExperience(toDelete);
+        deleteLanguage(toDelete);
+        deleteEducations(toDelete);
         if (null == toDelete) {
             throw new ResourceNotFoundException();
         }

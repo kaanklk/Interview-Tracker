@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import tcs.interviewtracker.persistence.InterviewType;
 
 public interface InterviewTypeRepository extends JpaRepository<InterviewType, Long> {
+    Optional<InterviewType> getByTypeName(String typeName);
 }

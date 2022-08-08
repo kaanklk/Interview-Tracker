@@ -71,6 +71,14 @@ public class InterviewService {
         return interviewTypeRepository.findAll();
     }
 
+    public InterviewType findInterviewTypeByName(String typeName) {
+        var optType = interviewTypeRepository.getByTypeName(typeName);
+        if (optType.isEmpty()) {
+            throw new ResourceNotFoundException();
+        }
+        return optType.get();
+    }
+
     public InterviewType saveInterviewType(InterviewType toSave) {
         return interviewTypeRepository.save(toSave);
     }
