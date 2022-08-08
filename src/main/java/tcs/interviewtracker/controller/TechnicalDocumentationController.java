@@ -33,6 +33,7 @@ import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.TechnicalDocumentation;
 import tcs.interviewtracker.persistence.User;
+import tcs.interviewtracker.properties.TechnicalSkills;
 //PageRequest -> Page tipust ad vissza
 import tcs.interviewtracker.service.CandidateService;
 import tcs.interviewtracker.service.TechnicalDocumentationService;
@@ -53,39 +54,6 @@ public class TechnicalDocumentationController {
 
     @Autowired
     private UserService userService;
-
-    Converter<UUID, User> userConverter = new AbstractConverter<UUID, User>() {
-        protected User convert(UUID uuid) {
-            try {
-
-                return userService.getUserById(uuid);
-
-            } catch (ResourceNotFoundException e) {
-
-                return null;
-
-            }
-
-        }
-    };
-
-    Converter<UUID, Candidate> candidateConverter = new AbstractConverter<UUID, Candidate>() {
-        protected Candidate convert(UUID uuid) {
-            try {
-                return candidateService.getByUuid(uuid);
-            }
-            catch (ResourceNotFoundException e) {
-                return null;
-            }
-        }
-    };
-
-    public TechnicalDocumentationController(ModelMapper modelMapper) {
-        this.technicalDocumentationMapper = modelMapper;
-        this.technicalDocumentationMapper.addConverter(userConverter);
-        this.technicalDocumentationMapper.addConverter(candidateConverter);
-
-    }
 
     @GetMapping("/")
     public ResponseEntity<List<TechnicalDocumentationDTO>> getAllTechDocs(
@@ -123,8 +91,8 @@ public class TechnicalDocumentationController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<TechnicalDocumentationDTO> createNewProject(
-            @Validated @RequestBody TechnicalDocumentationDTO techDocDTO)
+    public ResponseEntity<TechnicalDocumentationDTO> createNewTechnicalDocumentation(
+          @RequestBody TechnicalDocumentationDTO techDocDTO)
             throws ResourceAlreadyExistsException, ResourceNotFoundException {
 
         TechnicalDocumentation techDoc = convertToEntity(techDocDTO);
@@ -135,7 +103,7 @@ public class TechnicalDocumentationController {
     }
 
     @GetMapping("/{technicalId}")
-    public ResponseEntity<TechnicalDocumentationDTO> getProjectById(@PathVariable(value = "technicalId") UUID techDocId)
+    public ResponseEntity<TechnicalDocumentationDTO> getTechnicalDocumentationById(@PathVariable(value = "technicalId") UUID techDocId)
             throws ResourceNotFoundException {
         TechnicalDocumentation technicalDocumentation = techDocService.getById(techDocId).get();
         TechnicalDocumentationDTO technicalDocumentationDTO = convertToDTO(technicalDocumentation);
@@ -161,11 +129,6 @@ public class TechnicalDocumentationController {
         techDocService.delete(techId);
     }
 
-    private TechnicalDocumentationDTO convertToDTO(TechnicalDocumentation techDoc) {
-        TechnicalDocumentationDTO techDocDTO = technicalDocumentationMapper.map(techDoc,
-                TechnicalDocumentationDTO.class);
-        return techDocDTO;
-    }
 
     private TechnicalDocumentation convertToEntity(TechnicalDocumentationDTO dto) throws ResourceNotFoundException {
         var techDoc = new TechnicalDocumentation();
@@ -188,14 +151,39 @@ public class TechnicalDocumentationController {
 
         techDoc.setIsReccomended(dto.getIsReccomended());
         techDoc.setLastComments(dto.getLastComments());
-        techDoc.setTechSkillComment1(dto.getTechSkillComment1());
-        techDoc.setTechSkillComment2(dto.getTechSkillComment2());
-        techDoc.setTechSkillComment3(dto.getTechSkillComment3());
-        techDoc.setTechSkillComment4(dto.getTechSkillComment4());
-        techDoc.setTechnicalSkills1(dto.getTechnicalSkills1());
-        techDoc.setTechnicalSkills2(dto.getTechnicalSkills2());
-        techDoc.setTechnicalSkills3(dto.getTechnicalSkills3());
-        techDoc.setTechnicalSkills4(dto.getTechnicalSkills4());
+
+        if(dto.getSkills().size()==1){
+            techDoc.setTechSkillComment1(dto.getSkills().get(0).getSkillName());
+            techDoc.setTechnicalSkills1(dto.getSkills().get(0).getSkillLevel());
+        
+        }else if(dto.getSkills().size()==2){
+
+            techDoc.setTechSkillComment1(dto.getSkills().get(0).getSkillName());
+            techDoc.setTechnicalSkills1(dto.getSkills().get(0).getSkillLevel());
+            techDoc.setTechSkillComment2(dto.getSkills().get(1).getSkillName());
+            techDoc.setTechnicalSkills2(dto.getSkills().get(1).getSkillLevel());
+        
+        }else if(dto.getSkills().size()==3){
+            techDoc.setTechSkillComment1(dto.getSkills().get(0).getSkillName());
+            techDoc.setTechnicalSkills1(dto.getSkills().get(0).getSkillLevel());
+            techDoc.setTechSkillComment2(dto.getSkills().get(1).getSkillName());
+            techDoc.setTechnicalSkills2(dto.getSkills().get(1).getSkillLevel());
+            techDoc.setTechSkillComment3(dto.getSkills().get(2).getSkillName());
+            techDoc.setTechnicalSkills3(dto.getSkills().get(2).getSkillLevel());
+            
+        }else if(dto.getSkills().size() >= 4){
+
+            techDoc.setTechSkillComment1(dto.getSkills().get(0).getSkillName());
+            techDoc.setTechnicalSkills1(dto.getSkills().get(0).getSkillLevel());
+            techDoc.setTechSkillComment2(dto.getSkills().get(1).getSkillName());
+            techDoc.setTechnicalSkills2(dto.getSkills().get(1).getSkillLevel());
+            techDoc.setTechSkillComment3(dto.getSkills().get(2).getSkillName());
+            techDoc.setTechnicalSkills3(dto.getSkills().get(2).getSkillLevel());
+            techDoc.setTechSkillComment4(dto.getSkills().get(3).getSkillName());
+            techDoc.setTechnicalSkills4(dto.getSkills().get(3).getSkillLevel());
+            
+        }
+
         techDoc.setRoleExperience(dto.getRoleExperience());
         techDoc.setTotalExperience(dto.getTotalExperience());
         techDoc.setUnderstandingComment(dto.getUnderstandingComment());
@@ -203,39 +191,50 @@ public class TechnicalDocumentationController {
 
         return techDoc;
     }
-    /*
-     * private TechnicalDocumentationDTO convertToDto(TechnicalDocumentation
-     * techDoc){
-     * var dto = new TechnicalDocumentationDTO();
-     * dto.setUuid(techDoc.getUuid());
-     * dto.setDate(techDoc.getDate());
-     * dto.setDesignationOne(techDoc.getDesignationOne());
-     * dto.setDesignationTwo(techDoc.getDesignationTwo());
-     * dto.setCandidateUuid(techDoc.getCandidate().getUuid());
-     * dto.setDuration(techDoc.getDuration());
-     * 
-     * dto.setInterviewerOneUUID(techDoc.getInterviewerOne().getUuid());
-     * dto.setInterviewerTwoUUID(techDoc.getInterviewerTwo().getUuid());
-     * 
-     * dto.setIsReccomended(techDoc.getIsReccomended());
-     * dto.setLastComments(techDoc.getLastComments());
-     * dto.setTechSkillComment1(techDoc.getTechSkillComment1());
-     * dto.setTechSkillComment2(techDoc.getTechSkillComment2());
-     * dto.setTechSkillComment3(techDoc.getTechSkillComment3());
-     * dto.setTechSkillComment4(techDoc.getTechSkillComment4());
-     * dto.setTechnicalSkills1(techDoc.getTechnicalSkills1());
-     * dto.setTechnicalSkills2(techDoc.getTechnicalSkills2());
-     * dto.setTechnicalSkills3(techDoc.getTechnicalSkills3());
-     * dto.setTechnicalSkills4(techDoc.getTechnicalSkills4());
-     * dto.setRoleExperience(techDoc.getRoleExperience());
-     * dto.setTotalExperience(techDoc.getTotalExperience());
-     * dto.setUnderstandingComment(techDoc.getUnderstandingComment());
-     * dto.setUnderstandingOfRole(techDoc.getUnderstandingOfRole());
-     * 
-     * 
-     * return dto;
-     * 
-     * }
-     * 
-     */
+    
+     private TechnicalDocumentationDTO convertToDTO(TechnicalDocumentation
+     techDoc){
+     var dto = new TechnicalDocumentationDTO();
+     dto.setUuid(techDoc.getUuid());
+     dto.setDate(techDoc.getDate());
+     dto.setDesignationOne(techDoc.getDesignationOne());
+     dto.setDesignationTwo(techDoc.getDesignationTwo());
+     dto.setCandidateUuid(techDoc.getCandidate().getUuid());
+     dto.setDuration(techDoc.getDuration());
+     
+     dto.setInterviewerOneUUID(techDoc.getInterviewerOne().getUuid());
+     dto.setInterviewerTwoUUID(techDoc.getInterviewerTwo().getUuid());
+     
+     if(techDoc.getTechSkillComment1() != null && techDoc.getTechnicalSkills1() != null){
+        TechnicalSkills techSkill = new TechnicalSkills(techDoc.getTechSkillComment1(),techDoc.getTechnicalSkills1());
+        dto.getSkills().add(techSkill);
+     }
+     if(techDoc.getTechSkillComment2() != null && techDoc.getTechnicalSkills2() != null){
+        TechnicalSkills techSkill = new TechnicalSkills(techDoc.getTechSkillComment2(),techDoc.getTechnicalSkills2());
+        dto.getSkills().add(techSkill);
+     }
+     if(techDoc.getTechSkillComment3() != null && techDoc.getTechnicalSkills3() != null){
+        TechnicalSkills techSkill = new TechnicalSkills(techDoc.getTechSkillComment3(),techDoc.getTechnicalSkills3());
+        dto.getSkills().add(techSkill);
+     }
+     if(techDoc.getTechSkillComment4() != null && techDoc.getTechnicalSkills4() != null){
+        TechnicalSkills techSkill = new TechnicalSkills(techDoc.getTechSkillComment4(),techDoc.getTechnicalSkills4());
+        dto.getSkills().add(techSkill);
+     }
+     
+     dto.setIsReccomended(techDoc.getIsReccomended());
+     dto.setLastComments(techDoc.getLastComments());
+     
+     
+     dto.setRoleExperience(techDoc.getRoleExperience());
+     dto.setTotalExperience(techDoc.getTotalExperience());
+     dto.setUnderstandingComment(techDoc.getUnderstandingComment());
+     dto.setUnderstandingOfRole(techDoc.getUnderstandingOfRole());
+     
+     
+     return dto;
+     
+     }
+     
+     
 }
