@@ -10,10 +10,10 @@ values
     (16, 'Junior HR Assistant', 3, 10, 3, true, '54fafe36-1306-11ed-861d-0242ac120002');
 
 INSERT INTO project (id, name, description, uuid)
-    VALUES (1, 'alpha','This is a project to build a new developer team', '79a7f7a0-1196-11ed-861d-0242ac120002'), 
-    (2, 'beta','This is a project to build a new hr team', '80903b22-1196-11ed-861d-0242ac120002'), 
-    (3, 'gamma','This is a project to build a new data engineer team', 'b2eeb4e0-1196-11ed-861d-0242ac120002'), 
-    (4, 'epsilon', 'This is a project to build a new frontend team',  'b7c1b364-1196-11ed-861d-0242ac120002'), 
+    VALUES (1, 'alpha','This is a project to build a new developer team', '79a7f7a0-1196-11ed-861d-0242ac120002'),
+    (2, 'beta','This is a project to build a new hr team', '80903b22-1196-11ed-861d-0242ac120002'),
+    (3, 'gamma','This is a project to build a new data engineer team', 'b2eeb4e0-1196-11ed-861d-0242ac120002'),
+    (4, 'epsilon', 'This is a project to build a new frontend team',  'b7c1b364-1196-11ed-861d-0242ac120002'),
     (5, 'omega','This is a project to build a new backend team',  'bb65fade-1196-11ed-861d-0242ac120002');
 
 INSERT INTO users (id, admin, created_at, date_of_birth, email, employee_id, first_name, last_name, middle_name, phone_number, photo, uuid)

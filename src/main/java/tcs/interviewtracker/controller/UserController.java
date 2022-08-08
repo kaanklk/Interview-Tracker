@@ -67,9 +67,10 @@ public class UserController {
     @GetMapping("/{uuid}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public User getUserById(@PathVariable UUID uuid) throws ResourceNotFoundException{
-        return service.getUserById(uuid);
+    public UserDTO getUserById(@PathVariable UUID uuid) throws ResourceNotFoundException{
+        return entityToDto(service.getUserById(uuid));
     }
+
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDTO save(@RequestBody UserDTO userDTO) throws ResourceAlreadyExistsException{

@@ -1,17 +1,17 @@
 package tcs.interviewtracker.DTOs;
 
-import java.util.List;
 import java.util.UUID;
 
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 @Data
+@SuperBuilder
 public class ProjectDTO {
     private UUID uuid;
     private String name;
-    private UUID projectManagerId;
     private String description;
-    private List<UUID> recruiterId;
-    private List<UUID> sourcerId;
-    private List<UUID> interviewerId;
+    private String numberOfAssocicates;
+    private String numberOfPositions;
+    private String projectManagerName;
 }

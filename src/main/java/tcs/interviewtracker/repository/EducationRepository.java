@@ -13,7 +13,6 @@ import tcs.interviewtracker.persistence.Education;
 
 @Repository
 public interface EducationRepository extends JpaRepository<Education, Long> {
-    public Education getByUuid(UUID uuid);
     public List<Education> getByCandidate(Candidate candidate);
     public Page<Education> getByCandidate(Candidate candidate, PageRequest request);
 }

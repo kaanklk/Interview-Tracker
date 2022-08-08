@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
+import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.TechnicalDocumentation;
 import tcs.interviewtracker.repository.TechnicalDocumentationRepository;
 
@@ -62,4 +63,9 @@ public class TechnicalDocumentationService {
         techDocRepository.delete(techD);
 
     }
+
+    public Optional<TechnicalDocumentation> getTechnicalDocByCandidate(Candidate candidate) {
+        return techDocRepository.getReferenceByCandidate(candidate);
+    }
+
 }

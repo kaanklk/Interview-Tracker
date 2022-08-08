@@ -13,7 +13,6 @@ import tcs.interviewtracker.persistence.Language;
 
 @Repository
 public interface LanguageRepository extends JpaRepository<Language, Long> {
-    public Language getByUuid(UUID uuid);
     public List<Language> getByCandidate(Candidate candidate);
     public Page<Language> getByCandidate(Candidate candidate, PageRequest request);
 }

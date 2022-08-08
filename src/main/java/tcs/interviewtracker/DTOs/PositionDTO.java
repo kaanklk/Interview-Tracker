@@ -13,8 +13,10 @@ import tcs.interviewtracker.persistence.BehavioralCompetency;
 import tcs.interviewtracker.persistence.ContractType;
 import tcs.interviewtracker.persistence.LanguageRequirement;
 import tcs.interviewtracker.persistence.Task;
+import lombok.experimental.SuperBuilder;
 
 @Data
+@SuperBuilder
 public class PositionDTO {
 
     private UUID uuid;

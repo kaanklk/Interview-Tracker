@@ -20,7 +20,7 @@ import lombok.ToString;
 public class Candidate {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "serial")
     private Long id;
 
@@ -51,10 +51,10 @@ public class Candidate {
     /*
      * @OneToMany(mappedBy = "candidate")
      * private Set<WorkExperience> workExperiences;
-     * 
+     *
      * @OneToMany(mappedBy = "candidate")
      * private Set<Education> educations;
-     * 
+     *
      * @OneToMany(mappedBy = "candidate")
      * private Set<Language> langugages;
      */

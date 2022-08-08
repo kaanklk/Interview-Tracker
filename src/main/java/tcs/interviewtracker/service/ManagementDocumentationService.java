@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.ManagementDocumentation;
 import tcs.interviewtracker.repository.ManagementDocumentationRepository;
 
@@ -50,5 +51,10 @@ public class ManagementDocumentationService {
     public void deleteManageDoc(ManagementDocumentation manageDoc) {
         manageRepo.delete(manageDoc);
     }
+
+    public Optional<ManagementDocumentation> getManageDocByCandidate(Candidate candidate) {
+        return manageRepo.getByCandidate(candidate);
+    }
+
 
 }
