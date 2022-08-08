@@ -59,10 +59,6 @@ public class Position {
     @Nullable
     private Boolean open;
 
-    @Column(name = "deadline")
-    @Nullable
-    private Date deadline;
-
     @ManyToMany
     @JoinTable(name = "position_has_interviewers", joinColumns = @JoinColumn(name = "position_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
     Set<User> interviewers;
@@ -82,8 +78,8 @@ public class Position {
     Set<Task> tasks;
 
     String degrees;
-    ArrayList<String> itSkills;
-    ArrayList<String> requiredExperience;
+    String itSkills;
+    String requiredExperience;
 
     ArrayList<String> advantages;
 
