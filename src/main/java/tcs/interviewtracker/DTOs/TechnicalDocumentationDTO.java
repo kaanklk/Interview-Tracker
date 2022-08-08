@@ -2,10 +2,12 @@ package tcs.interviewtracker.DTOs;
 
 import java.sql.Date;
 import java.util.UUID;
-
+import java.util.ArrayList;
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
+import tcs.interviewtracker.properties.TechnicalSkills;
 
 @Data
 public class TechnicalDocumentationDTO {
@@ -22,22 +24,8 @@ public class TechnicalDocumentationDTO {
     private String understandingOfRole;
 
     private String understandingComment;
-
-    private Integer technicalSkills1;
-
-    private String techSkillComment1;
-
-    private Integer technicalSkills2;
-
-    private String techSkillComment2;
-
-    private Integer technicalSkills3;
-
-    private String techSkillComment3;
-
-    private Integer technicalSkills4;
-
-    private String techSkillComment4;
+  
+    private List<TechnicalSkills> skills;
 
     private Integer totalExperience;
 
@@ -56,6 +44,7 @@ public class TechnicalDocumentationDTO {
     private int designationTwo;
 
     public TechnicalDocumentationDTO() {
+    skills = new ArrayList<TechnicalSkills>();
     }
 
 }
