@@ -18,7 +18,7 @@ VALUES (101, 'fc0e88ec-cb24-42e2-9e55-f85512c584eb', now(), '1997-02-02', 'john.
 	   (107, '1ba75c20-676e-42bf-ac9b-a5f22833a470', now(), '1996-02-02', 'john.doe7@mail.ru', '1234567', 'John7', 'Doe7', 'Diego7', '+3687238323', 'url7', false),
 	   (108, '1a5e6859-7a7b-495f-b064-5c66a7a85510', now(), '1994-02-02', 'john.doe8@mail.ru', '3454567', 'John8', 'Doe8', 'Diego8', '+3687238323', 'url8', true),
 	   (109, '44097d7e-d916-4276-bbae-47385f92b236', now(), '1995-02-02', 'john.doe9@mail.ru', '4344567', 'John9', 'Doe9', 'Diego9', '+3687238323', 'url9', false),
-	   (110, '3c9dead7-638f-4745-9545-615f269f65d6', now(), '1993-02-02', 'john.doe0@mail.ru', '8754567', 'John0', 'Doe0', 'Diego0', '+3687238323', 'url10', false);
+	   (110, '3c9dead7-638f-4745-9545-615f269f65d6', now(), '1993-02-02', 'john.doe0@mail.ru', '8754567', 'John0', 'Doe0', 'Diego0', '+3687238323', 'url0', false);
 
 INSERT INTO project(id, uuid, name, description)
     VALUES
@@ -73,27 +73,46 @@ INSERT INTO education (id, start_date, end_date, information, institution, candi
         (105, '2019-10-01', '2020-01-11', 'OKJ', 'ELTE', 105);
 
 INSERT INTO roles (id, role_name, uuid)
-VALUES (101, 'Management Interviewer', '07f16e6c-10a4-4fbf-9330-8404125b046f'),
-       (102, 'project_manager', 'aa8b7a22-4da4-41d9-8e91-023303383f4d'),
-       (103, 'recruiter', '10b526ae-f78c-4615-8cb1-e7f21239a4fe'),
-       (104, 'sourcer', 'e5b73f8d-d858-468c-9934-4cbe2f083563'),
-       (105, 'Technical Interviewer', 'ba9766e1-e3b3-4229-8639-53db4676294d');
-       
+VALUES (101, 'Project Manager', 'aa8b7a22-4da4-41d9-8e91-023303383f4d'),
+       (102, 'Management Interviewer', '07f16e6c-10a4-4fbf-9330-8404125b046f'),
+       (103, 'Technical Interviewer', 'ba9766e1-e3b3-4229-8639-53db4676294d'),
+       (104, 'Recruiter', '10b526ae-f78c-4615-8cb1-e7f21239a4fe'),
+	   (105, 'Sourcer', 'e5b73f8d-d858-468c-9934-4cbe2f083563');
+
 INSERT INTO user_roles (id, user_id, project_id)
 	VALUES
         (101, 101, 101),
-        (102, 102, 102),
-        (103, 103, 103),
-        (104, 104, 104),
-        (105, 105, 105);
+        (102, 101, 102),
+        (103, 102, 102),
+        (104, 102, 103),
+        (105, 103, 101),
+		(106, 103, 104),
+		(107, 103, 103),
+		(108, 104, 104),
+		(109, 104, 105),
+		(110, 105, 102),
+		(111, 106, 103),
+		(112, 107, 105),
+		(113, 108, 102),
+		(114, 109, 104);
 
 INSERT INTO user_roles_role (user_roles_id, role_id)
 VALUES
-		(101, 102),
-       	(101, 103),
+		(101, 101),
+       	(101, 102),
        	(102, 105),
 	   	(103, 101),
-	   	(104, 104);
+	   	(104, 104),
+		(105, 103),
+		(106, 105),
+		(107, 103),
+		(108, 104),
+		(109, 104),
+		(110, 102),
+		(111, 103),
+		(112, 102),
+		(113, 105),
+		(114, 104);
 
 INSERT INTO technical_documentation (id, uuid, candidate_id, interviewer_one, interviewer_two)
 	VALUES
@@ -110,7 +129,7 @@ INSERT INTO management_documentation (id, uuid, candidate_id, project_id, interv
 		(103, '3ca1e412-760f-4276-9805-abdb5900db6c', 103, 101, 103, 104),
 		(104, 'cb5057b3-9b3c-4523-85cb-9eca3771a111', 104, 101, 101, 103),
 		(105, '6290e09d-c5d9-4018-9137-1511ccb11fd3', 105, 101, 102, 101);
-	
+
 INSERT INTO timeslot (id, uuid, start_time, end_time, "type", is_completed)
 	VALUES
 		(101, 'edc1a219-55ad-4edc-84c0-844409bf70fb', '2022-08-04 13:30:00', '2022-08-04 14:00:00', '', true),
@@ -119,7 +138,7 @@ INSERT INTO timeslot (id, uuid, start_time, end_time, "type", is_completed)
 		(104, 'e6cb3e1d-5ecd-4f77-badd-e7ff0b77e591', '2022-08-06 13:30:00', '2022-08-06 14:00:00', '', false),
 		(105, 'e70b8802-d4bb-4231-b0d5-9ecf081c0dae', '2022-08-06 13:30:00', '2022-08-06 14:00:00', '', false),
 		(106, '22480204-3fda-463c-bc4e-13cfc13b8055', '2022-08-07 13:30:00', '2022-08-07 14:00:00', '', true);
-	
+
 INSERT INTO interview_type (id, type_name)
 	VALUES
 		(101, 'technical'),
@@ -133,7 +152,7 @@ INSERT INTO interview (id, uuid, candidate_id, project_id, timeslot_id, type_id,
 		(104, '28a62838-6f82-4387-8f54-59e4631a4e4d', 104, 102, 104, 102, 104, 105, false),
 		(105, '990857bf-20ae-44dd-97be-43690a2f1a3b', 105, 103, 105, 101, 105, 101, false),
 		(106, '844b19ee-1816-4857-be94-10fd993bca04', 106, 104, 106, 102, 101, 102, true);
-		
+
 INSERT INTO person_has_timeslot (id, uuid, person_id, timeslot_id, "function")
 	VALUES
 		(101, 'dbd03aa1-ac31-432b-8946-9b4b98c4daa0', 101, 101, ''),
@@ -141,7 +160,7 @@ INSERT INTO person_has_timeslot (id, uuid, person_id, timeslot_id, "function")
 		(103, 'd78112d2-91b9-4148-b5b3-bd39d675a6cd', 103, 103, ''),
 		(104, '17e1227d-74df-4194-86ec-de106a742f06', 104, 104, ''),
 		(105, '98633dff-5a93-436a-b78d-65505530f412', 105, 105, '');
-		
+
 
 
 
