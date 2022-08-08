@@ -1,5 +1,6 @@
 package tcs.interviewtracker.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -10,9 +11,11 @@ import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
+import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.Interview;
 import tcs.interviewtracker.persistence.Timeslot;
 import tcs.interviewtracker.repository.PersonHasTimeslotRepository;
+import tcs.interviewtracker.repository.PersonRepository;
 import tcs.interviewtracker.repository.TimeslotRepository;
 
 @Service
@@ -68,6 +71,14 @@ public class TimeslotService {
         return optTimeslot.get();
     }
 
-    
+// ----Candidate related -------------------------------------------------
 
+    public List<Timeslot> findTimeslotsOfCandidate(Candidate candidate) {
+        var relations = personHasTimeslotRepository.findByPerson(candidate.getPerson());
+        ArrayList<Timeslot> timeslots = new ArrayList<Timeslot>();
+        for (var relation : relations) {
+            timeslots.add(relation.getTimeslot());
+        }
+        return timeslots;
+    }
 }
