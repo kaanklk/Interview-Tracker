@@ -28,22 +28,22 @@ public class PositionDTO {
     private Integer hiredCount;
     private Integer totalCount;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date deadline;
     private String ievolveRole;
     private String ProjectSupportRole;
     private String manager;
     private ContractType contractType;
     private String workingHours;
     private String workingPlace;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date dateOfJoining;
     private String purposeOfPosition;
     private ArrayList<Task> tasks;
     private String degrees;
-    private ArrayList<String> itSkills;
-    private ArrayList<String> requiredExperience;
+    private String itSkills;
+    private String requiredExperience;
     private Set<LanguageRequirement> languageRequirements;
-    private ArrayList<String> advantages;
+    private String advantages;
     private Set<BehavioralCompetency> behavioralCompetencies;
     private String otherRequirements;
     private String developmentAndCarreerOpportunities;

@@ -130,7 +130,7 @@ public class ProjectService {
         List<Interview> interviews = interviewRepository.findAll();
         List<Interview> completedInterviews = new ArrayList<Interview>();
         for (Interview inter : interviews) {
-            if (inter.getProjectId().equals(project.getId())) {
+            if (inter.getProject().getUuid().equals(project.getId())) {
                 if (inter.getIsCompleted()) {
                     completedInterviews.add(inter);
                 }
@@ -144,7 +144,7 @@ public class ProjectService {
         List<Interview> interviews = interviewRepository.findAll();
         List<Interview> completedInterviews = new ArrayList<Interview>();
         for (Interview inter : interviews) {
-            if (inter.getProjectId().equals(project.getId())) {
+            if (inter.getProject().getUuid().equals(project.getId())) {
                 if (!inter.getIsCompleted()) {
                     completedInterviews.add(inter);
                 }
@@ -204,8 +204,8 @@ public class ProjectService {
         List<Interview> interviews = interviewRepository.findAll();
         List<Interview> technicalInterviews = new ArrayList<Interview>();
         for (Interview inter : interviews) {
-            if (inter.getProjectId().equals(project.getId())) {
-                if (inter.getType().toLowerCase().equals("technical")) {
+            if (inter.getProject().getUuid().equals(project.getId())) {
+                if (inter.getType().getTypeName().toLowerCase().equals("technical")) {
                     technicalInterviews.add(inter);
                 }
             }
@@ -218,8 +218,8 @@ public class ProjectService {
         List<Interview> interviews = interviewRepository.findAll();
         List<Interview> technicalInterviews = new ArrayList<Interview>();
         for (Interview inter : interviews) {
-            if (inter.getProjectId().equals(project.getId())) {
-                if (inter.getType().toLowerCase().equals("management")) {
+            if (inter.getProject().getId().equals(project.getId())) {
+                if (inter.getType().getTypeName().toLowerCase().equals("management")) {
                     technicalInterviews.add(inter);
                 }
             }
@@ -232,8 +232,8 @@ public class ProjectService {
         List<Interview> interviews = interviewRepository.findAll();
         List<Interview> upcomingTechnicalInterviews = new ArrayList<Interview>();
         for (Interview inter : interviews) {
-            if (inter.getProjectId().equals(project.getId()) && !inter.getIsCompleted()) {
-                if (inter.getType().toLowerCase().equals("technical")) {
+            if (inter.getProject().getId().equals(project.getId()) && !inter.getIsCompleted()) {
+                if (inter.getType().getTypeName().toLowerCase().equals("technical")) {
                     upcomingTechnicalInterviews.add(inter);
                 }
             }
@@ -246,8 +246,8 @@ public class ProjectService {
         List<Interview> interviews = interviewRepository.findAll();
         List<Interview> upcomingManagementInterviews = new ArrayList<Interview>();
         for (Interview inter : interviews) {
-            if (inter.getProjectId().equals(project.getId()) && !inter.getIsCompleted()) {
-                if (inter.getType().toLowerCase().equals("management")) {
+            if (inter.getProject().getId().equals(project.getId()) && !inter.getIsCompleted()) {
+                if (inter.getType().getTypeName().toLowerCase().equals("management")) {
                     upcomingManagementInterviews.add(inter);
                 }
             }
@@ -296,24 +296,24 @@ public class ProjectService {
 
     public Set<User> fetchInterviewers(UUID projectUuid, String interviewType) {
         Project project = projectRepository.findByUuid(projectUuid).get();
-        List<Interview> interviewToCheckInterviewers = interviewRepository.findByProjectId(project.getId());
+        List<Interview> interviewToCheckInterviewers = interviewRepository.findByProject(project);
         if (interviewType == "management") {
             for (Interview inter : interviewToCheckInterviewers) {
-                if (inter.getType() != "management") {
+                if (inter.getType().getTypeName().equals("management")) {
                     interviewToCheckInterviewers.remove(inter);
                 }
             }
         } else if (interviewType == "technical") {
             for (Interview inter : interviewToCheckInterviewers) {
-                if (inter.getType() != "technical") {
+                if (inter.getType().getTypeName().equals("technical")) {
                     interviewToCheckInterviewers.remove(inter);
                 }
             }
         }
         Set<User> projectInterviewers = new HashSet<User>();
         for (Interview inter : interviewToCheckInterviewers) {
-            User interviewerOne = userRepository.getReferenceById(inter.getInterviewerOneId());
-            User interviewerTwo = userRepository.getReferenceById(inter.getInterviewerTwoId());
+            User interviewerOne = userRepository.getReferenceById(inter.getInterviewerOne().getId());
+            User interviewerTwo = userRepository.getReferenceById(inter.getInterviewerTwo().getId());
             projectInterviewers.add(interviewerOne);
             projectInterviewers.add(interviewerTwo);
         }

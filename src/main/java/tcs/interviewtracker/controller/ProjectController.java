@@ -293,9 +293,9 @@ public class ProjectController {
     private List<InterviewDTO> convertToInterviewDto(List<Interview> interviews) {
         List<InterviewDTO> interviewDtos = new ArrayList<InterviewDTO>();
         for (Interview inter : interviews) {
-            InterviewDTO interviewDto = InterviewDTO.builder().uuid(inter.getUuid()).projectId(inter.getProjectId())
-                    .timeslotId(inter.getTimeslotId()).interviewerOneId(inter.getInterviewerOneId())
-                    .interviewerTwoId(inter.getInterviewerTwoId()).documentId(inter.getDocumentId())
+            InterviewDTO interviewDto = InterviewDTO.builder().uuid(inter.getUuid()).projectId(inter.getProject().getUuid())
+                    .timeslotId(inter.getTimeslot().getUuid()).interviewerOneId(inter.getInterviewerOne().getUuid())
+                    .interviewerTwoId(inter.getInterviewerTwo().getUuid())
                     .isCompleted(inter.getIsCompleted()).build();
 
             interviewDtos.add(interviewDto);

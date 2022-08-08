@@ -5,18 +5,20 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table
+@Data
+@NoArgsConstructor
 public class InterviewType {
-    protected static final String TBL_NAME = "interview_type";
-    private static final String FLD_TYPENAME = "type_name";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "serial")
     private Long id;
 
-    @Column(name = FLD_TYPENAME)
+    @Column(columnDefinition = "varchar(128)")
     private String typeName;
 }

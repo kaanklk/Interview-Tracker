@@ -32,6 +32,7 @@ import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.Education;
 import tcs.interviewtracker.persistence.Language;
 import tcs.interviewtracker.persistence.Person;
+import tcs.interviewtracker.persistence.PersonHasTimeslot;
 import tcs.interviewtracker.persistence.Timeslot;
 import tcs.interviewtracker.persistence.WorkExperience;
 import tcs.interviewtracker.service.CandidateService;
@@ -40,6 +41,7 @@ import tcs.interviewtracker.service.PersonService;
 import tcs.interviewtracker.service.PositionService;
 import tcs.interviewtracker.service.ProjectService;
 import tcs.interviewtracker.service.TechnicalDocumentationService;
+import tcs.interviewtracker.service.TimeslotService;
 
 @RestController
 @RequestMapping("/candidates")
@@ -57,6 +59,9 @@ public class CandidateController {
     private ManagementDocumentationService managementDocumentationService;
     @NonNull
     private TechnicalDocumentationService technicalDocumentationService;
+    @NonNull
+    private TimeslotService timeslotService;
+
 
     @GetMapping
     public ResponseEntity<List<CandidateDTO>> getCandidates(
@@ -66,7 +71,7 @@ public class CandidateController {
                 @RequestParam(required = false, defaultValue = "ascending") String orderDirection)
     {
         PageRequest request = PageRequest.of(offset, pagesize,
-                        (orderDirection.equals("ascending"))? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending());
+                        (orderDirection.toLowerCase().equals("ascending"))? Sort.by(orderBy).ascending() : Sort.by(orderBy).descending());
         var candidates = candidateService.findPaginated(request);
         var dtos = new ArrayList<CandidateDTO>();
         for (var candidate : candidates) {
@@ -91,7 +96,6 @@ public class CandidateController {
     public ResponseEntity<CandidateDTO> getCandidates(
                 @PathVariable(name = "candidateId", required = true) UUID candidateUuid
     ) throws ResourceNotFoundException {
-
         var candidate = candidateService.getByUuid(candidateUuid);
         var responseDto = convertToDTO(candidate);
         return new ResponseEntity<CandidateDTO>(responseDto, HttpStatus.OK);
@@ -140,6 +144,51 @@ public class CandidateController {
         return new ResponseEntity<StatusChangeDTO>(responseDto, HttpStatus.OK);
     }
 
+    @GetMapping("/{candidateId}/possible-timeslots")
+    public ResponseEntity<List<TimeslotDTO>> getPossibleTimeslots(
+        @PathVariable(name = "candidateId", required = true) UUID candidateUuid
+    ) 
+    {
+        var candidate = candidateService.getByUuid(candidateUuid);
+        var timeslots = timeslotService.findTimeslotsOfCandidate(candidate);
+        var dtos = new ArrayList<TimeslotDTO>();
+        for (var timeslot : timeslots) {
+            dtos.add(convertToDTO(timeslot));
+        }
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
+    }
+
+    @PostMapping("/{candidateId}/possible-timeslots")
+    public ResponseEntity<TimeslotDTO> postPossibleTimeslot(
+        @PathVariable(name = "candidateId", required = true) UUID candidateUuid,
+        @RequestBody(required = true) TimeslotDTO timeslotDTO
+    ) 
+    {
+        var candidate = candidateService.getByUuid(candidateUuid);
+        var timeslot = convertToEntity(timeslotDTO);
+        timeslot = timeslotService.saveTimeslot(timeslot);
+        timeslotService.bindTimeslotToPerson(timeslot, candidate.getPerson());
+        var dto = convertToDTO(timeslot);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    private TimeslotDTO convertToDTO(Timeslot src) {
+        var dest = new TimeslotDTO();
+        dest.setUuid(src.getUuid());
+        dest.setStart(src.getStartTime().toString());
+        dest.setEnd(src.getEndTime().toString());
+        return dest;
+    }
+
+    private Timeslot convertToEntity(TimeslotDTO src) {
+        var dest = new Timeslot();
+        dest.setUuid(src.getUuid());
+        dest.setStartTime(java.sql.Timestamp.valueOf(src.getStart()));
+        dest.setEndTime(java.sql.Timestamp.valueOf(src.getEnd()));
+        dest.setIsCompleted(false);
+        return dest;
+    }
+
     private void saveRelatedRecords(CandidateDTO src, Candidate dest) {
         var workExperienceDTOs = src.getWorkExperiences();
         for (var dto : workExperienceDTOs) {
@@ -169,6 +218,7 @@ public class CandidateController {
             language.setLevel(dto.getLevel());
             candidateService.saveLanguage(language);
         }
+
     }
 
     private Candidate convertToEntity(CandidateDTO src) throws ResourceNotFoundException {
@@ -291,14 +341,14 @@ public class CandidateController {
             }
         }
 
-        var timeslots = new ArrayList<TimeslotDTO>();
-        //TODO
-        dest.setPossibleTimeslots(timeslots);
+        var timeslots = timeslotService.findTimeslotsOfCandidate(src);
+        dest.setPossibleTimeslots(new ArrayList<TimeslotDTO>());
+        for (var timeslot : timeslots) {
+            dest.getPossibleTimeslots().add(convertToDTO(timeslot));
+        }
 
         dest.setCvPath(src.getCvPath());
 
-        //var dto = candidateMapper.map(entity, CandidateDTO.class);
-        //return dto;
         return dest;
     }
 }

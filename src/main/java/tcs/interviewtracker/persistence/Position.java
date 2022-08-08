@@ -59,10 +59,6 @@ public class Position {
     @Nullable
     private Boolean open;
 
-    @Column(name = "deadline")
-    @Nullable
-    private Date deadline;
-
     @ManyToMany
     @JoinTable(name = "position_has_interviewers", joinColumns = @JoinColumn(name = "position_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
     Set<User> interviewers;
@@ -74,6 +70,7 @@ public class Position {
     String workingHours;
     String workingPlace;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     Date dateOfJoining;
     String purposeOfPosition;
 
@@ -82,9 +79,8 @@ public class Position {
     Set<Task> tasks;
 
     String degrees;
-    ArrayList<String> itSkills;
-    ArrayList<String> requiredExperience;
-
+    String itSkills;
+    String requiredExperience;
     ArrayList<String> advantages;
 
     @ElementCollection(fetch = FetchType.EAGER)

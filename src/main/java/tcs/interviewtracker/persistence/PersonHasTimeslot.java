@@ -16,36 +16,23 @@ import lombok.NonNull;
 
 @Entity
 @Data
-@Table(name="person_has_timeslot")
 public class PersonHasTimeslot {
 
     @Id
-    @Column(name="id")
-    @NonNull
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long personHasTimeslotId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "serial")
+    private Long id;
 
-    @Column(name="uuid")
     private UUID uuid;
 
     @ManyToOne
-    @JoinColumn(name="timeslot_id", referencedColumnName = "id")
+    @JoinColumn(referencedColumnName = "id")
     private Timeslot timeslot;
 
     @ManyToOne
-    @JoinColumn(name="person_id", referencedColumnName = "id")
+    @JoinColumn(referencedColumnName = "id")
     private Person person;
 
-    @Column(name="function")
+    @Column(columnDefinition = "varchar(128)")
     private String function;
-
-    public PersonHasTimeslot() {
-    }
-
-    public PersonHasTimeslot(Timeslot  timeslot, Person person, String function) {
-        this.timeslot = timeslot;
-        this.person = person;
-        this.function = function;
-    }
-
 }
