@@ -9,6 +9,7 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import tcs.interviewtracker.persistence.BehavioralCompetency;
 import tcs.interviewtracker.persistence.ContractType;
 import tcs.interviewtracker.persistence.LanguageRequirement;
@@ -17,6 +18,7 @@ import lombok.experimental.SuperBuilder;
 
 @Data
 @SuperBuilder
+@NoArgsConstructor
 public class PositionDTO {
 
     private UUID uuid;
