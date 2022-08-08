@@ -22,15 +22,16 @@ public class PositionMapperConfig {
     @Bean("positionMapper")
     public ModelMapper positionMapper() {
         var mapper = new ModelMapper();
-        mapper.addConverter(uuidToProjectConverter);
+        mapper.addConverter(projectConverter);
+        // mapper.addMappings(mapper ->
+        // mapper.using(uuidToProjectConverter).map(PositionDTO::getProjectUuid,
+        // Position::setProject));
 
-        return new ModelMapper();
+        return mapper;
     }
 
     // @AllArgsConstructor
-    Converter<UUID, Project> uuidToProjectConverter = new AbstractConverter<UUID, Project>() {
-
-        @Override
+    Converter<UUID, Project> projectConverter = new AbstractConverter<UUID, Project>() {
         protected Project convert(UUID uuid) {
             return projectService.getByUuid(uuid);
         }

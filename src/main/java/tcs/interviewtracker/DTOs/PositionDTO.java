@@ -1,9 +1,18 @@
 package tcs.interviewtracker.DTOs;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
+import tcs.interviewtracker.persistence.BehavioralCompetency;
+import tcs.interviewtracker.persistence.ContractType;
+import tcs.interviewtracker.persistence.LanguageRequirement;
+import tcs.interviewtracker.persistence.Task;
 
 @Data
 public class PositionDTO {
@@ -14,5 +23,26 @@ public class PositionDTO {
     private Boolean open;
     private Integer hiredCount;
     private Integer totalCount;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date deadline;
+    private String ievolveRole;
+    private String ProjectSupportRole;
+    private String manager;
+    private ContractType contractType;
+    private String workingHours;
+    private String workingPlace;
+    private Date dateOfJoining;
+    private String purposeOfPosition;
+    private ArrayList<Task> tasks;
+    private String degrees;
+    private ArrayList<String> itSkills;
+    private ArrayList<String> requiredExperience;
+    private Set<LanguageRequirement> languageRequirements;
+    private ArrayList<String> advantages;
+    private Set<BehavioralCompetency> behavioralCompetencies;
+    private String otherRequirements;
+    private String developmentAndCarreerOpportunities;
+    private String workingEnvironment;
+
 }

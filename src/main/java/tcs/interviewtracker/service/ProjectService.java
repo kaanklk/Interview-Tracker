@@ -45,6 +45,10 @@ public class ProjectService {
         return projectRepository.findByUuid(uuid).get();
     }
 
+    public Project getReferenceByUuid(UUID uuid) {
+        return projectRepository.getReferenceByUuid(uuid).get();
+    }
+
     public Project getById(Long id) {
         return projectRepository.getReferenceById(id);
     }
@@ -149,7 +153,8 @@ public class ProjectService {
         List<Candidate> pendingCandidates = new ArrayList<Candidate>();
         for (Candidate c : candidates) {
             if (c.getProject().getId() == project.getId()) {
-                if (c.getStatus() != CandidateStatus.REJECTED.toString() || c.getStatus() != CandidateStatus.OFFER_ACCEPTED.toString()) {
+                if (c.getStatus() != CandidateStatus.REJECTED.toString()
+                        || c.getStatus() != CandidateStatus.OFFER_ACCEPTED.toString()) {
                     pendingCandidates.add(c);
                 }
             }

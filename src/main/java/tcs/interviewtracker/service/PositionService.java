@@ -13,9 +13,12 @@ import org.springframework.stereotype.Service;
 
 import tcs.interviewtracker.exceptions.ResourceAlreadyExistsException;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
+import tcs.interviewtracker.persistence.BehavioralCompetency;
 import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.Position;
+
 import tcs.interviewtracker.repository.PositionRepository;
+import tcs.interviewtracker.repository.ProjectRepository;
 
 @Service
 public class PositionService {
@@ -25,6 +28,12 @@ public class PositionService {
 
     @Autowired
     CandidateService candidateService;
+
+    @Autowired
+    ProjectService projectService;
+
+    @Autowired
+    ProjectRepository projectRepository;
 
     public PositionService(PositionRepository positionRepository, CandidateService candidateService) {
         this.positionRepository = positionRepository;
@@ -47,7 +56,11 @@ public class PositionService {
     public Position save(Position position) {
 
         position.setUuid(UUID.randomUUID());
-        return positionRepository.save(position);
+
+        position.setHiredCount(0);
+
+        var saved = positionRepository.save(position);
+        return saved;
     }
 
     @Transactional

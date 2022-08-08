@@ -14,4 +14,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     Optional<Project> findByUuid(UUID uuid);
 
     Optional<Project> getByUuid(UUID projectUuid);
+
+    Optional<Project> getReferenceByUuid(UUID uuid);
 }

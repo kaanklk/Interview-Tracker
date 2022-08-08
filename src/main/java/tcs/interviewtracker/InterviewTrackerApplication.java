@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
@@ -22,6 +23,12 @@ public class InterviewTrackerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(InterviewTrackerApplication.class, args);
+	}
+
+	@Bean
+	@Primary
+	public ModelMapper modelMapper() {
+		return new ModelMapper();
 	}
 
 }
