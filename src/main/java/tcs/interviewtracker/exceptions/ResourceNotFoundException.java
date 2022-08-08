@@ -1,6 +1,6 @@
 package tcs.interviewtracker.exceptions;
 
-public class ResourceNotFoundException extends Exception {
+public class ResourceNotFoundException extends RuntimeException {
 
     public ResourceNotFoundException() {
         super();
