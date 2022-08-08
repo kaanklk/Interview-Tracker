@@ -74,11 +74,11 @@ INSERT INTO education (id, start_date, end_date, information, institution, candi
 
 INSERT INTO roles (id, role_name, uuid)
 VALUES (101, 'Management Interviewer', '07f16e6c-10a4-4fbf-9330-8404125b046f'),
-       (102, 'Project Manager', 'aa8b7a22-4da4-41d9-8e91-023303383f4d'),
-       (103, 'Recruiter', '10b526ae-f78c-4615-8cb1-e7f21239a4fe'),
-	   (104, 'Sourcer', 'e5b73f8d-d858-468c-9934-4cbe2f083563'),
-	   (105, 'Technical Interviewer', 'ba9766e1-e3b3-4229-8639-53db4676294d');
-
+       (102, 'project_manager', 'aa8b7a22-4da4-41d9-8e91-023303383f4d'),
+       (103, 'recruiter', '10b526ae-f78c-4615-8cb1-e7f21239a4fe'),
+       (104, 'sourcer', 'e5b73f8d-d858-468c-9934-4cbe2f083563'),
+       (105, 'Technical Interviewer', 'ba9766e1-e3b3-4229-8639-53db4676294d');
+       
 INSERT INTO user_roles (id, user_id, project_id)
 	VALUES
         (101, 101, 101),
