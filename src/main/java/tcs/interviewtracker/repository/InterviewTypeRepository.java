@@ -7,6 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import tcs.interviewtracker.persistence.InterviewType;
 
-public class InterviewTypeRepository extends JpaRepository<InterviewType, Long> {
-    Optional<InterviewType> getByUuid(UUID uuid);
+public interface InterviewTypeRepository extends JpaRepository<InterviewType, Long> {
 }

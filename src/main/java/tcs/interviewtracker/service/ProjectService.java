@@ -294,7 +294,7 @@ public class ProjectService {
 
     public Set<User> fetchInterviewers(UUID projectUuid) {
         Project project = projectRepository.findByUuid(projectUuid).get();
-        List<Interview> interviewToCheckInterviewers = interviewRepository.findByProjectId(project.getId());
+        List<Interview> interviewToCheckInterviewers = interviewRepository.findByProject(project);
         Set<User> projectInterviewers = new HashSet<User>();
         for (Interview inter : interviewToCheckInterviewers) {
             User interviewerOne = userRepository.getReferenceById(inter.getInterviewerOne().getId());
