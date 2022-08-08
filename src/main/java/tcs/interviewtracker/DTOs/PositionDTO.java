@@ -35,7 +35,7 @@ public class PositionDTO {
     private String workingHours;
     private String workingPlace;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date dateOfJoining;
     private String purposeOfPosition;
     private ArrayList<Task> tasks;
