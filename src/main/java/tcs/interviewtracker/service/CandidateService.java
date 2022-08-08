@@ -55,10 +55,10 @@ public class CandidateService {
 
     public Candidate getByUuid(UUID uuid) throws ResourceNotFoundException {
         var candidate = candidateRepository.getByUuid(uuid);
-        if (null == candidate) {
+        if (candidate.isEmpty()) {
             throw new ResourceNotFoundException();
         }
-        return candidate;
+        return candidate.get();
     }
 
     public Candidate save(Candidate candidate) {
@@ -67,62 +67,65 @@ public class CandidateService {
     }
 
     public Candidate update(UUID uuid, Candidate candidate) throws ResourceNotFoundException {
-        Candidate oldCandidate = candidateRepository.getByUuid(uuid);
-        if (null == oldCandidate) {
+        var oldCandidate = candidateRepository.getByUuid(uuid);
+        if (oldCandidate.isEmpty()) {
             throw new ResourceNotFoundException();
         }
 
         //Delete old attached records:
-        deleteWorkExperience(oldCandidate);
-        deleteLanguage(oldCandidate);
-        deleteEducations(oldCandidate);
+        deleteWorkExperience(oldCandidate.get());
+        deleteLanguage(oldCandidate.get());
+        deleteEducations(oldCandidate.get());
 
-        candidate.setId(oldCandidate.getId());
+        candidate.setId(oldCandidate.get().getId());
         candidate.setUuid(uuid);
         return candidateRepository.save(candidate);
     }
 
     public Candidate delete(UUID uuid) throws ResourceNotFoundException {
-        Candidate toDelete = candidateRepository.getByUuid(uuid);
-        var interview = interviewRepository.getByCandidate(toDelete);
+        var toDelete = candidateRepository.getByUuid(uuid);
+        if (toDelete.isEmpty()) {
+            throw new ResourceNotFoundException();
+        }
+        var interview = interviewRepository.getByCandidate(toDelete.get());
         if (interview.isPresent()) {
             interviewRepository.delete(interview.get());
         }
-        var techDoc = technicalDocumentationRepository.getReferenceByCandidate(toDelete);
+        var techDoc = technicalDocumentationRepository.getReferenceByCandidate(toDelete.get());
         if (techDoc.isPresent()) {
             technicalDocumentationRepository.delete(techDoc.get());
         }
-        var manDoc = managementDocumentationRepository.getByCandidate(toDelete);
+        var manDoc = managementDocumentationRepository.getByCandidate(toDelete.get());
         if (manDoc.isPresent()) {
             managementDocumentationRepository.delete(manDoc.get());
         }
-        deleteWorkExperience(toDelete);
-        deleteLanguage(toDelete);
-        deleteEducations(toDelete);
-        if (null == toDelete) {
+        deleteWorkExperience(toDelete.get());
+        deleteLanguage(toDelete.get());
+        deleteEducations(toDelete.get());
+        if (toDelete.isEmpty()) {
             throw new ResourceNotFoundException();
         }
-        candidateRepository.delete(toDelete);
-        return toDelete;
+        candidateRepository.delete(toDelete.get());
+        return toDelete.get();
     }
 
     public List<StatusChange> getCandidateHistory(UUID candidateUuid) throws ResourceNotFoundException {
-        Candidate candidate = candidateRepository.getByUuid(candidateUuid);
-        if (null == candidate) {
+        var candidate = candidateRepository.getByUuid(candidateUuid);
+        if (candidate.isEmpty()) {
             throw new ResourceNotFoundException();
         }
-        return statusChangeRepository.getByCandidate(candidate);
+        return statusChangeRepository.getByCandidate(candidate.get());
     }
 
     public StatusChange getCandidateHistoryByUuid(UUID candidateUuid, UUID statusChangeUuid)
             throws ResourceNotFoundException {
-        Candidate candidate = candidateRepository.getByUuid(candidateUuid);
-        if (null == candidate) {
+        var candidate = candidateRepository.getByUuid(candidateUuid);
+        if (candidate.isEmpty()) {
             throw new ResourceNotFoundException();
         }
-        List<StatusChange> history = statusChangeRepository.getByCandidate(candidate);
+        List<StatusChange> history = statusChangeRepository.getByCandidate(candidate.get());
         for (StatusChange statusChange : history) {
-            if (statusChange.getCandidate().equals(candidate)) {
+            if (statusChange.getCandidate().equals(candidate.get())) {
                 return statusChange;
             }
         }
@@ -147,37 +150,37 @@ public class CandidateService {
 
     public TechnicalDocumentation getTechnicalDocumentationOfCandidate(UUID candidateUuid) {
         var candidate = candidateRepository.getByUuid(candidateUuid);
-        if (null == candidate) {
+        if (candidate.isEmpty()) {
             return null;
         }
-        return technicalDocumentationRepository.getReferenceByCandidate(candidate).get();
+        return technicalDocumentationRepository.getReferenceByCandidate(candidate.get()).get();
     }
 
     public ManagementDocumentation getManagementDocumentationByCandidate(UUID candidateUuid) {
         var candidate = candidateRepository.getByUuid(candidateUuid);
-        if (null == candidate) {
+        if (candidate.isEmpty()) {
             return null;
         }
-        return managementDocumentationRepository.getReferenceByCandidate(candidate);
+        return managementDocumentationRepository.getReferenceByCandidate(candidate.get());
     }
 
     //WorkExperience:----------------------------------------------------
 
     public List<WorkExperience> findWorkExperiences(UUID candidateUuid) throws ResourceNotFoundException {
-        Candidate candidate = candidateRepository.getByUuid(candidateUuid);
-        if (null == candidate) {
+        var candidate = candidateRepository.getByUuid(candidateUuid);
+        if (candidate.isEmpty()) {
             throw new ResourceNotFoundException();
         }
-        return workExperienceRepository.getByCandidate(candidate);
+        return workExperienceRepository.getByCandidate(candidate.get());
     }
 
     public Page<WorkExperience> findWorkExperiencesPaginated(UUID candidateUuid, PageRequest request)
             throws ResourceNotFoundException {
-        Candidate candidate = candidateRepository.getByUuid(candidateUuid);
-        if (null == candidate) {
+        var candidate = candidateRepository.getByUuid(candidateUuid);
+        if (candidate.isEmpty()) {
             throw new ResourceNotFoundException();
         }
-        return workExperienceRepository.getByCandidate(candidate, request);
+        return workExperienceRepository.getByCandidate(candidate.get(), request);
     }
 
     public WorkExperience saveWorkExperience(WorkExperience workExperience) {
@@ -194,20 +197,20 @@ public class CandidateService {
     // Education:----------------------------------------------------------------
 
     public List<Education> findEducation(UUID candidateUuid) throws ResourceNotFoundException {
-        Candidate candidate = candidateRepository.getByUuid(candidateUuid);
-        if (null == candidate) {
+        var candidate = candidateRepository.getByUuid(candidateUuid);
+        if (candidate.isEmpty()) {
             throw new ResourceNotFoundException();
         }
-        return educationRepository.getByCandidate(candidate);
+        return educationRepository.getByCandidate(candidate.get());
     }
 
     public Page<Education> findEducationPaginated(UUID candidateUuid, PageRequest request)
             throws ResourceNotFoundException {
-        Candidate candidate = candidateRepository.getByUuid(candidateUuid);
-        if (null == candidate) {
+        var candidate = candidateRepository.getByUuid(candidateUuid);
+        if (candidate.isEmpty()) {
             throw new ResourceNotFoundException();
         }
-        return educationRepository.getByCandidate(candidate, request);
+        return educationRepository.getByCandidate(candidate.get(), request);
     }
 
     public Education saveEducation(Education education) {
@@ -224,20 +227,20 @@ public class CandidateService {
     // Languages:----------------------------------------------------------------
 
     public List<Language> findLanguages(UUID candidateUuid) throws ResourceNotFoundException {
-        Candidate candidate = candidateRepository.getByUuid(candidateUuid);
-        if (null == candidate) {
+        var candidate = candidateRepository.getByUuid(candidateUuid);
+        if (candidate.isEmpty()) {
             throw new ResourceNotFoundException();
         }
-        return languageRepository.getByCandidate(candidate);
+        return languageRepository.getByCandidate(candidate.get());
     }
 
     public Page<Language> findLanguagePaginated(UUID candidateUuid, PageRequest request)
             throws ResourceNotFoundException {
-        Candidate candidate = candidateRepository.getByUuid(candidateUuid);
-        if (null == candidate) {
+        var candidate = candidateRepository.getByUuid(candidateUuid);
+        if (candidate.isEmpty()) {
             throw new ResourceNotFoundException();
         }
-        return languageRepository.getByCandidate(candidate, request);
+        return languageRepository.getByCandidate(candidate.get(), request);
     }
 
     public Language saveLanguage(Language language) {

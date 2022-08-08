@@ -35,13 +35,13 @@ public class PositionDTO {
     private String workingHours;
     private String workingPlace;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date dateOfJoining;
     private String purposeOfPosition;
     private ArrayList<Task> tasks;
     private String degrees;
     private String itSkills;
-    private ArrayList<String> requiredExperience;
+    private String requiredExperience;
     private Set<LanguageRequirement> languageRequirements;
     private String advantages;
     private Set<BehavioralCompetency> behavioralCompetencies;

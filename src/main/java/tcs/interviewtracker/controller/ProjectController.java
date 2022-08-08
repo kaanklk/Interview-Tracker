@@ -55,8 +55,9 @@ public class ProjectController {
     }
 
     @PostMapping("")
-    public Project createNewProject(@Validated @RequestBody Project project) throws ResourceNotFoundException {
-        return projectService.saveProject(project);
+    public ResponseEntity<Project> createNewProject(@Validated @RequestBody Project project)
+            throws ResourceNotFoundException {
+        return new ResponseEntity<Project>(projectService.saveProject(project), new HttpHeaders(), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -233,9 +234,10 @@ public class ProjectController {
     }
 
     @GetMapping(value = "/{id}/interviewers")
-    public ResponseEntity<List<UserDTO>> getInterviewers(@PathVariable(name = "id") UUID uuid)
+    public ResponseEntity<List<UserDTO>> getInterviewers(@PathVariable(name = "id") UUID uuid,
+            @RequestParam(defaultValue = "all") String interviewType)
             throws ResourceNotFoundException {
-        Set<User> interviewers = projectService.fetchInterviewers(uuid);
+        Set<User> interviewers = projectService.fetchInterviewers(uuid, interviewType);
         List<UserDTO> userDtos = new ArrayList<UserDTO>();
         for (User usr : interviewers) {
             UserDTO userDto = UserDTO.builder().uuid(usr.getUuid()).firstName(usr.getFirstName())
@@ -261,7 +263,7 @@ public class ProjectController {
                     .uuid(pjuuid)
                     .name(pjname)
                     .description(pjdesc)
-                    .numberOfAssocicates(pjAssocicateCount.toString())
+                    .numberOfAssociates(pjAssocicateCount.toString())
                     .numberOfPositions(pjPositionCount.toString())
                     .projectManagerName(pjPmName).build();
             dtoList.add(pjDto);
@@ -282,7 +284,7 @@ public class ProjectController {
                 .uuid(pjuuid)
                 .name(pjname)
                 .description(pjdesc)
-                .numberOfAssocicates(pjAssocicateCount.toString())
+                .numberOfAssociates(pjAssocicateCount.toString())
                 .numberOfPositions(pjPositionCount.toString())
                 .projectManagerName(pjPmName).build();
         return projectDTO;

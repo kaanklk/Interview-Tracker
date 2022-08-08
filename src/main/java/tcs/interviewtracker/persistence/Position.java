@@ -70,6 +70,7 @@ public class Position {
     String workingHours;
     String workingPlace;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     Date dateOfJoining;
     String purposeOfPosition;
 
@@ -80,7 +81,6 @@ public class Position {
     String degrees;
     String itSkills;
     String requiredExperience;
-
     ArrayList<String> advantages;
 
     @ElementCollection(fetch = FetchType.EAGER)
