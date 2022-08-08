@@ -45,25 +45,25 @@ public class TechnicalDocumentation {
     private String understandingComment;
 
     @Column(name = "technical_skills1", nullable = true)
-    private Integer technicalSkills1;
+    private String technicalSkills1;
 
     @Column(name = "tech_skill_comment1", nullable = true)
     private String techSkillComment1;
 
     @Column(name = "technical_skills2", nullable = true)
-    private Integer technicalSkills2;
+    private String technicalSkills2;
 
     @Column(name = "tech_skill_comment2", nullable = true)
     private String techSkillComment2;
 
     @Column(name = "technical_skills3", nullable = true)
-    private Integer technicalSkills3;
+    private String technicalSkills3;
 
     @Column(name = "tech_skill_comment3", nullable = true)
     private String techSkillComment3;
 
     @Column(name = "technical_skills4", nullable = true)
-    private Integer technicalSkills4;
+    private String technicalSkills4;
 
     @Column(name = "tech_skill_comment4", nullable = true)
     private String techSkillComment4;
@@ -98,8 +98,8 @@ public class TechnicalDocumentation {
     }
 
     public TechnicalDocumentation(Candidate candidate, Date date, Integer duration, String understandingOfRole,
-            String understandingComment, Integer technicalSkills1, String techSkillComment1, Integer technicalSkills2,
-            String techSkillComment2, Integer technicalSkills3, String techSkillComment3, Integer technicalSkills4,
+            String understandingComment, String technicalSkills1, String techSkillComment1, String technicalSkills2,
+            String techSkillComment2, String technicalSkills3, String techSkillComment3, String technicalSkills4,
             String techSkillComment4, Integer totalExperience, Integer roleExperience, Boolean isReccomended,
             String lastComments, User interviewerOne, User interviewerTwo, int designationOne, int designationTwo) {
         this.candidate = candidate;
