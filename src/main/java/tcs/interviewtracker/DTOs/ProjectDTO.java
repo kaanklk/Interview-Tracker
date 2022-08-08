@@ -11,7 +11,7 @@ public class ProjectDTO {
     private UUID uuid;
     private String name;
     private String description;
-    private String numberOfAssocicates;
+    private String numberOfAssociates;
     private String numberOfPositions;
     private String projectManagerName;
 }

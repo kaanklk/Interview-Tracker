@@ -44,7 +44,7 @@ public class ProjectService {
 
     public Project getByUuid(UUID uuid) throws ResourceNotFoundException {
         Optional<Project> project = projectRepository.findByUuid(uuid);
-        if(!project.isPresent()){
+        if (!project.isPresent()) {
             throw new ResourceNotFoundException("Project not found");
 
         }
@@ -158,12 +158,10 @@ public class ProjectService {
         List<Candidate> candidates = candidateRepository.findAll();
         List<Candidate> pendingCandidates = new ArrayList<Candidate>();
         for (Candidate c : candidates) {
-            if (c.getProject().getId().equals(project.getId()) ) {
-                if (
-                    !c.getStatus().toUpperCase().equals(CandidateStatus.REJECTED.toString())
-                    && !c.getStatus().toUpperCase().equals(CandidateStatus.OFFER_ACCEPTED.toString())
-                    && !c.getStatus().toUpperCase().equals(CandidateStatus.OFFER_DECLINED.toString())
-                    ) {
+            if (c.getProject().getId().equals(project.getId())) {
+                if (!c.getStatus().toUpperCase().equals(CandidateStatus.REJECTED.toString())
+                        && !c.getStatus().toUpperCase().equals(CandidateStatus.OFFER_ACCEPTED.toString())
+                        && !c.getStatus().toUpperCase().equals(CandidateStatus.OFFER_DECLINED.toString())) {
                     pendingCandidates.add(c);
                 }
             }
@@ -221,7 +219,7 @@ public class ProjectService {
         List<Interview> technicalInterviews = new ArrayList<Interview>();
         for (Interview inter : interviews) {
             if (inter.getProjectId().equals(project.getId())) {
-                if (inter.getType().toLowerCase().equals("management") ) {
+                if (inter.getType().toLowerCase().equals("management")) {
                     technicalInterviews.add(inter);
                 }
             }
@@ -296,9 +294,22 @@ public class ProjectService {
         return projectManager;
     }
 
-    public Set<User> fetchInterviewers(UUID projectUuid) {
+    public Set<User> fetchInterviewers(UUID projectUuid, String interviewType) {
         Project project = projectRepository.findByUuid(projectUuid).get();
         List<Interview> interviewToCheckInterviewers = interviewRepository.findByProjectId(project.getId());
+        if (interviewType == "management") {
+            for (Interview inter : interviewToCheckInterviewers) {
+                if (inter.getType() != "management") {
+                    interviewToCheckInterviewers.remove(inter);
+                }
+            }
+        } else if (interviewType == "technical") {
+            for (Interview inter : interviewToCheckInterviewers) {
+                if (inter.getType() != "technical") {
+                    interviewToCheckInterviewers.remove(inter);
+                }
+            }
+        }
         Set<User> projectInterviewers = new HashSet<User>();
         for (Interview inter : interviewToCheckInterviewers) {
             User interviewerOne = userRepository.getReferenceById(inter.getInterviewerOneId());
