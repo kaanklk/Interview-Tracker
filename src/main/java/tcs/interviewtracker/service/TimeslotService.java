@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import lombok.AllArgsConstructor;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.Candidate;
+import tcs.interviewtracker.persistence.Person;
+import tcs.interviewtracker.persistence.PersonHasTimeslot;
 import tcs.interviewtracker.persistence.Timeslot;
 import tcs.interviewtracker.repository.PersonHasTimeslotRepository;
 import tcs.interviewtracker.repository.TimeslotRepository;
@@ -78,5 +80,13 @@ public class TimeslotService {
             timeslots.add(relation.getTimeslot());
         }
         return timeslots;
+    }
+
+    public void bindTimeslotToPerson(Timeslot timeslot, Person person) {
+        var personHasTimeslot = new PersonHasTimeslot();
+        personHasTimeslot.setTimeslot(timeslot);
+        personHasTimeslot.setPerson(person);
+        personHasTimeslot.setFunction("");
+        personHasTimeslotRepository.save(personHasTimeslot);
     }
 }

@@ -134,5 +134,15 @@ INSERT INTO interview (id, uuid, candidate_id, project_id, timeslot_id, type_id,
 		(105, '990857bf-20ae-44dd-97be-43690a2f1a3b', 105, 103, 105, 101, 105, 101, false),
 		(106, '844b19ee-1816-4857-be94-10fd993bca04', 106, 104, 106, 102, 101, 102, true);
 		
+INSERT INTO person_has_timeslot (id, uuid, person_id, timeslot_id, "function")
+	VALUES
+		(101, 'dbd03aa1-ac31-432b-8946-9b4b98c4daa0', 101, 101, ''),
+		(102, '03a20a80-c5ff-4842-b0ca-e4af67328427', 102, 102, ''),
+		(103, 'd78112d2-91b9-4148-b5b3-bd39d675a6cd', 103, 103, ''),
+		(104, '17e1227d-74df-4194-86ec-de106a742f06', 104, 104, ''),
+		(105, '98633dff-5a93-436a-b78d-65505530f412', 105, 105, '');
 		
-		
+
+
+
+
