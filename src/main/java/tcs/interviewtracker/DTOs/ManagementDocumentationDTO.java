@@ -1,6 +1,6 @@
 package tcs.interviewtracker.DTOs;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.UUID;
 
 import lombok.Data;
@@ -10,7 +10,7 @@ public class ManagementDocumentationDTO {
 
     private UUID uuid;
 
-    private Timestamp dateOfInterview;
+    private Date dateOfInterview;
 
     private Boolean mobileToWork;
 
