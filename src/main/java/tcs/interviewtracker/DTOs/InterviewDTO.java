@@ -1,24 +1,26 @@
 package tcs.interviewtracker.DTOs;
 
+import java.util.UUID;
+
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
 @Data
 @SuperBuilder
 public class InterviewDTO {
-    private Long uuid;
+    private UUID uuid;
 
-    private Long projectId;
+    private UUID projectId;
 
-    private Long timeslotId;
+    private UUID timeslotId;
 
     private String type;
 
-    private Long interviewerOneId;
+    private UUID interviewerOneId;
 
-    private Long interviewerTwoId;
+    private UUID interviewerTwoId;
 
-    private Long documentId;
+    private UUID documentId;
 
     private Boolean isCompleted;
 }

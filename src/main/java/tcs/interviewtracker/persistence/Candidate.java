@@ -24,7 +24,6 @@ public class Candidate {
     @Column(columnDefinition = "serial")
     private Long id;
 
-    @Column(name = "uuid")
     private UUID uuid;
 
     @ManyToOne
@@ -32,12 +31,12 @@ public class Candidate {
     private Position position;
 
     @ManyToOne
-    @JoinColumn(name = "person_id", columnDefinition = "int4")
+    @JoinColumn
     @ToString.Exclude
     private Person person;
 
     // @Enumerated(EnumType.STRING)
-    @Column(name = "status", columnDefinition = "varchar(128)")
+    @Column(columnDefinition = "varchar(128)")
     private String status;
 
     @ManyToOne
@@ -47,16 +46,4 @@ public class Candidate {
     @Column(columnDefinition = "varchar(255)")
     @Nullable
     private String cvPath;
-
-    /*
-     * @OneToMany(mappedBy = "candidate")
-     * private Set<WorkExperience> workExperiences;
-     *
-     * @OneToMany(mappedBy = "candidate")
-     * private Set<Education> educations;
-     *
-     * @OneToMany(mappedBy = "candidate")
-     * private Set<Language> langugages;
-     */
-
 }

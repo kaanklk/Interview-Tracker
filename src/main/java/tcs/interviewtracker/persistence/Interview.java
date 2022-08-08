@@ -1,58 +1,52 @@
 package tcs.interviewtracker.persistence;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
-@Table(name = Interview.TBL_NAME)
 @Data
 @NoArgsConstructor
 public class Interview {
 
-    protected static final String TBL_NAME = "interview";
-
-    private static final String FLD_PROJECTID = "projectId";
-    private static final String FLD_TIMESLOTID = "timeslotId";
-    private static final String FLD_TYPE = "type";
-    private static final String FLD_INTERVIEWERONEID = "interviewerOneId";
-    private static final String FLD_INTERVIEWERTWOID = "interviewerTwoId";
-    private static final String FLD_DOCUMENTID = "documentId";
-    private static final String FLD_ISCOMPLETED = "isCompleted";
-    private static final String FLD_INTERVIEW_UUID = "uuid";
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "serial")
     private Long id;
 
-    @Column(name = FLD_INTERVIEW_UUID)
-    private Long uuid;
+    private UUID uuid;
 
-    @Column(name = FLD_PROJECTID)
-    private Long projectId;
+    @ManyToOne
+    @ToString.Exclude
+    private Project project;
 
-    @Column(name = FLD_TIMESLOTID)
-    private Long timeslotId;
+    @OneToOne
+    private Timeslot timeslot;
 
-    @Column(name = FLD_TYPE)
-    private String type;
+    @ManyToOne
+    private InterviewType type;
 
-    @Column(name = FLD_INTERVIEWERONEID)
-    private Long interviewerOneId;
+    @ManyToOne
+    @ToString.Exclude
+    private User interviewerOne;
 
-    @Column(name = FLD_INTERVIEWERTWOID)
-    private Long interviewerTwoId;
+    @ManyToOne
+    @ToString.Exclude
+    private User interviewerTwo;
 
-    @Column(name = FLD_DOCUMENTID)
-    private Long documentId;
+    @OneToOne
+    @ToString.Exclude
+    private Candidate candidate;
 
-    @Column(name = FLD_ISCOMPLETED)
-    private Boolean isCompleted;
-
+    private Boolean isCompleted = false;
 }
