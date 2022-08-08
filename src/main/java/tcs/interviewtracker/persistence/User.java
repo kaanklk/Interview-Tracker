@@ -53,7 +53,7 @@ public class User {
     private String profilePicture;
 
     @Column(name = "date_of_birth", nullable = false)
-    @JsonFormat(pattern = "EEE MMM dd yyyy HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date dateOfBirth;
 
     @Column(name = "email", nullable = false)

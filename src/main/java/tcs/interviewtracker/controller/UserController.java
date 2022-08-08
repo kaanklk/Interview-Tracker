@@ -44,7 +44,7 @@ public class UserController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public List<UserDTO> getAllUsers(
-        @RequestParam(required = false, defaultValue = "10") Integer pagesize,
+        @RequestParam(required = false, defaultValue = "100") Integer pagesize,
         @RequestParam(required = false, defaultValue = "0") Integer offset,
         @RequestParam(required = false, defaultValue = "id") String orderBy,
         @RequestParam(required = false, defaultValue = "ascending") String orderDirection){
@@ -67,8 +67,8 @@ public class UserController {
     @GetMapping("/{uuid}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public User getUserById(@PathVariable UUID uuid) throws ResourceNotFoundException{
-        return service.getUserById(uuid);
+    public UserDTO getUserById(@PathVariable UUID uuid) throws ResourceNotFoundException{
+        return entityToDto(service.getUserById(uuid));
     }
 
     @PostMapping("")

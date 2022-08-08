@@ -14,4 +14,5 @@ public interface ManagementDocumentationRepository extends JpaRepository<Managem
 
     public ManagementDocumentation getReferenceByCandidate(Candidate candidate);
 
+    public Optional<ManagementDocumentation> getByCandidate(Candidate candidate);
 }

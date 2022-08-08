@@ -2,7 +2,7 @@ package tcs.interviewtracker.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import tcs.interviewtracker.DTOs.CandidateDTO;
+import tcs.interviewtracker.DTOs.InterviewDTO;
+import tcs.interviewtracker.DTOs.PositionDTO;
+import tcs.interviewtracker.DTOs.ProjectDTO;
+import tcs.interviewtracker.DTOs.UserDTO;
 import tcs.interviewtracker.exceptions.ResourceAlreadyExistsException;
 import tcs.interviewtracker.exceptions.ResourceNotFoundException;
 import tcs.interviewtracker.persistence.Candidate;
@@ -39,37 +44,43 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @GetMapping("/")
-    public ResponseEntity<List<Project>> getAllProjects(
+    @GetMapping("")
+    public ResponseEntity<List<ProjectDTO>> getAllProjects(
             @RequestParam(defaultValue = "0") Integer pageNo,
             @RequestParam(defaultValue = "5") Integer pageSize,
             @RequestParam(defaultValue = "name") String sortBy) throws ResourceNotFoundException {
         List<Project> list = projectService.getAllProjects(pageNo, pageSize, sortBy);
-        return new ResponseEntity<List<Project>>(list, new HttpHeaders(), HttpStatus.OK);
+        List<ProjectDTO> dtoList = convertToProjectDtoList(list);
+        return new ResponseEntity<List<ProjectDTO>>(dtoList, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public Project createNewProject(@Validated @RequestBody Project project) throws ResourceNotFoundException {
         return projectService.saveProject(project);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Project> getProjectsById(@PathVariable(value = "id") UUID uuid)
+    public ResponseEntity<ProjectDTO> getProjectsById(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         Project project = projectService.getByUuid(uuid);
-        return ResponseEntity.ok().body(project);
+
+        ProjectDTO projectDTO = convertToProjectDto(project);
+
+        return new ResponseEntity<ProjectDTO>(projectDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Project> updateExistingProject(@PathVariable(value = "id") UUID uuid,
+    public ResponseEntity<ProjectDTO> updateExistingProject(@PathVariable(value = "id") UUID uuid,
             @Validated @RequestBody Project projectDetails)
-            throws ResourceAlreadyExistsException {
+            throws ResourceAlreadyExistsException, ResourceNotFoundException {
 
         Project project = projectService.getByUuid(uuid);
 
         final Project updatedProject = projectService.updateProject(project, projectDetails);
+        ProjectDTO projectDTO = convertToProjectDto(updatedProject);
         projectService.saveProject(updatedProject);
-        return ResponseEntity.ok(updatedProject);
+
+        return new ResponseEntity<ProjectDTO>(projectDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -104,107 +115,196 @@ public class ProjectController {
     @GetMapping("/{id}/projectmanager")
     public ResponseEntity<UUID> getProjectManager(@PathVariable(value = "id") UUID uuid) {
         User projectManager = projectService.fetchProjectManager(uuid);
-        try {
-            UUID uuidPm = projectManager.getUuid();
+        UUID uuidPm = projectManager.getUuid();
+        if (uuid.toString().isEmpty()) {
+            return new ResponseEntity<UUID>(null, new HttpHeaders(), HttpStatus.NOT_FOUND);
+        } else {
             return new ResponseEntity<UUID>(uuidPm, new HttpHeaders(), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<UUID>(null, new HttpHeaders(), HttpStatus.OK);
         }
     }
 
     @GetMapping(value = "/{id}/positions")
-    public ResponseEntity<List<Position>> getProjectPositions(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId) {
+    public ResponseEntity<List<PositionDTO>> getProjectPositions(@PathVariable(value = "id") UUID uuid)
+            throws ResourceNotFoundException {
         List<Position> projectPositions = projectService.fetchProjectPositions(uuid);
-        return new ResponseEntity<List<Position>>(projectPositions, new HttpHeaders(), HttpStatus.OK);
+        List<PositionDTO> positionDtoList = new ArrayList<PositionDTO>();
+        for (Position pos : projectPositions) {
+            PositionDTO posDto = PositionDTO.builder().uuid(pos.getUuid()).positionName(pos.getPositionName())
+                    .projectUuid(uuid).open(pos.getOpen()).hiredCount(pos.getHiredCount())
+                    .totalCount(pos.getTotalCount())
+                    .build();
+            positionDtoList.add(posDto);
+        }
+        return new ResponseEntity<List<PositionDTO>>(positionDtoList, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/position-count")
-    public ResponseEntity<Integer> getPositionCount(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    public ResponseEntity<Integer> getPositionCount(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         int positionCount = projectService.fetchProjectPositionsCount(uuid);
         return new ResponseEntity<Integer>(positionCount, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/assosciate-count")
-    public ResponseEntity<Integer> getAssosicateCount(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    public ResponseEntity<Integer> getAssosicateCount(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         int associateCount = projectService.fetchProjectAssocicateCount(uuid);
         return new ResponseEntity<Integer>(associateCount, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/incomplete-interviews")
-    public ResponseEntity<List<Interview>> getInCompleteInterviews(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project", required = true) Long projectId)
+    public ResponseEntity<List<InterviewDTO>> getInCompleteInterviews(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         List<Interview> interviews = projectService.fetchIncompletedInterviews(uuid);
-        return new ResponseEntity<List<Interview>>(interviews, new HttpHeaders(), HttpStatus.OK);
+        List<InterviewDTO> interviewDtos = convertToInterviewDto(interviews);
+        return new ResponseEntity<List<InterviewDTO>>(interviewDtos, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/complete-interviews")
-    public ResponseEntity<List<Interview>> getCompletedInterviews(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    public ResponseEntity<List<InterviewDTO>> getCompletedInterviews(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         List<Interview> interviews = projectService.fetchCompletedInterviews(uuid);
-        return new ResponseEntity<List<Interview>>(interviews, new HttpHeaders(), HttpStatus.OK);
+        List<InterviewDTO> interviewDtos = convertToInterviewDto(interviews);
+        return new ResponseEntity<List<InterviewDTO>>(interviewDtos, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/pending-candidates")
-    public ResponseEntity<List<Candidate>> getPendingCandidates(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    public ResponseEntity<List<CandidateDTO>> getPendingCandidates(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
-        List<Candidate> pendingCandidates = projectService.fetchPendingCandidates(uuid);
-        return new ResponseEntity<List<Candidate>>(pendingCandidates, new HttpHeaders(), HttpStatus.OK);
+        List<Candidate> candidates = projectService.fetchPendingCandidates(uuid);
+        List<CandidateDTO> candidateDtos = convertToCandidateDto(candidates);
+        return new ResponseEntity<List<CandidateDTO>>(candidateDtos, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/rejected-candidates")
-    public ResponseEntity<List<Candidate>> getRejectedCandidates(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    public ResponseEntity<List<CandidateDTO>> getRejectedCandidates(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
-        List<Candidate> rejectedCandidates = projectService.fetchRejectedCandidates(uuid);
-        return new ResponseEntity<List<Candidate>>(rejectedCandidates, new HttpHeaders(), HttpStatus.OK);
+        List<Candidate> candidates = projectService.fetchRejectedCandidates(uuid);
+        List<CandidateDTO> candidateDtos = convertToCandidateDto(candidates);
+        return new ResponseEntity<List<CandidateDTO>>(candidateDtos, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/accepted-candidates")
-    public ResponseEntity<List<Candidate>> getAcceptedCandidates(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    public ResponseEntity<List<CandidateDTO>> getAcceptedCandidates(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
-        List<Candidate> acceptedCandidates = projectService.fetchAcceptedCandidates(uuid);
-        return new ResponseEntity<List<Candidate>>(acceptedCandidates, new HttpHeaders(), HttpStatus.OK);
+        List<Candidate> candidates = projectService.fetchAcceptedCandidates(uuid);
+        List<CandidateDTO> candidateDtos = convertToCandidateDto(candidates);
+        return new ResponseEntity<List<CandidateDTO>>(candidateDtos, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}/techical-interview-count")
-    public ResponseEntity<Integer> getTechnicalInterviewCount(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    @GetMapping(value = "/{id}/technical-interview-count")
+    public ResponseEntity<Integer> getTechnicalInterviewCount(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         Integer technicalInterviewCount = projectService.fetchTecnicalInterviewCount(uuid);
         return new ResponseEntity<Integer>(technicalInterviewCount, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/management-interview-count")
-    public ResponseEntity<Integer> getManagementInterviewCount(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    public ResponseEntity<Integer> getManagementInterviewCount(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
         Integer managemenInterviewCount = projectService.fetchManagementInterviewCount(uuid);
         return new ResponseEntity<Integer>(managemenInterviewCount, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}/upcoming-tecnical-interviews")
-    public ResponseEntity<List<Interview>> getUpcomingTechnicalInterviews(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    @GetMapping(value = "/{id}/upcoming-technical-interviews")
+    public ResponseEntity<List<InterviewDTO>> getUpcomingTechnicalInterviews(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
-        List<Interview> upcomingTechInterviews = projectService.fetchUpcomingTecnicalInterviews(uuid);
-        return new ResponseEntity<List<Interview>>(upcomingTechInterviews, new HttpHeaders(), HttpStatus.OK);
+        List<Interview> interviews = projectService.fetchUpcomingTecnicalInterviews(uuid);
+        List<InterviewDTO> interviewDtos = convertToInterviewDto(interviews);
+        return new ResponseEntity<List<InterviewDTO>>(interviewDtos, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/upcoming-management-interviews")
-    public ResponseEntity<List<Interview>> getUpcomingManagementInterviews(@PathVariable(value = "id") UUID uuid,
-            @RequestParam(name = "project") Long projectId)
+    public ResponseEntity<List<InterviewDTO>> getUpcomingManagementInterviews(@PathVariable(value = "id") UUID uuid)
             throws ResourceNotFoundException {
-        List<Interview> upcomingManagemeInterviews = projectService.fetchUpcomingManagementInterviews(uuid);
-        return new ResponseEntity<List<Interview>>(upcomingManagemeInterviews, new HttpHeaders(), HttpStatus.OK);
+        List<Interview> interviews = projectService.fetchUpcomingManagementInterviews(uuid);
+        List<InterviewDTO> interviewDtos = convertToInterviewDto(interviews);
+        return new ResponseEntity<List<InterviewDTO>>(interviewDtos, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}/interviewers")
+    public ResponseEntity<List<UserDTO>> getInterviewers(@PathVariable(name = "id") UUID uuid)
+            throws ResourceNotFoundException {
+        Set<User> interviewers = projectService.fetchInterviewers(uuid);
+        List<UserDTO> userDtos = new ArrayList<UserDTO>();
+        for (User usr : interviewers) {
+            UserDTO userDto = UserDTO.builder().uuid(usr.getUuid()).firstName(usr.getFirstName())
+                    .lastName(usr.getLastName()).middleName(usr.getMiddleName()).employeeId(usr.getEmployeeId())
+                    .profilePicture(usr.getProfilePicture()).dateOfBirth(usr.getDateOfBirth()).email(usr.getEmail())
+                    .phone(usr.getPhone()).admin(usr.getAdmin()).build();
+            userDtos.add(userDto);
+        }
+        return new ResponseEntity<List<UserDTO>>(userDtos, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    private List<ProjectDTO> convertToProjectDtoList(List<Project> list) {
+        List<ProjectDTO> dtoList = new ArrayList<ProjectDTO>();
+        for (Project pj : list) {
+            UUID pjuuid = pj.getUuid();
+            String pjname = pj.getName();
+            String pjdesc = pj.getDescription();
+            Integer pjAssocicateCount = projectService.fetchProjectAssocicateCount(pjuuid);
+            Integer pjPositionCount = projectService.fetchProjectPositionsCount(pjuuid);
+            String pjPmName = projectService.fetchProjectManager(pjuuid).getFirstName()
+                    + projectService.fetchProjectManager(pjuuid).getLastName();
+            ProjectDTO pjDto = ProjectDTO.builder()
+                    .uuid(pjuuid)
+                    .name(pjname)
+                    .description(pjdesc)
+                    .numberOfAssocicates(pjAssocicateCount.toString())
+                    .numberOfPositions(pjPositionCount.toString())
+                    .projectManagerName(pjPmName).build();
+            dtoList.add(pjDto);
+        }
+        return dtoList;
+    }
+
+    private ProjectDTO convertToProjectDto(Project project) {
+        UUID pjuuid = project.getUuid();
+        String pjname = project.getName();
+        String pjdesc = project.getDescription();
+        Integer pjAssocicateCount = projectService.fetchProjectAssocicateCount(pjuuid);
+        Integer pjPositionCount = projectService.fetchProjectPositionsCount(pjuuid);
+        String pjPmName = projectService.fetchProjectManager(pjuuid).getFirstName()
+                + projectService.fetchProjectManager(pjuuid).getLastName();
+
+        ProjectDTO projectDTO = ProjectDTO.builder()
+                .uuid(pjuuid)
+                .name(pjname)
+                .description(pjdesc)
+                .numberOfAssocicates(pjAssocicateCount.toString())
+                .numberOfPositions(pjPositionCount.toString())
+                .projectManagerName(pjPmName).build();
+        return projectDTO;
+    }
+
+    private List<InterviewDTO> convertToInterviewDto(List<Interview> interviews) {
+        List<InterviewDTO> interviewDtos = new ArrayList<InterviewDTO>();
+        for (Interview inter : interviews) {
+            InterviewDTO interviewDto = InterviewDTO.builder().uuid(inter.getUuid()).projectId(inter.getProjectId())
+                    .timeslotId(inter.getTimeslotId()).interviewerOneId(inter.getInterviewerOneId())
+                    .interviewerTwoId(inter.getInterviewerTwoId()).documentId(inter.getDocumentId())
+                    .isCompleted(inter.getIsCompleted()).build();
+
+            interviewDtos.add(interviewDto);
+        }
+        return interviewDtos;
+    }
+
+    private List<CandidateDTO> convertToCandidateDto(List<Candidate> candidates) {
+        List<CandidateDTO> candidateDtos = new ArrayList<CandidateDTO>();
+        for (Candidate cand : candidates) {
+            CandidateDTO candidateDto = CandidateDTO.builder().uuid(cand.getUuid())
+                    .positionId(cand.getPosition().getUuid()).firstName(cand.getPerson().getFirstName())
+                    .middleName(cand.getPerson().getMiddleName()).lastName(cand.getPerson().getLastName())
+                    .email(cand.getPerson().getEmail()).phone(cand.getPerson().getPhone()).languages(null)
+                    .workExperiences(null).educations(null).status(cand.getStatus()).cvPath(cand.getCvPath())
+                    .technicalInterviewerId(null).technicalInterviewerId2(null)
+                    .managementInterviewerId(null).managementInterviewerId2(null).technicalDocumentationId(null)
+                    .managementDocumentationId(null).possibleTimeslots(null).build();
+            candidateDtos.add(candidateDto);
+        }
+        return candidateDtos;
     }
 
 }

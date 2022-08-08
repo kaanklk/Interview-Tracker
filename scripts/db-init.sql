@@ -1,108 +1,114 @@
 -- DB init script --
 
-
-INSERT INTO person(id, date_of_birth, email, fname, lname, mname, phone, profile_picture_url)
+INSERT INTO person(id, email, uuid, fname, lname, mname, phone, date_of_birth, profile_picture_url)
     VALUES
-        (1, '1999-01-01', 'helloman@gmail.com', 'John', 'Doe', 'd', '+36912345678', 'resources/pictures/profil/pp_001.jpg'),
-        (2, '1980-11-04', 'justaname@gmail.com', 'David', 'Keresztes', 'd', '+3698765432', 'resources/pictures/profil/pp_002.jpg'),
-        (3, '1993-08-15', 'marta.1993@gmail.com', 'Marta', 'Szabo', 'd', '+3656231489', 'resources/pictures/profil/pp_003.jpg'),
-        (4, '1982-07-02', 'janos.kovacs@gmail.com', 'Janos', 'Kovacs', 'd', '+36852741933', 'resources/pictures/profil/pp_004.jpg'),
-        (5, '1975-04-03', 'peter.kovacs@gmail.com', 'Peter', 'Kovacs', 'd', '+36953214552', 'resources/pictures/profil/pp_005.jpg');
+        (101, 'helloman@gmail.com', '07f16e6c-10a4-4fbf-9330-8404125b046f', 'John', 'Doe', 'd', '+36912345678', '1993-05-12', 'resources/pictures/profil/pp_001.jpg'),
+        (102, 'justaname@gmail.com', '9bacd258-0995-4295-8c79-8fe3de6da6ab', 'David', 'Keresztes', 'd', '+3698765432', '1995-05-12', 'resources/pictures/profil/pp_002.jpg'),
+        (103, 'marta.1993@gmail.com', 'b2b36375-354c-462a-a3c0-4b71bcf6e127', 'Marta', 'Sabo', 'd', '+3656231489', '1985-05-02', 'resources/pictures/profil/pp_003.jpg'),
+        (104, 'janos.kovacs@gmail.com', '0b3c5a27-7922-416d-baab-46c73ec0b7b0', 'Janos', 'Kovacs', 'd', '+36852741933', '1948-05-10', 'resources/pictures/profil/pp_004.jpg'),
+        (105, 'peter.kovacs@gmail.com', '5b6613f0-9faa-488e-95c2-418af8e6f438', 'Peter', 'Kovacs', 'd', '+36953214552', '1989-05-30', 'resources/pictures/profil/pp_005.jpg');
 
-INSERT INTO users (id, created_at, date_of_birth, email, employee_id, first_name, last_name, middle_name, phone_number, photo)
-VALUES (1, now(), '1997-02-02', 'john.doe1@mail.ru', '1234567', 'John1', 'Doe1', 'Diego1', '+3687238323', 'url1'),
-       (2, now(), '1998-02-02', 'john.doe2@mail.ru', '4234567', 'John2', 'Doe2', 'Diego2', '+3687238323', 'url2'),
-	   (3, now(), '1999-02-02', 'john.doe3@mail.ru', '1236567', 'John3', 'Doe3', 'Diego3', '+3687238323', 'url3'),
-	   (4, now(), '1992-02-02', 'john.doe4@mail.ru', '1234727', 'John4', 'Doe4', 'Diego4', '+3687238323', 'url4'),
-	   (5, now(), '1993-02-02', 'john.doe5@mail.ru', '6734567', 'John5', 'Doe5', 'Diego5', '+3687238323', 'url5'),
-	   (6, now(), '1991-02-02', 'john.doe6@mail.ru', '1454567', 'John6', 'Doe6', 'Diego6', '+3687238323', 'url6'),
-	   (7, now(), '1996-02-02', 'john.doe7@mail.ru', '1234567', 'John7', 'Doe7', 'Diego7', '+3687238323', 'url7'),
-	   (8, now(), '1994-02-02', 'john.doe8@mail.ru', '3454567', 'John8', 'Doe8', 'Diego8', '+3687238323', 'url8'),
-	   (9, now(), '1995-02-02', 'john.doe9@mail.ru', '4344567', 'John9', 'Doe9', 'Diego9', '+3687238323', 'url9'),
-	   (10, now(), '1993-02-02', 'john.doe0@mail.ru', '8754567', 'John10', 'Doe10', 'Diego10', '+3687238323', 'url10');
+INSERT INTO users (id, uuid, created_at, date_of_birth, email, employee_id, first_name, last_name, middle_name, phone_number, photo, admin)
+VALUES (101, 'fc0e88ec-cb24-42e2-9e55-f85512c584eb', now(), '1997-02-02', 'john.doe1@mail.ru', '1234567', 'John1', 'Doe1', 'Diego1', '+3687238323', 'url1', true),
+       (102, '11b6cab6-4a8f-40d0-be64-50a7b338523c', now(), '1998-02-02', 'john.doe2@mail.ru', '4234567', 'John2', 'Doe2', 'Diego2', '+3687238323', 'url2', false),
+	   (103, '5d7e1836-36f2-4cf1-bacc-26006bf25153', now(), '1999-02-02', 'john.doe3@mail.ru', '1236567', 'John3', 'Doe3', 'Diego3', '+3687238323', 'url3', true),
+	   (104, '4cba21f6-13bd-49db-b1a5-3eb0bb5d9f1c', now(), '1992-02-02', 'john.doe4@mail.ru', '1234727', 'John4', 'Doe4', 'Diego4', '+3687238323', 'url4', true),
+	   (105, '6f06dead-fa00-4f66-9a35-8813437a8906', now(), '1993-02-02', 'john.doe5@mail.ru', '6734567', 'John5', 'Doe5', 'Diego5', '+3687238323', 'url5', false),
+	   (106, '62f393bd-7b05-4479-8e06-034a3a125581', now(), '1991-02-02', 'john.doe6@mail.ru', '1454567', 'John6', 'Doe6', 'Diego6', '+3687238323', 'url6', true),
+	   (107, '1ba75c20-676e-42bf-ac9b-a5f22833a470', now(), '1996-02-02', 'john.doe7@mail.ru', '1234567', 'John7', 'Doe7', 'Diego7', '+3687238323', 'url7', false),
+	   (108, '1a5e6859-7a7b-495f-b064-5c66a7a85510', now(), '1994-02-02', 'john.doe8@mail.ru', '3454567', 'John8', 'Doe8', 'Diego8', '+3687238323', 'url8', true),
+	   (109, '44097d7e-d916-4276-bbae-47385f92b236', now(), '1995-02-02', 'john.doe9@mail.ru', '4344567', 'John9', 'Doe9', 'Diego9', '+3687238323', 'url9', false),
+	   (110, '3c9dead7-638f-4745-9545-615f269f65d6', now(), '1993-02-02', 'john.doe0@mail.ru', '8754567', 'John0', 'Doe0', 'Diego0', '+3687238323', 'url10', false);
 
-       
-INSERT INTO project(id, name, project_manager_id, description, recruiter_id, sourcer_id, deadline)
+INSERT INTO project(id, uuid, name, description)
     VALUES
-        (1, 'alpha', 1, 'This is a project to build a new developer team', 4, 1, '2022-06-20'),
-        (2, 'beta', 2, 'This is a project to build a new hr team', 5, 4, '2022-01-23'),
-        (3, 'gamma', 3, 'This is a project to build a new data engineer team', 2, 3, '2021-03-03'),
-        (4, 'epsilon', 4, 'This is a project to build a new frontend team', 2, 3, '2022-02-02'),
-        (5, 'omega', 5, 'This is a project to build a new backend team', 4, 5, '2019-07-03');
+        (101, 'ede22832-77e9-4374-8b3b-142e80829d74', 'alpha', 'This is a project to build a new developer team'),
+        (102, '34f10181-465b-4573-87b1-12e5bd70d58a', 'beta', 'This is a project to build a new hr team'),
+        (103, '29562c07-b0ca-4af0-8d74-531857aa6fb3', 'gamma', 'This is a project to build a new data engineer team'),
+        (104, '0e288a1e-b9a4-42cd-909a-812929b0e7a9', 'epsilon', 'This is a project to build a new frontend team'),
+        (105, 'd894a591-5b2f-4bcb-8353-4fcca82a6ed5', 'omega', 'This is a project to build a new backend team');
 
-INSERT INTO position(id, position_name, project_id, total_count, hired_count, open)
+INSERT INTO position(id, uuid, position_name, project_id, total_count, hired_count, open)
 values
-    (1, 'Junior Java Developer', 1, 7, 3, true),
-    (2, 'Junior C# Developer', 2, 10, 5, true),
-    (3, 'Senior Java Developer', 2, 11, 9, false),
-    (4, 'Junior Data Engineer', 1, 5, 3, true),
-    (5, 'Medor Python Developer', 2, 4, 3, false),
-    (6, 'Junior HR Assistant', 3, 10, 4, true);
+    (101, '3ff269d3-e1e8-417a-a2f8-2a629eef5d9b', 'Junior Java Developer', 101, 7, 3, true),
+    (102, 'b309fa51-cb5f-4e7a-9eaf-f6dbd2e9ee10', 'Junior C# Developer', 102, 10, 5, true),
+    (103, '48ed010a-5eee-4c02-96aa-bae833cc2447', 'Senior Java Developer', 102, 11, 9, false),
+    (104, 'b99ceb50-31f6-4a90-a5a2-f708ea4eac4c', 'Junior Data Engineer', 101, 5, 3, true),
+    (105, 'e05fd854-4685-402c-a270-1a4eb1ed5099', 'Medor Python Developer', 102, 4, 3, false),
+    (106, '8721be71-a153-4944-8ce8-da09ca22922f', 'Junior HR Assistant', 103, 10, 4, true);
 
-INSERT INTO candidate (id, cv_path, status, person_id, position_id)
+INSERT INTO candidate (id, uuid, status, cv_path, person_id, position_id, project_id)
     VALUES
-        (1, 'resources/cv/cv_000.pdf', 'accepted', 1, 1),
-        (2, 'resources/cv/cv_001.pdf', 'rejected', 1, 2),
-        (3, 'resources/cv/cv_002.pdf', 'accepted', 2, 1),
-        (4, 'resources/cv/cv_003.pdf', 'accepted', 3, 2),
-        (5, 'resources/cv/cv_004.pdf', 'accepted', 4, 2),
-        (6, 'resources/cv/cv_005.pdf', 'accepted', 5, 2);
+        (101, '131f1987-ea30-40b1-bf0b-0791e5063599', 'OFFER_ACCEPTED', 'resources/cv/cv_000.pdf',  101, 101, 101),
+        (102, '24cc06fe-2ee2-4963-ac55-3263f1917a1c', 'REJECTED', 'resources/cv/cv_001.pdf',  101, 102, 101),
+        (103, 'f0ea1a0a-2527-4b79-9151-e7373f95f51c', 'OFFER_SENT', 'resources/cv/cv_002.pdf', 102, 101, 101),
+        (104, '879d3947-2bd8-43bf-a089-f77fe709c25d', 'OFFER_ACCEPTED', 'resources/cv/cv_003.pdf',  103, 102, 101),
+        (105, 'ec75a941-1bdc-4000-ab09-a6a82c5cb4c4', 'REJECTED', 'resources/cv/cv_004.pdf',  104, 102, 101),
+        (106, '20bab9a9-6058-450e-b1d6-e886dc08d53b', 'OFFER_ACCEPTED', 'resources/cv/cv_005.pdf', 105, 102, 101);
 
 INSERT INTO language (id, language, LEVEL, candidate_id)
-    VALUES 
-	    (1, 'english', 'beginner', 1),
-        (2, 'english', 'beginner', 2),
-        (3, 'english', 'beginner', 3),
-        (4, 'hungarian', 'beginner', 4),
-        (5, 'hungarian', 'beginner', 5);
+    VALUES
+	    (101, 'english', 'beginner', 101),
+        (102, 'english', 'beginner', 102),
+        (103, 'english', 'beginner', 103),
+        (104, 'hungarian', 'beginner', 104),
+        (105, 'hungarian', 'beginner', 105);
 
 INSERT INTO work_experience (id, start_date, end_date, institution, name, summary, candidate_id)
     VALUES
-        (1, '2021-04-01', '2021-10-10', 'TCS', 'back-end developer', 'Worked on REST API.', 1),
-        (2, '2021-04-01', '2021-03-20', 'MS', 'back-end developer', 'Worked on REST API.', 1),
-        (3, '2020-04-11', '2021-12-10', 'TCS', 'data-engineer developer', 'Worked on db.', 2),
-        (4, '2019-01-21', '2020-02-05', 'OTP', 'data-engineer developer', 'Worked on db.', 2),
-        (5, '2008-06-02', '2019-01-10', 'TCS', 'front-end developer', 'Worked with Angular.', 3),
-        (6, '2009-08-01', '2020-04-10', 'TCS', 'front-end developer', 'Worked with Angular.', 4),
-        (7, '2015-02-12', '2021-10-11', 'TCS', 'front-end developer', 'Worked with Angular.', 5);
+        (101, '2021-04-01', '2021-10-10', 'TCS', 'back-end developer', 'Worked on REST API.', 101),
+        (102, '2021-04-01', '2021-03-20', 'MS', 'back-end developer', 'Worked on REST API.', 101),
+        (103, '2020-04-11', '2021-12-10', 'TCS', 'data-engineer developer', 'Worked on db.', 102),
+        (104, '2019-01-21', '2020-02-05', 'OTP', 'data-engineer developer', 'Worked on db.', 102),
+        (105, '2008-06-02', '2019-01-10', 'TCS', 'front-end developer', 'Worked with Angular.', 103),
+        (106, '2009-08-01', '2020-04-10', 'TCS', 'front-end developer', 'Worked with Angular.', 104),
+        (107, '2015-02-12', '2021-10-11', 'TCS', 'front-end developer', 'Worked with Angular.', 105);
 
 INSERT INTO education (id, start_date, end_date, information, institution, candidate_id)
     VALUES
-        (1, '2019-09-01', '2023-01-01', 'BSc', 'BME', 1),
-        (2, '2019-09-01', '2023-01-02', 'BSc', 'ELTE', 2),
-        (3, '2010-09-01', '2013-01-02', 'BSc', 'BME', 3),
-        (4, '2008-09-01', '2011-01-04', 'MSc', 'OLTE', 4),
-        (5, '2019-10-01', '2020-01-11', 'OKJ', 'ELTE', 5);
+        (101, '2019-09-01', '2023-01-01', 'BSc', 'BME', 101),
+        (102, '2019-09-01', '2023-01-02', 'BSc', 'ELTE', 102),
+        (103, '2010-09-01', '2013-01-02', 'BSc', 'BME', 103),
+        (104, '2008-09-01', '2011-01-04', 'MSc', 'OLTE', 104),
+        (105, '2019-10-01', '2020-01-11', 'OKJ', 'ELTE', 105);
 
 INSERT INTO roles (id, role_name, uuid)
-VALUES (1, 'Management Interviewer', 'aa8b7a22-4da4-41d9-8e91-023303383f4d'),
-       (2, 'Project Manager', 'aa8b7a22-4da4-41d9-8e91-023303383f4d'),
-       (3, 'Recruiter', '10b526ae-f78c-4615-8cb1-e7f21239a4fe'),
-	   (4, 'Sourcer', 'e5b73f8d-d858-468c-9934-4cbe2f083563'),
-	   (5, 'Technical Interviewer', 'ba9766e1-e3b3-4229-8639-53db4676294d');
+VALUES (101, 'Management Interviewer', '07f16e6c-10a4-4fbf-9330-8404125b046f'),
+       (102, 'Project Manager', 'aa8b7a22-4da4-41d9-8e91-023303383f4d'),
+       (103, 'Recruiter', '10b526ae-f78c-4615-8cb1-e7f21239a4fe'),
+	   (104, 'Sourcer', 'e5b73f8d-d858-468c-9934-4cbe2f083563'),
+	   (105, 'Technical Interviewer', 'ba9766e1-e3b3-4229-8639-53db4676294d');
 
-INSERT INTO user_roles (id, project_id, user_id, uuid)
-	VALUES 	
-			(1, 'd5692d0f-665d-4547-a494-5b6c3011447c', 'd0be0ead-1392-4dc5-a67b-6325d873b255', '8d706a76-e252-4f9c-af2d-c20a3c4d6e2e'),
-			(2, '50bb0218-2537-4fcb-b8c8-83449981b59c', '07bfc7f2-89ad-43d2-af00-61667754c1ce', 'd2866a36-6e15-471a-9b32-163593c4052e'),
-			(3, '0f2b581d-3d08-4d8d-8df0-11944ffa3a54', 'a7a03f20-5214-4d78-8cf5-02c2339b7f7e', 'd8d93f23-bcbb-4d44-9254-49b00253b6ee'),
-			(4, 'be1a8d14-b108-448f-97e3-508566a0b1a0', 'd246a0a7-ce00-48a2-8611-916dd073252c', 'afea27a2-99e1-48d8-9b84-b97876059ad2'),
-			(5, '1bf7c7bb-f4b6-4b9c-8156-56ebf6bdf777', '43174beb-6955-400f-b697-b7df577a6fc1', '6d521dbb-c0bd-492b-a6ff-b3d1f24d28a2');
-
-INSERT INTO users_roles (user_id, roles_role_id)
-	VALUES 	
-			(1, 1),
-			(1, 2),
-			(2, 3),
-			(3, 4),
-			(4, 5);
-			
+INSERT INTO user_roles (id, user_id, project_id)
+	VALUES
+        (101, 101, 101),
+        (102, 102, 102),
+        (103, 103, 103),
+        (104, 104, 104),
+        (105, 105, 105);
 
 INSERT INTO user_roles_role (user_roles_id, role_id)
 VALUES
-		(1,2),
-       	(1,3),
-       	(2,5),
-	   	(3,1),
-	   	(4,4);
+		(101, 102),
+       	(101, 103),
+       	(102, 105),
+	   	(103, 101),
+	   	(104, 104);
+
+INSERT INTO technical_documentation (id, uuid, candidate_id, interviewer_one, interviewer_two)
+	VALUES
+		(101, 'a470cde2-a6e0-49aa-9db1-bfb4f61a2319', 101, 102, 103),
+		(102, 'f0006722-91f6-4702-a8a1-3f66176f0da4', 102, 101, 102),
+		(103, 'c43dfece-596a-47c1-860b-06e98383bf04', 103, 103, 104),
+		(104, '7747e757-8cf9-4709-b7f4-2e41c80e4dda', 104, 101, 103),
+		(105, 'ef4a38dc-f83f-45f2-b80a-bd9a3868ee30', 105, 102, 101);
+
+INSERT INTO management_documentation (id, uuid, candidate_id, project_id, interviewer_id1 , interviewer_id2)
+	VALUES
+		(101, '9d158f42-615f-4657-a99d-902820c8adab', 101, 101, 102, 103),
+		(102, '0e0ccfe0-a25f-42e2-801d-c53a082408d8', 102, 101, 101, 102),
+		(103, '3ca1e412-760f-4276-9805-abdb5900db6c', 103, 101, 103, 104),
+		(104, 'cb5057b3-9b3c-4523-85cb-9eca3771a111', 104, 101, 101, 103),
+		(105, '6290e09d-c5d9-4018-9137-1511ccb11fd3', 105, 101, 102, 101);
+
 

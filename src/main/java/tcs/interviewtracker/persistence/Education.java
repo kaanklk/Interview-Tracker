@@ -15,18 +15,18 @@ import javax.persistence.Table;
 import org.springframework.lang.NonNull;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "education")
 public class Education {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "serial")
     private Long id;
-
-    @Column(name="uuid")
-    private UUID uuid;
 
     @ManyToOne
     @JoinColumn(name = "candidate_id", referencedColumnName = "id", nullable = false)
