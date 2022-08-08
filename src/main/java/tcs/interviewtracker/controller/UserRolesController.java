@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +58,7 @@ public class UserRolesController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public List<UserRolesDTO> getUserRoles(@PathVariable UUID userUuid) throws ResourceNotFoundException{
-        List<UserRolesDTO> userRolesDTO = Arrays.asList(modelMapper.map(service.getAllRoles(userUuid), UserRolesDTO[].class));
-
+        List<UserRolesDTO> userRolesDTO = entityListToDto(service.getAllRoles(userUuid));
         return userRolesDTO;
     }
 
@@ -67,6 +67,7 @@ public class UserRolesController {
     @ResponseStatus(HttpStatus.OK)
     public UserRolesDTO getRoleForSpecificProject(@PathVariable UUID userUuid, @PathVariable UUID projectUuid) throws ResourceNotFoundException{
         return entityToDto(service.getRoleForSpecificProject(userUuid, projectUuid));
+
     }
 
     @PostMapping("")
@@ -89,12 +90,12 @@ public class UserRolesController {
 
         UserRoles created = service.saveUserRole(userRoles);
 
-        List<RoleDTO> roleCreated = Arrays.asList(modelMapper.map(created.getRoles(), RoleDTO[].class));
+     //   List<RoleDTO> roleCreated = Arrays.asList(modelMapper.map(created.getRoles(), RoleDTO[].class));
 
-        UserRolesDTO createdDTO = new UserRolesDTO();
-        createdDTO.setUser(entityToDto(created.getUser()));
-        createdDTO.setProject(entityToDto(created.getProject()));
-        createdDTO.setRoles(roleCreated);
+        UserRolesDTO createdDTO = entityToDto(created);
+        // createdDTO.setUser(entityToDto(created.getUser()));
+        // createdDTO.setProject(entityToDto(created.getProject()));
+        // createdDTO.setRoles(roleCreated);
 
         return createdDTO;
     }
@@ -131,7 +132,19 @@ public class UserRolesController {
     ////////////////////Mapping dto to entity methods/////////////////////////
 
     public UserRolesDTO entityToDto(UserRoles userRoles){
-        return modelMapper.map(userRoles, UserRolesDTO.class);
+
+        User user = userRoles.getUser();
+        Project project = userRoles.getProject();
+        List<Role> roles = userRoles.getRoles();
+        List<RoleDTO> rolesDTO = Arrays.asList(modelMapper.map(roles, RoleDTO[].class));
+
+        UserRolesDTO userRolesDTO = new UserRolesDTO();
+
+        userRolesDTO.setUser(entityToDto(user));
+        userRolesDTO.setProject(entityToDto(project));
+        userRolesDTO.setRoles(rolesDTO);
+
+        return userRolesDTO;
     }
 
 
@@ -152,7 +165,25 @@ public class UserRolesController {
     }
 
     public ProjectDTO entityToDto(Project project){
-       return modelMapper.map(project, ProjectDTO.class);
+
+        ProjectDTO projectDTO = ProjectDTO.builder()
+                .uuid(project.getUuid())
+                .name(project.getName())
+                .description(project.getDescription()).build();
+
+
+        return projectDTO;
+    }
+
+    public List<UserRolesDTO> entityListToDto(List<UserRoles> userRoles){
+
+        List<UserRolesDTO> userRolesDTO = new ArrayList<>();
+
+        for(UserRoles ur : userRoles){
+            userRolesDTO.add(entityToDto(ur));
+        }
+
+        return userRolesDTO;
     }
 
 }
