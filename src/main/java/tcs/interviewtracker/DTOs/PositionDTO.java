@@ -41,7 +41,7 @@ public class PositionDTO {
     private ArrayList<Task> tasks;
     private String degrees;
     private String itSkills;
-    private ArrayList<String> requiredExperience;
+    private String requiredExperience;
     private Set<LanguageRequirement> languageRequirements;
     private String advantages;
     private Set<BehavioralCompetency> behavioralCompetencies;
