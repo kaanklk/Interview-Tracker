@@ -32,6 +32,7 @@ import tcs.interviewtracker.persistence.Candidate;
 import tcs.interviewtracker.persistence.Education;
 import tcs.interviewtracker.persistence.Language;
 import tcs.interviewtracker.persistence.Person;
+import tcs.interviewtracker.persistence.PersonHasTimeslot;
 import tcs.interviewtracker.persistence.Timeslot;
 import tcs.interviewtracker.persistence.WorkExperience;
 import tcs.interviewtracker.service.CandidateService;
@@ -95,7 +96,6 @@ public class CandidateController {
     public ResponseEntity<CandidateDTO> getCandidates(
                 @PathVariable(name = "candidateId", required = true) UUID candidateUuid
     ) throws ResourceNotFoundException {
-
         var candidate = candidateService.getByUuid(candidateUuid);
         var responseDto = convertToDTO(candidate);
         return new ResponseEntity<CandidateDTO>(responseDto, HttpStatus.OK);
@@ -167,8 +167,7 @@ public class CandidateController {
         var candidate = candidateService.getByUuid(candidateUuid);
         var timeslot = convertToEntity(timeslotDTO);
         timeslot = timeslotService.saveTimeslot(timeslot);
-            //TODO
-            //Person has timeslot
+        timeslotService.bindTimeslotToPerson(timeslot, candidate.getPerson());
         var dto = convertToDTO(timeslot);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
