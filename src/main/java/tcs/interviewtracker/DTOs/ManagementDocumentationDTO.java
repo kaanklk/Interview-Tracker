@@ -3,6 +3,8 @@ package tcs.interviewtracker.DTOs;
 import java.sql.Date;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -10,6 +12,7 @@ public class ManagementDocumentationDTO {
 
     private UUID uuid;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date dateOfInterview;
 
     private Boolean mobileToWork;
@@ -27,8 +30,6 @@ public class ManagementDocumentationDTO {
     private String proactiveness;
 
     private String potentionalConflict;
-
-    private String teamFit;
 
     private String observations;
 
@@ -50,15 +51,13 @@ public class ManagementDocumentationDTO {
 
     private UUID candidateUuid;
 
-    private UUID  projectUuid;
+    private UUID projectUuid;
+
+    private String projectSwonNumber;
 
     private UUID interviewer1Uuid;
 
     private UUID interviewer2Uuid;
-
-    public ManagementDocumentationDTO() {
-
-    }
 
 }
 

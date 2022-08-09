@@ -162,7 +162,6 @@ public class ManagementDocumentationController {
         manageDoc.setOpennessToDiversity(manageDTO.getOpennessToDiversity());
         manageDoc.setProactiveness(manageDTO.getProactiveness());
         manageDoc.setPotentionalConflict(manageDTO.getPotentionalConflict());
-        manageDoc.setTeamFit(manageDTO.getTeamFit());
         manageDoc.setObservations(manageDTO.getObservations());
         manageDoc.setOtherComments(manageDTO.getOtherComments());
         manageDoc.setOtherStrengths(manageDTO.getOtherStrengths());
@@ -174,9 +173,9 @@ public class ManagementDocumentationController {
         manageDoc.setDirectSupervisorName(manageDTO.getDirectSupervisorName());
         manageDoc.setCandidate(candidateService.getByUuid(manageDTO.getCandidateUuid()));
         manageDoc.setProject(projectService.getByUuid(manageDTO.getProjectUuid()));
+        manageDoc.setProjectSwonNumber(manageDTO.getProjectSwonNumber());
         manageDoc.setInterviewer1(userService.getUserById(manageDTO.getInterviewer1Uuid()));
         manageDoc.setInterviewer2(userService.getUserById(manageDTO.getInterviewer2Uuid()));
-
         return manageDoc;
     }
 }

@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Entity
@@ -26,7 +28,9 @@ public class ManagementDocumentation {
 
     private UUID uuid;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date dateOfInterview;
+
     private Boolean mobileToWork;
     private Boolean floorVisit;
     private String motivation;
@@ -35,7 +39,6 @@ public class ManagementDocumentation {
     private String opennessToDiversity;
     private String proactiveness;
     private String potentionalConflict;
-    private String teamFit;
     private String observations;
     private String otherComments;
     private String otherStrengths;
@@ -57,6 +60,8 @@ public class ManagementDocumentation {
     @ManyToOne
     @JoinColumn(name = "project_id", referencedColumnName = "id", nullable = false)
     private Project project;
+
+    private String projectSwonNumber;
 
     @ManyToOne
     @JoinColumn(name = "interviewer_id1", referencedColumnName = "id", nullable = false)

@@ -38,37 +38,37 @@ INSERT INTO candidate (id,cv_path, status, person_id, position_id,uuid)
 
 
 INSERT INTO management_documentation VALUES(
-1,'RGSID_1', 'Frontend developer', '2022-01-13', 'John Doe', 'he fits into the team as a frontend candidate', FALSE,
+1,'RGSID_1', 'Frontend developer', '2022-01-13T12:00:00.000Z', 'John Doe', 'he fits into the team as a frontend candidate', FALSE,
 TRUE, 'learning the usage of react', 'he has a lot of motivation for the position', 'high', 'none', 'excellent knowlegde in HTML and Javascript',
-'lack of knowlege when it comes to react', 'none', 'very proactive', TRUE, 1, 'he fits well enough', 2, '2006cb02-118e-11ed-861d-0242ac120002',
+'lack of knowlege when it comes to react', 'none', 'very proactive', 'example1', TRUE, 1, 2, '2006cb02-118e-11ed-861d-0242ac120002',
 1, 4, 6, 2
 );
 
 INSERT INTO management_documentation VALUES(
-2,'RGSID_2', 'backend developer', '2022-01-15', 'Csaba Hegedus', 'she fits', TRUE,
+2,'RGSID_2', 'backend developer', '2022-01-15T14:30:00.000Z', 'Csaba Hegedus', 'she fits', TRUE,
 TRUE, 'to study spring boot', 'none', 'high', 'none', 'avarege java knowlegde',
-'avarege java knowlegde', 'none', 'not proactive at all', FALSE, 1, 'she does not fit', 1, '2006cb02-118e-11ed-861d-0242ac120004',
+'avarege java knowlegde', 'none', 'not proactive at all', 'example2', FALSE, 1, 1, '2006cb02-118e-11ed-861d-0242ac120004',
 2, 5, 8, 2
 );
 
 INSERT INTO management_documentation VALUES(
-3,'RGSID_3', 'Backend developer', '2022-01-12', 'William Howard', 'she fits', FALSE,
+3,'RGSID_3', 'Backend developer', '2022-01-12T10:15:10.000Z', 'William Howard', 'she fits', FALSE,
 TRUE, 'learning the usage of react', 'none', 'low', 'none', 'excellent knowlegde in HTML, Javascript, Angular and React',
-'cant speak english', 'none', 'somewhat proactive and interested', TRUE, 2, 'she fits into the team', 4, '65f00650-c2c1-4253-992f-bedee28197dc',
+'cant speak english', 'none', 'somewhat proactive and interested', 'example3', TRUE, 2, 4, '65f00650-c2c1-4253-992f-bedee28197dc',
 3, 1, 4, 3
 );
 
 INSERT INTO management_documentation VALUES(
-4,'RGSID_4', 'Frontend developer', '2022-04-25', 'Csaba Hegedus', 'he fits', TRUE,
+4,'RGSID_4', 'Frontend developer', '2022-04-25T16:00:00.000Z', 'Csaba Hegedus', 'he fits', TRUE,
 TRUE, 'he want sto work in a multicultural enviroment', 'he has a lot of experience', 'high', 'none', 'his experience gives him an edge when it comes to frontend development',
-'cant speak english', 'none', 'very proactive', TRUE, 3, 'he fits into the team as a frontend candidate', 4, '364a8600-118f-11ed-861d-0242ac120002',
+'cant speak english', 'none', 'very proactive', 'example4', TRUE, 3, 4, '364a8600-118f-11ed-861d-0242ac120002',
 5, 4, 7, 4
 );
 
 
 INSERT INTO management_documentation VALUES(
-5,'RGSID_5', 'Fullstack programmer', '2022-04-28', 'Csaba Hegedus', 'he fits', TRUE,
+5,'RGSID_5', 'Fullstack programmer', '2022-04-28T9:00:00.000Z', 'Csaba Hegedus', 'he fits', TRUE,
 TRUE, 'he is open for improving both his frontend and backend knowledge', 'he has a lot of experience', 'high', 'none', 'very skilled with spring boot ang react as well',
-'lack of experience with agile', 'none', 'very proactive', TRUE, 3, 'he fits into the team', 3, '44245670-118f-11ed-861d-0242ac120002',
+'lack of experience with agile', 'none', 'very proactive', 'example5', TRUE, 3, 3, '44245670-118f-11ed-861d-0242ac120002',
 6, 2, 3, 1
 );
